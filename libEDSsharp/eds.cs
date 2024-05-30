@@ -679,7 +679,7 @@ namespace libEDSsharp
         /// product revision number according to identity object sub-index 03h (Unsigned32) 
         /// </summary>
         [EdsExport]
-        public UInt32 RevisionNumber;
+        public string RevisionNumber="";
 
         /// <summary>
         /// indicate the supported baud rates (Boolean, 0 = not supported, 1=supported)
