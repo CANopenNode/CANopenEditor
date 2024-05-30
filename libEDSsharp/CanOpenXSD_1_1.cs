@@ -683,6 +683,8 @@ namespace CanOpenXSD_1_1 {
 
         private vendorID vendorIDField;
 
+        private revisionNumber revisionNumberField;
+
         private deviceFamily deviceFamilyField;
 
         private productID productIDField;
@@ -703,6 +705,20 @@ namespace CanOpenXSD_1_1 {
             }
             set {
                 this.vendorIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.canopen.org/xml/1.1")]
+        public revisionNumber revisionNumer
+        {
+            get
+            {
+                return this.revisionNumberField;
+            }
+            set
+            {
+                this.revisionNumberField = value;
             }
         }
 
@@ -809,6 +825,55 @@ namespace CanOpenXSD_1_1 {
                 return this.valueField;
             }
             set {
+                this.valueField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.canopen.org/xml/1.1")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://www.canopen.org/xml/1.1", IsNullable = false)]
+    public partial class revisionNumber
+    {
+
+        private bool readOnlyField;
+
+        private string valueField;
+
+        public revisionNumber()
+        {
+            this.readOnlyField = true;
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool readOnly
+        {
+            get
+            {
+                return this.readOnlyField;
+            }
+            set
+            {
+                this.readOnlyField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
                 this.valueField = value;
             }
         }
@@ -3306,6 +3371,8 @@ namespace CanOpenXSD_1_1 {
 
         private vendorID vendorIDField;
 
+        private revisionNumber revisionNumberField;
+
         private vendorText vendorTextField;
 
         private deviceFamily deviceFamilyField;
@@ -3347,6 +3414,19 @@ namespace CanOpenXSD_1_1 {
             }
             set {
                 this.vendorIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public revisionNumber revisionNumber
+        {
+            get
+            {
+                return this.revisionNumberField;
+            }
+            set
+            {
+                this.revisionNumberField = value;
             }
         }
 
