@@ -1,0 +1,215 @@
+syntax = "proto3";
+
+package libEDSsharp;
+
+import "google/protobuf/timestamp.proto";
+import "cia301.proto";
+
+/// <summary>
+/// CANopen [FileInfo] section, based on CiA306
+/// </summary>
+message CanOpen_FileInfo
+{
+    /// <summary>
+    /// Actual file version (as string)
+    /// </summary>
+    string FileVersion = 1;
+
+    /// <summary>
+    /// File description
+    /// </summary>
+    string Description = 2;
+
+    /// <summary>
+    /// File creation time
+    /// </summary>
+    google.protobuf.Timestamp CreationTime = 3;
+
+    /// <summary>
+    /// Name or a description of the file creator
+    /// </summary>
+    string CreatedBy = 4;
+
+    /// <summary>
+    /// Time of last modification
+    /// </summary>
+    google.protobuf.Timestamp ModificationTime = 5;
+
+    /// <summary>
+    /// Name or a description of the creator
+    /// </summary>
+    string ModifiedBy = 6;
+}
+
+/// <summary>
+/// CANopen [DeviceInfo] section, based on CiA306
+/// </summary>
+message CanOpen_DeviceInfo
+{
+    /// <summary>
+    /// Vendor name
+    /// </summary>
+    string VendorName = 1;
+
+    /// <summary>
+    /// Unique vendor-ID (index 1018, sub-index 01)
+    /// </summary>
+    uint32 VendorNumber = 2;
+
+    /// <summary>
+    /// Product name
+    /// </summary>
+    string ProductName = 3;
+
+    /// <summary>
+    /// Product code (index 1018, sub-index 02)
+    /// </summary>
+    uint32 ProductNumber = 4;
+
+    /// <summary>
+    /// Support of the baud rate 10 kbit/s
+    /// </summary>
+    bool BaudRate_10 = 100;
+
+    /// <summary>
+    /// Support of the baud rate 20 kbit/s
+    /// </summary>
+    bool BaudRate_20 = 101;
+
+    /// <summary>
+    /// Support of the baud rate 50 kbit/s
+    /// </summary>
+    bool BaudRate_50 = 102;
+
+    /// <summary>
+    /// Support of the baud rate 125 kbit/s
+    /// </summary>
+    bool BaudRate_125 = 103;
+
+    /// <summary>
+    /// Support of the baud rate 250 kbit/s
+    /// </summary>
+    bool BaudRate_250 = 104;
+
+    /// <summary>
+    /// Support of the baud rate 500 kbit/s
+    /// </summary>
+    bool BaudRate_500 = 105;
+
+    /// <summary>
+    /// Support of the baud rate 800 kbit/s
+    /// </summary>
+    bool BaudRate_800 = 106;
+
+    /// <summary>
+    /// Support of the baud rate 1000 kbit/s
+    /// </summary>
+    bool BaudRate_1000 = 107;
+
+    /// <summary>
+    /// Minimum size of a mappable object in bits, allowed for the PDO mapping on this CANopen device, usually 8
+    /// </summary>
+    uint32 Granularity = 200;
+
+    /// <summary>
+    /// Number of the supported receive PDOs
+    /// </summary>
+    uint32 NrOfRxPDO = 201;
+
+    /// <summary>
+    /// Number of the supported transmit PDOs
+    /// </summary>
+    uint32 NrOfTxPDO = 202;
+
+    /// <summary>
+    /// Support of the LSS slave functionality, see CiA305
+    /// </summary>
+    bool LssSlave = 203;
+
+    /// <summary>
+    /// Support of the LSS master functionality, see CiA305
+    /// </summary>
+    bool LssMaster = 204;
+
+    /// <summary>
+    /// Support of the NodeGuarding slave
+    /// </summary>
+    bool NodeGuardingSlave = 205;
+
+    /// <summary>
+    /// Support of the NodeGuarding master
+    /// </summary>
+    bool NodeGuardingMaster = 206;
+
+    /// <summary>
+    /// Support of the NodeGuarding master
+    /// </summary>
+    uint32 NrOfNodeGuardingMonitoredNodes = 207;
+}
+
+/// <summary>
+/// CANopen [DeviceComissioning] section, based on CiA306, used for the device configuration file (DCF)
+/// </summary>
+message CanOpen_DeviceComissioning
+{
+    /// <summary>
+    /// CANopen device’s address
+    /// </summary>
+    uint32 NodeID = 1;
+
+    /// <summary>
+    /// Node name
+    /// </summary>
+    string NodeName = 2;
+
+    /// <summary>
+    /// CANopen device’s baudrate
+    /// </summary>
+    uint32 Baudrate = 3;
+
+    /// <summary>
+    /// Number of the network
+    /// </summary>
+    uint32 NetNumber = 4;
+
+    /// <summary>
+    /// Name of the network
+    /// </summary>
+    string NetworkName = 5;
+
+    /// <summary>
+    /// CANopen device is the CANopen manager
+    /// </summary>
+    bool CANopenManager = 6;
+
+    /// <summary>
+    /// Serial number (index 1018, sub-index 03)
+    /// </summary>
+    uint32 LSS_SerialNumber = 7;
+}
+
+/// <summary>
+/// CANopen Device description object
+/// </summary>
+message CanOpenDevice
+{
+    /// <summary>
+    /// CANopen [FileInfo] section, based on CiA306
+    /// </summary>
+    CanOpen_FileInfo FileInfo = 1;
+
+    /// <summary>
+    /// CANopen [DeviceInfo] section, based on CiA306
+    /// </summary>
+    CanOpen_DeviceInfo DeviceInfo = 2;
+
+    /// <summary>
+    /// CANopen [DeviceComissioning] section, based on CiA306, used for the device configuration file (DCF)
+    /// </summary>
+    CanOpen_DeviceComissioning DeviceComissioning = 3;
+
+    /// <summary>
+    /// CANopen Object Dictionary
+    /// </summary>
+    map<string, OdEntry> Objects = 4;
+}

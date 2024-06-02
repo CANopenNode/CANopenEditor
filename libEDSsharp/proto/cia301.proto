@@ -1,0 +1,290 @@
+syntax = "proto3";
+
+package libEDSsharp;
+
+/// <summary>
+/// Object dictionary basic data types from CiA 301
+/// </summary>
+enum DataType
+{
+    UNSPECIFIED = 0x00;
+    BOOLEAN = 0x01;
+    INTEGER8 = 0x02;
+    INTEGER16 = 0x03;
+    INTEGER32 = 0x04;
+    UNSIGNED8 = 0x05;
+    UNSIGNED16 = 0x06;
+    UNSIGNED32 = 0x07;
+    REAL32 = 0x08;
+    VISIBLE_STRING = 0x09;
+    OCTET_STRING = 0x0A;
+    UNICODE_STRING = 0x0B;
+    TIME_OF_DAY = 0x0C;
+    TIME_DIFFERENCE = 0x0D;
+    DOMAIN = 0x0F;
+    INTEGER24 = 0x10;
+    REAL64 = 0x11;
+    INTEGER40 = 0x12;
+    INTEGER48 = 0x13;
+    INTEGER56 = 0x14;
+    INTEGER64 = 0x15;
+    UNSIGNED24 = 0x16;
+    UNSIGNED40 = 0x18;
+    UNSIGNED48 = 0x19;
+    UNSIGNED56 = 0x1A;
+    UNSIGNED64 = 0x1B;
+}
+
+/// <summary>
+/// Object Dictionary object codes from CiA 301
+/// </summary>
+enum ObjectType
+{
+    ObjectType_UNSPECIFIED = 0;
+    /// <summary>
+    /// An object with no data fields
+    /// </summary>
+    ObjectType_NULL = 1;
+    /// <summary>
+    /// Large variable amount of data e.g. executable program code
+    /// </summary>
+    ObjectType_DOMAIN = 2;
+    /// <summary>
+    /// Denotes a type definition such as a BOOLEAN, UNSIGNED16, FLOAT and so on
+    /// </summary>
+    ObjectType_DEFTYPE = 5;
+    /// <summary>
+    /// Defines a new record type e.g. the PDO mapping structure at 21h
+    /// </summary>
+    ObjectType_DEFSTRUCT = 6;
+    /// <summary>
+    /// A single value such as an UNSIGNED8, BOOLEAN, FLOAT, INTEGER16, VISIBLE STRING etc.
+    /// </summary>
+    ObjectType_VAR = 7;
+    /// <summary>
+    /// A multiple data field object where each data field is a
+    /// simple variable of the SAME basic data type e.g. array of UNSIGNED16 etc.
+    /// Sub-index 0 is of UNSIGNED8 and therefore not part of the ARRAY data
+    /// </summary>
+    ObjectType_ARRAY = 8;
+    /// <summary>
+    /// A multiple data field object where the data fields may be any combination of
+    /// simple variables. Sub-index 0 is of UNSIGNED8 and sub-index 255 is of UNSIGNED32 and
+    /// therefore not part of the RECORD data
+    /// </summary>
+    ObjectType_RECORD = 9;
+}
+
+/// <summary>
+/// Defines how the object can be changed from SDO
+/// </summary>
+enum AccessSDO
+{
+    AccessSDO_UNSPECIFIED = 0;
+    /// <summary>
+    /// no access
+    /// </summary>
+    AccessSDO_no = 1;
+
+    /// <summary>
+    /// read only access
+    /// </summary>
+    AccessSDO_ro = 2;
+
+    /// <summary>
+    /// write only access
+    /// </summary>
+    AccessSDO_wo = 3;
+
+    /// <summary>
+    /// read and write access
+    /// </summary>
+    AccessSDO_rw = 4;
+}
+
+/// <summary>
+/// Defines how the object can be changed from PDO
+/// </summary>
+enum AccessPDO
+{
+    AccessPDO_UNSPECIFIED = 0;
+    /// <summary>
+    /// no access
+    /// </summary>
+    no = 1;
+
+    /// <summary>
+    /// TPDO access
+    /// </summary>
+    t = 2;
+
+    /// <summary>
+    /// RPDO access
+    /// </summary>
+    r = 3;
+
+    /// <summary>
+    /// TPDO and RPDO access
+    /// </summary>
+    tr = 4;
+}
+
+/// <summary>
+/// Defines how the object can be changed from SRDO
+/// </summary>
+enum AccessSRDO
+{
+    /// <summary>
+    /// no access
+    /// </summary>
+    AccessSRDO_no = 0;
+
+    /// <summary>
+    /// SRDO TX access
+    /// </summary>
+    AccessSRDO_tx = 1;
+
+    /// <summary>
+    /// SRDO RX access
+    /// </summary>
+    AccessSRDO_rx = 2;
+
+    /// <summary>
+    /// SRDO TX or RX access
+    /// </summary>
+    AccessSRDO_trx = 3;
+}
+
+
+/// <summary>
+/// Object Dictionary SubEntry on specific Subindex. Sorted dictionary of them
+/// is part of OdEntry. If OdEntry ObjectType is "record", then each SubEntry in the
+/// dictionary may be unique. If OdEntry ObjectType is "array", then some properties
+/// of all SubEntries must be equal. If OdEntry ObjectType is "var", then
+/// one SubEntry exists.
+/// </summary>
+message OdSubEntry
+{
+    /// <summary>
+    /// Name of the sub entry. If OdEntry is "VAR", this property is not relevant.
+    /// If null, parameter is ignored by the JSON exporter.
+    /// </summary>
+    string SubParameterName = 1;
+
+    /// <summary>
+    /// Additonal parameter name, for the device configuration file (DCF).
+    /// If null, parameter is ignored by the JSON exporter.
+    /// </summary>
+    string Denotation = 2;
+
+    /// <summary>
+    /// CANopen data type
+    /// </summary>
+    DataType DataType = 3;
+
+    /// <summary>
+    /// CANopen SDO access permissions
+    /// </summary>
+    AccessSDO AccessSDO = 4;
+
+    /// <summary>
+    /// CANopen PDO access permissions
+    /// </summary>bool
+    AccessPDO AccessPDO = 5;
+
+    /// <summary>
+    /// CANopen SRDO access permissions.
+    /// </summary>
+    AccessSRDO AccessSRDO = 6;
+
+    /// <summary>
+    /// Default value of the sub object.
+    /// </summary>
+    string DefaultValue = 7;
+
+    /// <summary>
+    /// Actual value, for the device configuration file (DCF).
+    /// </summary>
+    string ParameterValue = 8;
+
+    /// <summary>
+    /// Low limit for the value.
+    /// </summary>
+    string LowLimit = 9;
+
+    /// <summary>
+    /// High limit for the value.
+    /// </summary>
+
+    string HighLimit = 10;
+    /// <summary>
+    /// CanOpenNode OD exporter V4: Minimum length of a string that can be stored.
+    /// </summary>
+    uint32 StringLengthMin = 1000;
+}
+
+/// <summary>
+/// Object Dictionary Entry on specific Index. Sorted dictionary of them
+/// is part of CanOpenDevice - CANopen Object Dictionary.
+/// </summary>
+message OdEntry
+{
+    /// <summary>
+    /// If true, object is completelly skipped by CANopenNode exporters, etc.
+    /// If false, parameter is ignored by the JSON exporter.
+    /// </summary>
+    bool Disabled = 1;
+
+    /// <summary>
+    /// Name of the entry
+    /// </summary>
+    string ParameterName = 2;
+
+    /// <summary>
+    /// Additonal parameter name, for the device configuration file (DCF).
+    /// </summary>
+    string Denotation = 3;
+
+    /// <summary>
+    /// Description of the Entry.
+    /// </summary>
+    string Description = 4;
+
+    /// <summary>
+    /// CANopen Object Type
+    /// </summary>
+    ObjectType ObjectType = 5;
+
+    /// <summary>
+    /// CANopen Complex Data Type, if ObjectType==RECORD. This property
+    /// is informative and required for some exportrs. Complex data types
+    /// are defined by OdSubEntries for each ODEntry individually.
+    /// </summary>
+    uint32 ComplexDataType = 6;
+
+    /// <summary>
+    /// CanOpenNode OD exporter V4: it will generate a macro for each different CO_countLabel.
+    /// For example, if four OD objects have "CO_countLabel" set to "TPDO", then
+    /// macro "#define ODxyz_CNT_TPDO 4" will be generated by the OD exporter.
+    /// If null, parameter is ignored by the JSON exporter.
+    /// </summary>
+    string CountLabel = 1001;
+
+    /// <summary>
+    /// CanOpenNode OD exporter V4: storage group into which the C variable will belong.
+    /// If null, it will default to "RAM" and is ignored by the JSON exporter.
+    /// </summary>
+    string StorageGroup = 1002;
+
+    /// <summary>
+    /// CanOpenNode OD exporter V1.3: Flags for the PDO.
+    /// If false, parameter is ignored by the JSON exporter.
+    /// </summary>
+    bool FlagsPDO = 1003;
+
+    /// <summary>
+    /// Sorted dictionary of sub entries
+    /// </summary>
+    map<string, OdSubEntry> SubObjects = 9;
+}
+
