@@ -60,6 +60,8 @@
             this.label32 = new System.Windows.Forms.Label();
             this.textBox_concretenodeid = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_revisionnumber = new System.Windows.Forms.TextBox();
             this.textBox_productnumber = new System.Windows.Forms.TextBox();
             this.textBox_productname = new System.Windows.Forms.TextBox();
             this.textBox_vendornumber = new System.Windows.Forms.TextBox();
@@ -104,8 +106,8 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.textBox_revisionnumber = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_ordercode = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -125,7 +127,7 @@
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(773, 807);
+            this.panel1.Size = new System.Drawing.Size(773, 833);
             this.panel1.TabIndex = 60;
             // 
             // groupBox5
@@ -144,7 +146,7 @@
             this.groupBox5.Controls.Add(this.label31);
             this.groupBox5.Controls.Add(this.textBox_projectFileName);
             this.groupBox5.Controls.Add(this.textBox_deviceedsname);
-            this.groupBox5.Location = new System.Drawing.Point(12, 358);
+            this.groupBox5.Location = new System.Drawing.Point(12, 384);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(377, 182);
             this.groupBox5.TabIndex = 63;
@@ -416,6 +418,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label12);
+            this.groupBox4.Controls.Add(this.textBox_ordercode);
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.textBox_revisionnumber);
             this.groupBox4.Controls.Add(this.textBox_productnumber);
@@ -428,10 +432,26 @@
             this.groupBox4.Controls.Add(this.label26);
             this.groupBox4.Location = new System.Drawing.Point(12, 14);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(377, 152);
+            this.groupBox4.Size = new System.Drawing.Size(377, 178);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Device Info";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 127);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(88, 13);
+            this.label11.TabIndex = 39;
+            this.label11.Text = "Revision Number";
+            // 
+            // textBox_revisionnumber
+            // 
+            this.textBox_revisionnumber.Location = new System.Drawing.Point(139, 124);
+            this.textBox_revisionnumber.Name = "textBox_revisionnumber";
+            this.textBox_revisionnumber.Size = new System.Drawing.Size(226, 20);
+            this.textBox_revisionnumber.TabIndex = 38;
             // 
             // textBox_productnumber
             // 
@@ -747,7 +767,7 @@
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.label20);
             this.groupBox3.Controls.Add(this.label18);
-            this.groupBox3.Location = new System.Drawing.Point(12, 172);
+            this.groupBox3.Location = new System.Drawing.Point(12, 198);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(377, 180);
             this.groupBox3.TabIndex = 1;
@@ -851,21 +871,21 @@
             this.label18.TabIndex = 18;
             this.label18.Text = "File version";
             // 
-            // textBox_revisionnumber
+            // textBox_ordercode
             // 
-            this.textBox_revisionnumber.Location = new System.Drawing.Point(139, 124);
-            this.textBox_revisionnumber.Name = "textBox_revisionnumber";
-            this.textBox_revisionnumber.Size = new System.Drawing.Size(226, 20);
-            this.textBox_revisionnumber.TabIndex = 38;
+            this.textBox_ordercode.Location = new System.Drawing.Point(139, 150);
+            this.textBox_ordercode.Name = "textBox_ordercode";
+            this.textBox_ordercode.Size = new System.Drawing.Size(226, 20);
+            this.textBox_ordercode.TabIndex = 40;
             // 
-            // label11
+            // label12
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 127);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(88, 13);
-            this.label11.TabIndex = 39;
-            this.label11.Text = "Revision Number";
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 153);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(58, 13);
+            this.label12.TabIndex = 41;
+            this.label12.Text = "OrderCode";
             // 
             // DeviceInfoView
             // 
@@ -971,5 +991,7 @@
         private System.Windows.Forms.CheckBox checkBox_ngSlave;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox_revisionnumber;
+        private System.Windows.Forms.TextBox textBox_ordercode;
+        private System.Windows.Forms.Label label12;
     }
 }

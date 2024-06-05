@@ -45,6 +45,7 @@ namespace ODEditor
             textBox_vendorname.Text = eds.di.VendorName;
             textBox_vendornumber.Text = eds.di.VendorNumber;
             textBox_revisionnumber.Text = eds.di.RevisionNumber;
+            textBox_ordercode.Text = eds.di.OrderCode;
 
             textBox_fileversion.Text = eds.fi.FileVersion;
             textBox_di_description.Text = eds.fi.Description;
@@ -142,6 +143,7 @@ namespace ODEditor
                 eds.di.VendorName = textBox_vendorname.Text;
                 eds.di.VendorNumber = textBox_vendornumber.Text;
                 eds.di.RevisionNumber = textBox_revisionnumber.Text;
+                eds.di.OrderCode = textBox_ordercode.Text;
 
                 eds.fi.FileVersion = textBox_fileversion.Text;
                 eds.fi.Description = textBox_di_description.Text;

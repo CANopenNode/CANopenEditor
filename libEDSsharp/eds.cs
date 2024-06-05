@@ -680,6 +680,11 @@ namespace libEDSsharp
         /// </summary>
         [EdsExport]
         public string RevisionNumber="";
+        /// <summary>
+        /// The value indicates the manufacturer specific order code
+        /// </summary>
+        [EdsExport]
+        public string OrderCode="";
 
         /// <summary>
         /// indicate the supported baud rates (Boolean, 0 = not supported, 1=supported)
