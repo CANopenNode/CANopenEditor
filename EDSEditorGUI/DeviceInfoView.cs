@@ -44,7 +44,7 @@ namespace ODEditor
             textBox_productnumber.Text = eds.di.ProductNumber;
             textBox_vendorname.Text = eds.di.VendorName;
             textBox_vendornumber.Text = eds.di.VendorNumber;
-            textBox_revisionnumber.Text = eds.di.RevisionNumber;
+            textBox_revisionnumber.Text = string.Format("0x{0:x8}", eds.di.RevisionNumber);
             textBox_ordercode.Text = eds.di.OrderCode;
 
             textBox_fileversion.Text = eds.fi.FileVersion;
@@ -142,7 +142,7 @@ namespace ODEditor
                 eds.di.ProductNumber = textBox_productnumber.Text;
                 eds.di.VendorName = textBox_vendorname.Text;
                 eds.di.VendorNumber = textBox_vendornumber.Text;
-                eds.di.RevisionNumber = textBox_revisionnumber.Text;
+                eds.di.RevisionNumber = Convert.ToUInt32(textBox_revisionnumber.Text,16);
                 eds.di.OrderCode = textBox_ordercode.Text;
 
                 eds.fi.FileVersion = textBox_fileversion.Text;

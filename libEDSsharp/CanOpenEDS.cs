@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace libEDSsharp
@@ -73,6 +74,10 @@ namespace libEDSsharp
                 if (f.FieldType.Name == "Boolean")
                 {
                     writer.WriteLine(string.Format("{2}{0}={1}", f.Name, ((bool)f.GetValue(this)) == true ? 1 : 0, comment == true ? ";" : ""));
+                }
+                else  if (f.FieldType.Name == "UInt32")
+                {
+                    writer.WriteLine(string.Format("{2}{0}={1}", f.Name, string.Format("0x{0:x8}", f.GetValue(this)), comment == true ? ";" : ""));
                 }
                 else
                 {

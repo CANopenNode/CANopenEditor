@@ -1259,7 +1259,7 @@ namespace libEDSsharp
                     if (body_device.DeviceIdentity.vendorID != null)
                         eds.di.VendorNumber = body_device.DeviceIdentity.vendorID.Value ?? "";
                     if (body_device.DeviceIdentity.revisionNumber != null)
-                        eds.di.RevisionNumber = body_device.DeviceIdentity.revisionNumber.Value ?? "";
+                        eds.di.RevisionNumber = body_device.DeviceIdentity.revisionNumber.Value;
                     if (body_device.DeviceIdentity.orderCode != null)
                         eds.di.OrderCode = body_device.DeviceIdentity.orderCode.Value ?? "";
                     if (body_device.DeviceIdentity.productName != null)

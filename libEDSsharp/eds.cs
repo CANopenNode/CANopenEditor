@@ -679,7 +679,7 @@ namespace libEDSsharp
         /// product revision number according to identity object sub-index 03h (Unsigned32) 
         /// </summary>
         [EdsExport]
-        public string RevisionNumber="";
+        public UInt32 RevisionNumber;
         /// <summary>
         /// The value indicates the manufacturer specific order code
         /// </summary>
