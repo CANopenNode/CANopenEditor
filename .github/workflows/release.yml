@@ -32,7 +32,7 @@ jobs:
       run: |
         $tag = "${{ github.ref_name }}"
         $filename = "CANopenEditor-$tag-binary.zip"
-        Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*" -DestinationPath $filename
+        Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*","EDSSharp\bin\Release\*" -DestinationPath $filename
         echo "binary_name=$filename" >> $env:GITHUB_ENV
     - name: make release
       uses: softprops/action-gh-release@v2
