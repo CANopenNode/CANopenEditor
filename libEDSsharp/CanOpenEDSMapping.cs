@@ -20,7 +20,6 @@
 using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
-using libEDSsharp;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -150,6 +149,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.objecttype))
                 .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.Label));
+                cfg.CreateMap<ObjectType, OdObject.Types.ObjectType>().ConvertUsing<ODTypeResolver>();
                 cfg.CreateMap<ODentry, OdSubObject>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.Alias, opt => opt.Ignore())
@@ -165,69 +165,106 @@ namespace libEDSsharp
             return mapper.Map<CanOpenDevice>(source);
         }
     }
-}
 
-/// <summary>
-/// Helper class to convert EDS date and time into datetime used in the protobuffer timestand (datetime)
-/// </summary>
-public class EDSDateAndTimeResolver : IValueResolver<FileInfo, CanOpen_FileInfo, Timestamp>
-{
-    string _type;
-    public EDSDateAndTimeResolver(string type)
-    {
-        _type = type;
-    }
+
     /// <summary>
-    /// Resolver to convert eds date and time into protobuffer timestamp (datetime)
+    /// Helper class to convert EDS date and time into datetime used in the protobuffer timestand (datetime)
     /// </summary>
-    /// <param name="source">source EDS fileinfo object</param>
-    /// <param name="destination">protobuffer fileinfo object</param>
-    /// <param name="member">result object</param>
-    /// <param name="context">resolve context</param>
-    /// <returns>result </returns>
-    public Timestamp Resolve(FileInfo source, CanOpen_FileInfo destination, Timestamp member, ResolutionContext context)
+    public class EDSDateAndTimeResolver : IValueResolver<FileInfo, CanOpen_FileInfo, Timestamp>
     {
-        string strTime;
-        string strDate; 
-        if(_type == "creation")
+        private readonly string _type;
+        public EDSDateAndTimeResolver(string type)
         {
-            strDate = source.CreationDate;
-            strTime = source.CreationTime;
+            _type = type;
         }
-        else
+        /// <summary>
+        /// Resolver to convert eds date and time into protobuffer timestamp (datetime)
+        /// </summary>
+        /// <param name="source">source EDS fileinfo object</param>
+        /// <param name="destination">protobuffer fileinfo object</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public Timestamp Resolve(FileInfo source, CanOpen_FileInfo destination, Timestamp member, ResolutionContext context)
         {
-            strDate = source.ModificationDate;
-            strTime = source.ModificationTime;
-        }
-
-        var time = new DateTime(0);
-        var date = new DateTime(0);
-
-        try
-        {
-            time = DateTime.ParseExact(strTime, "h:mmtt", CultureInfo.InvariantCulture);
-        }
-        catch (Exception e)
-        {
-            if (e is FormatException)
+            string strTime;
+            string strDate;
+            if (_type == "creation")
             {
-                //Silently ignore
+                strDate = source.CreationDate;
+                strTime = source.CreationTime;
             }
-        }
-
-        try
-        {
-            date = DateTime.ParseExact(strDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
-        }
-        catch (Exception e)
-        {
-            if (e is FormatException)
+            else
             {
-                //Silently ignore
+                strDate = source.ModificationDate;
+                strTime = source.ModificationTime;
             }
-        }
 
-        var datetime = date.AddTicks(time.TimeOfDay.Ticks);
-        return Timestamp.FromDateTime(datetime.ToUniversalTime());
+            var time = new DateTime(0);
+            var date = new DateTime(0);
+
+            try
+            {
+                time = DateTime.ParseExact(strTime, "h:mmtt", CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                if (e is FormatException)
+                {
+                    //Silently ignore
+                }
+            }
+
+            try
+            {
+                date = DateTime.ParseExact(strDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                if (e is FormatException)
+                {
+                    //Silently ignore
+                }
+            }
+
+            var datetime = date.AddTicks(time.TimeOfDay.Ticks);
+            return Timestamp.FromDateTime(datetime.ToUniversalTime());
+        }
+    }
+
+    /// <summary>
+    /// Helper class to convert Enum types
+    /// </summary>
+    /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
+    public class ODTypeResolver : ITypeConverter<ObjectType, OdObject.Types.ObjectType>
+    {
+        /// <summary>
+        /// Resolver to convert eds date and time into protobuffer timestamp (datetime)
+        /// </summary>
+        /// <param name="source">source EDS fileinfo object</param>
+        /// <param name="destination">protobuffer fileinfo object</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public OdObject.Types.ObjectType Convert(ObjectType source, OdObject.Types.ObjectType destination, ResolutionContext context)
+        {
+            switch (source)
+            {
+                case ObjectType.VAR:
+                    return OdObject.Types.ObjectType.Var;
+                case ObjectType.ARRAY:
+                    return OdObject.Types.ObjectType.Array;
+                case ObjectType.RECORD:
+                    return OdObject.Types.ObjectType.Record;
+                case ObjectType.UNKNOWN:
+                case ObjectType.NULL:
+                case ObjectType.DOMAIN:
+                case ObjectType.DEFTYPE:
+                case ObjectType.DEFSTRUCT:
+                default:
+                    return OdObject.Types.ObjectType.Unspecified;
+            }
+
+        }
     }
 }

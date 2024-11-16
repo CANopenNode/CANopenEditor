@@ -336,16 +336,20 @@ ProDucTNumbeR=test4
         public void Test_accesstype()
         {
             {
-                Dictionary<string, Dictionary<string, string>> section = new Dictionary<string, Dictionary<string, string>>();
-                section.Add("[1234]", new Dictionary<string, string>());
+                Dictionary<string, Dictionary<string, string>> section = new Dictionary<string, Dictionary<string, string>>
+                {
+                    { "[1234]", new Dictionary<string, string>() }
+                };
                 section["[1234]"].Add("AccessType", "ro");
                 KeyValuePair<string, Dictionary<string, string>> kvp = section.Single();
                 this.ParseEDSentry(kvp);
             }
 
             {
-                Dictionary<string, Dictionary<string, string>> section = new Dictionary<string, Dictionary<string, string>>();
-                section.Add("[1234]", new Dictionary<string, string>());
+                Dictionary<string, Dictionary<string, string>> section = new Dictionary<string, Dictionary<string, string>>
+                {
+                    { "[1234]", new Dictionary<string, string>() }
+                };
                 section["[1234]"].Add("AccessType", "RO");
                 KeyValuePair<string, Dictionary<string, string>> kvp = section.Single();
                 this.ParseEDSentry(kvp);
