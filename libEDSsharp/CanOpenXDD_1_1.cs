@@ -450,7 +450,7 @@ namespace libEDSsharp
         {
             UInt32 byteLength;
             bool signed = false;
-            var dt = subEntry.Type;
+            var dt = subEntry.DataType;
 
             switch (dt)
             {
@@ -474,7 +474,7 @@ namespace libEDSsharp
                     return Items1ChoiceType.BITSTRING;
 
                 default:
-                    subEntry.Type = LibCanOpen.OdSubObject.Types.DataType.Integer32;
+                    subEntry.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer32;
                     return Items1ChoiceType.DINT;
 
                 // transform other non standard values to OCTET_STRING
@@ -508,7 +508,7 @@ namespace libEDSsharp
                 bytes.Add(String.Format("{0:X2}", value & 0xFF));
                 value >>= 8;
             }
-            subEntry.Type = LibCanOpen.OdSubObject.Types.DataType.OctetString;
+            subEntry.DataType = LibCanOpen.OdSubObject.Types.DataType.OctetString;
             subEntry.DefaultValue = string.Join(" ", bytes);
 
             return Items1ChoiceType.BITSTRING;
@@ -519,54 +519,54 @@ namespace libEDSsharp
             switch (choiceType)
             {
                 case Items1ChoiceType.BOOL:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Boolean;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Boolean;
                     break;
                 case Items1ChoiceType.CHAR:
                 case Items1ChoiceType.SINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Integer8;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer8;
                     break;
                 case Items1ChoiceType.INT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Integer16;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer16;
                     break;
                 case Items1ChoiceType.DINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Integer32;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer32;
                     break;
                 case Items1ChoiceType.LINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Integer64;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer64;
                     break;
                 case Items1ChoiceType.BYTE:
                 case Items1ChoiceType.USINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned8;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned8;
                     break;
                 case Items1ChoiceType.WORD:
                 case Items1ChoiceType.UINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned16;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned16;
                     break;
                 case Items1ChoiceType.DWORD:
                 case Items1ChoiceType.UDINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32;
                     break;
                 case Items1ChoiceType.LWORD:
                 case Items1ChoiceType.ULINT:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned64;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned64;
                     break;
                 case Items1ChoiceType.REAL:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Real32;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Real32;
                     break;
                 case Items1ChoiceType.LREAL:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Real64;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Real64;
                     break;
                 case Items1ChoiceType.STRING:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.VisibleString;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.VisibleString;
                     break;
                 case Items1ChoiceType.WSTRING:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.UnicodeString;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.UnicodeString;
                     break;
                 case Items1ChoiceType.BITSTRING:
-                    OdSubObject.Type = OdSubObject.DefaultValue == "" ? LibCanOpen.OdSubObject.Types.DataType.Domain : LibCanOpen.OdSubObject.Types.DataType.OctetString;
+                    OdSubObject.DataType = OdSubObject.DefaultValue == "" ? LibCanOpen.OdSubObject.Types.DataType.Domain : LibCanOpen.OdSubObject.Types.DataType.OctetString;
                     break;
                 default:
-                    OdSubObject.Type = LibCanOpen.OdSubObject.Types.DataType.Integer32;
+                    OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.Integer32;
                     break;
             }
         }
@@ -1758,12 +1758,12 @@ namespace libEDSsharp
                             {
                                 Name = netObj.name ?? "",
                                 Alias = netObj.denotation ?? "",
-                                Type = objectType
+                                ObjectType = objectType
                             };
 
                             OdSubObject subEntry0 = new OdSubObject()
                             {
-                                Type = dataType,
+                                DataType = dataType,
                                 Sdo = accessSDO,
                                 Pdo = accessPDO,
                                 DefaultValue = netObj.defaultValue ?? "",
@@ -1851,7 +1851,7 @@ namespace libEDSsharp
                                     {
                                         Name = netSubObj.name ?? "",
                                         Alias = netSubObj.denotation ?? "",
-                                        Type = subDataType,
+                                        DataType = subDataType,
                                         Sdo = subAccessSDO,
                                         Pdo = subAccessPDO,
                                         DefaultValue = netSubObj.defaultValue ?? "",
@@ -1982,7 +1982,7 @@ namespace libEDSsharp
                 {
                     index = new byte[] { (byte)(indexInt >> 8), (byte)(indexInt & 0xFF) },
                     name = entry.Name,
-                    objectType = (byte)entry.Type,
+                    objectType = (byte)entry.ObjectType,
                     uniqueIDRef = "UID_OBJ_" + index
                 };
                 body_network_objectList.Add(netObj);
@@ -2006,7 +2006,7 @@ namespace libEDSsharp
                 }
                 body_device_parameterList.Add(devPar);
 
-                if (entry.Type == LibCanOpen.OdObject.Types.ObjectType.Var)
+                if (entry.ObjectType == LibCanOpen.OdObject.Types.ObjectType.Var)
                 {
                     if (entry.SubObjects.Count != 1)
                     {
@@ -2037,7 +2037,7 @@ namespace libEDSsharp
                     if (deviceCommissioning && subEntry0.ActualValue != null && subEntry0.ActualValue != "")
                         devPar.actualValue = new actualValue { value = subEntry0.ActualValue };
                 }
-                else if ((entry.Type == LibCanOpen.OdObject.Types.ObjectType.Array || entry.Type == LibCanOpen.OdObject.Types.ObjectType.Record) && entry.SubObjects != null && entry.SubObjects.Count > 0)
+                else if ((entry.ObjectType == LibCanOpen.OdObject.Types.ObjectType.Array || entry.ObjectType == LibCanOpen.OdObject.Types.ObjectType.Record) && entry.SubObjects != null && entry.SubObjects.Count > 0)
                 {
                     netObj.subNumber = (byte)entry.SubObjects.Count;
                     netObj.subNumberSpecified = true;
@@ -2103,7 +2103,7 @@ namespace libEDSsharp
                         if (deviceCommissioning && subEntry.ActualValue != null && subEntry.ActualValue != "")
                             devPar.actualValue = new actualValue { value = subEntry.ActualValue };
 
-                        if (entry.Type == LibCanOpen.OdObject.Types.ObjectType.Record)
+                        if (entry.ObjectType == LibCanOpen.OdObject.Types.ObjectType.Record)
                         {
                             devStructSubList.Add(new varDeclaration
                             {
@@ -2123,7 +2123,7 @@ namespace libEDSsharp
                     }
 
                     // add refference to data type definition and definition of array or struct data type (schema requirement)
-                    if (entry.Type == LibCanOpen.OdObject.Types.ObjectType.Array)
+                    if (entry.ObjectType == LibCanOpen.OdObject.Types.ObjectType.Array)
                     {
                         devPar.Items1 = new object[] { new dataTypeIDRef { uniqueIDRef = "UID_ARR_" + index } };
                         devPar.Items1ElementName = new Items1ChoiceType[] { Items1ChoiceType.dataTypeIDRef };
