@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:EDSEditorGUI2.ViewModels"
+             xmlns:view="using:EDSEditorGUI2.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EDSEditorGUI2.Views.DeviceInfoView"
+             x:DataType="vm:DeviceInfo">
+  <StackPanel Orientation="Horizontal" >  
+    <StackPanel Width="500">
+      <TextBlock Text="Device Info:" Margin="0,10" />
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 5">
+        <TextBlock Text="Product name" VerticalAlignment="Center" Width="200" />
+        <TextBox Text="{Binding ProductName}" Width="250"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="50">
+        <TextBlock Text="Vendor name" VerticalAlignment="Center" Width="200" />
+        <TextBox Text="{Binding VendorName}" Width="250" />
+      </StackPanel>
+      <TextBlock Text="General and Master Features:" Margin="0,10"/>
+      <CheckBox IsChecked="{Binding LssSlave}">LSS Slave</CheckBox>
+      <CheckBox IsChecked="{Binding LssMaster}">Master</CheckBox>
+    </StackPanel>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Right" >
+      <TextBlock>Baudrates</TextBlock>
+      <CheckBox IsChecked="{Binding BaudRate10}">10 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate20}">20 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate50}">50 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate125}">125 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate250}">250 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate500}">500 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate800}">800 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRate1000}">1000 kbit/s.</CheckBox>
+      <CheckBox IsChecked="{Binding BaudRateAuto}">auto</CheckBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>
+
+
