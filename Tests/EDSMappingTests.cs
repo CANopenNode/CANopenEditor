@@ -41,19 +41,6 @@ namespace Tests
             MappingEDS.MapToProtobuffer(eds);
         }
         [Fact]
-        public void Test_FromProtobufferAssertConfig()
-        {
-            var d = new CanOpenDevice
-            {
-                FileInfo = new CanOpen_FileInfo(),
-                DeviceInfo = new CanOpen_DeviceInfo(),
-                DeviceCommissioning = new CanOpen_DeviceCommissioning()
-            };
-
-            //Assert is called inside the map function
-            MappingEDS.MapFromProtobuffer(d);
-        }
-        [Fact]
         public void Test_ToProtobufferFileInfo()
         {
             var eds = new EDSsharp
@@ -150,7 +137,7 @@ namespace Tests
         [InlineData(OdObject.Types.ObjectType.Unspecified, ObjectType.DOMAIN)]
         [InlineData(OdObject.Types.ObjectType.Unspecified, ObjectType.NULL)]
         [InlineData(OdObject.Types.ObjectType.Unspecified, ObjectType.UNKNOWN)]
-        void Test_ToProtobufferODObject(OdObject.Types.ObjectType objTypeProto, ObjectType objTypeEDS)
+        public void Test_ToProtobufferODObject(OdObject.Types.ObjectType objTypeProto, ObjectType objTypeEDS)
         {
             var eds = new EDSsharp
             {
@@ -194,7 +181,7 @@ namespace Tests
         [InlineData(OdSubObject.Types.DataType.Unsigned48, DataType.UNSIGNED48)]
         [InlineData(OdSubObject.Types.DataType.Unsigned56, DataType.UNSIGNED56)]
         [InlineData(OdSubObject.Types.DataType.Unsigned64, DataType.UNSIGNED64)]
-        void Test_ToProtobufferSubODObjectDatatype(OdSubObject.Types.DataType datatypeProto, DataType datatypeEDS)
+        public void Test_ToProtobufferSubODObjectDatatype(OdSubObject.Types.DataType datatypeProto, DataType datatypeEDS)
         {
             var eds = new EDSsharp
             {
@@ -216,15 +203,16 @@ namespace Tests
             var tmp = MappingEDS.MapToProtobuffer(eds);
             Assert.Equal(datatypeProto, tmp.Objects[od.Index.ToString()].SubObjects["0"].Type);
         }
+
         [Theory]
         [InlineData(OdSubObject.Types.AccessPDO.Tr, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rw)]
-        [InlineData(OdSubObject.Types.AccessPDO.T, OdSubObject.Types.AccessSDO.Ro, EDSsharp.AccessType.ro)]
-        [InlineData(OdSubObject.Types.AccessPDO.R, OdSubObject.Types.AccessSDO.Wo, EDSsharp.AccessType.wo)]
+        [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.Ro, EDSsharp.AccessType.ro)]
+        [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.Wo, EDSsharp.AccessType.wo)]
         [InlineData(OdSubObject.Types.AccessPDO.T, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rwr)]
         [InlineData(OdSubObject.Types.AccessPDO.R, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rww)]
         [InlineData(OdSubObject.Types.AccessPDO.R, OdSubObject.Types.AccessSDO.Ro, EDSsharp.AccessType.@const)]
         [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.No, EDSsharp.AccessType.UNKNOWN)]
-        void Test_ToProtobufferSubODObjectAccesstype(OdSubObject.Types.AccessPDO accessPDOProto, OdSubObject.Types.AccessSDO accessSDOProto, EDSsharp.AccessType datatypeEDS)
+        public void Test_ToProtobufferSubODObjectAccesstype(OdSubObject.Types.AccessPDO accessPDOProto, OdSubObject.Types.AccessSDO accessSDOProto, EDSsharp.AccessType datatypeEDS)
         {
             var eds = new EDSsharp
             {
@@ -278,6 +266,19 @@ namespace Tests
             Assert.Equal(sub.HighLimit, tmp.Objects[od.Index.ToString()].SubObjects["0"].HighLimit);
             Assert.Equal(sub.LowLimit, tmp.Objects[od.Index.ToString()].SubObjects["0"].LowLimit);
             Assert.Equal(sub.defaultvalue, tmp.Objects[od.Index.ToString()].SubObjects["0"].DefaultValue);
+        }
+        [Fact]
+        public void Test_FromProtobufferAssertConfig()
+        {
+            var d = new CanOpenDevice
+            {
+                FileInfo = new CanOpen_FileInfo(),
+                DeviceInfo = new CanOpen_DeviceInfo(),
+                DeviceCommissioning = new CanOpen_DeviceCommissioning()
+            };
+
+            //Assert is called inside the map function
+            MappingEDS.MapFromProtobuffer(d);
         }
     }
 }

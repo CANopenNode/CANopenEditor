@@ -150,12 +150,14 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.objecttype))
                 .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.Label));
                 cfg.CreateMap<ObjectType, OdObject.Types.ObjectType>().ConvertUsing<ODTypeResolver>();
+                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>().ConvertUsing<ODSDOAccessTypeResolver>();
+                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>().ConvertUsing<ODPDOAccessTypeResolver>();
                 cfg.CreateMap<ODentry, OdSubObject>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.Alias, opt => opt.Ignore())
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.datatype))
-                .ForMember(dest => dest.Sdo, opt => opt.MapFrom(src => src.AccessSDO()))
-                .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.AccessPDO()))
+                .ForMember(dest => dest.Sdo, opt => opt.MapFrom(src => src.accesstype))
+                .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Srdo, opt => opt.Ignore())
                 .ForMember(dest => dest.StringLengthMin, opt => opt.MapFrom(src => src.Lengthofstring));
             });
@@ -165,7 +167,6 @@ namespace libEDSsharp
             return mapper.Map<CanOpenDevice>(source);
         }
     }
-
 
     /// <summary>
     /// Helper class to convert EDS date and time into datetime used in the protobuffer timestand (datetime)
@@ -233,16 +234,16 @@ namespace libEDSsharp
     }
 
     /// <summary>
-    /// Helper class to convert Enum types
+    /// Helper class to convert object type enum
     /// </summary>
     /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
     public class ODTypeResolver : ITypeConverter<ObjectType, OdObject.Types.ObjectType>
     {
         /// <summary>
-        /// Resolver to convert eds date and time into protobuffer timestamp (datetime)
+        /// Resolver to convert object types
         /// </summary>
-        /// <param name="source">source EDS fileinfo object</param>
-        /// <param name="destination">protobuffer fileinfo object</param>
+        /// <param name="source">EDS object type object</param>
+        /// <param name="destination">protobuffer object type</param>
         /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
@@ -264,7 +265,68 @@ namespace libEDSsharp
                 default:
                     return OdObject.Types.ObjectType.Unspecified;
             }
-
+        }
+    }
+    /// <summary>
+    /// Helper class to convert Enum types
+    /// </summary>
+    /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
+    public class ODSDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>
+    {
+        /// <summary>
+        /// Resolver to convert eds access into SDO access type
+        /// </summary>
+        /// <param name="source">EDS accesstype</param>
+        /// <param name="destination">protobuffer sdo access type</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public OdSubObject.Types.AccessSDO Convert(EDSsharp.AccessType source, OdSubObject.Types.AccessSDO destination, ResolutionContext context)
+        {
+            switch (source)
+            {
+                case EDSsharp.AccessType.rw:
+                case EDSsharp.AccessType.rwr:
+                case EDSsharp.AccessType.rww:
+                    return OdSubObject.Types.AccessSDO.Rw;
+                case EDSsharp.AccessType.ro:
+                case EDSsharp.AccessType.@const:
+                    return OdSubObject.Types.AccessSDO.Ro;
+                case EDSsharp.AccessType.wo:
+                    return OdSubObject.Types.AccessSDO.Wo;
+                case EDSsharp.AccessType.UNKNOWN:
+                default:
+                    return OdSubObject.Types.AccessSDO.No;
+            }
+        }
+    }
+    public class ODPDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>
+    {
+        /// <summary>
+        /// Resolver to convert eds access into PDO access type
+        /// </summary>
+        /// <param name="source">EDS accesstype</param>
+        /// <param name="destination">protobuffer pdo access type</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public OdSubObject.Types.AccessPDO Convert(EDSsharp.AccessType source, OdSubObject.Types.AccessPDO destination, ResolutionContext context)
+        {
+            switch (source)
+            {
+                case EDSsharp.AccessType.rw:
+                    return OdSubObject.Types.AccessPDO.Tr;
+                case EDSsharp.AccessType.rwr:
+                    return OdSubObject.Types.AccessPDO.T;
+                case EDSsharp.AccessType.rww:
+                case EDSsharp.AccessType.@const:
+                    return OdSubObject.Types.AccessPDO.R;
+                case EDSsharp.AccessType.ro:
+                case EDSsharp.AccessType.wo:
+                case EDSsharp.AccessType.UNKNOWN:
+                default:
+                    return OdSubObject.Types.AccessPDO.No;
+            }
         }
     }
 }
