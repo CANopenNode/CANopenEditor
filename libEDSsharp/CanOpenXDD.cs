@@ -517,10 +517,8 @@ namespace libEDSsharp
 
                         AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].edseditor_extension_notifyonchange = subod.prop.CO_flagsPDO;
 
-                        if (od.objecttype == ObjectType.ARRAY && count != 0)
-                            bytes = BitConverter.GetBytes((UInt16)od.datatype);
-                        else
-                            bytes = BitConverter.GetBytes((UInt16)subod.datatype);
+                        bytes = (subod.datatype == DataType.UNKNOWN && od.parent != null) ? BitConverter.GetBytes((UInt16)od.parent.datatype) : BitConverter.GetBytes((UInt16)subod.datatype);
+                      
                         Array.Reverse(bytes);
 
                         // hack - special handling for rrw / rww access type
@@ -786,7 +784,7 @@ namespace libEDSsharp
                             productID = ApplicationLayers.identity.productID.Value;
                         }
 
-                        if (ApplicationLayers.identity.buildDate != null)
+                        if (ApplicationLayers.identity.buildDate != default)
                         {
                             buildDate = ApplicationLayers.identity.buildDate;
                         }

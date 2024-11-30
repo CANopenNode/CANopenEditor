@@ -30,10 +30,13 @@ jobs:
         echo "prerelease=$prerelease" >> $env:GITHUB_ENV
     - name: Make release package
       run: |
-        Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*" -DestinationPath ".\binary.zip"
+        $tag = "${{ github.ref_name }}"
+        $filename = "CANopenEditor-$tag-binary.zip"
+        Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*","EDSSharp\bin\Release\*" -DestinationPath $filename
+        echo "binary_name=$filename" >> $env:GITHUB_ENV
     - name: make release
       uses: softprops/action-gh-release@v2
       with:
         prerelease: ${{ env.prerelease }}
         files: |
-          binary.zip
+          ${{ env.binary_name }}

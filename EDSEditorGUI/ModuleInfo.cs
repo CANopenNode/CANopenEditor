@@ -67,7 +67,7 @@ namespace ODEditor
                     }
                     else
                     {
-                        lvi2.BackColor = Color.Red;
+                        lvi2.BackColor = Color.Tomato;
                     }
                 }
 

@@ -12,18 +12,6 @@ CANopen is the internationally standardized (EN 50325-4) ([CiA301](http://can-ci
 
 [CANopenNode](https://github.com/CANopenNode/CANopenNode) is free and open source CANopen Stack
 
-This is the `main` branch with sources. For binaries see the `build` branch or download latest [CANopenEditor-build.zip](https://github.com/CANopenNode/CANopenEditor/archive/refs/heads/build.zip).
-
-----
-
-Join us on slack
---------
-
-https://join.slack.com/t/canopennode/shared_invite/zt-ghjhfg12-qGQNWvSEmhqcSedhFaLpuA
-(Invite expires 12th Sep 2020) if the link expires before i push this page please ping me (robin.cornelius@gmail.com)
-
-I'm hoping to build a community with canopennode and related tools at the above address. There are channels for this project already
-so if you use this tool, or just canopennode please join.
 
 EDSSharp
 --------

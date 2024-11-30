@@ -4357,10 +4357,10 @@ namespace CanOpenXSD_1_1 {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.canopen.org/xml/1.1", IsNullable=false)]
     public partial class fileList {
 
-        private file fileField;
+        private File fileField;
 
         /// <remarks/>
-        public file file {
+        public File file {
             get {
                 return this.fileField;
             }
@@ -4377,7 +4377,7 @@ namespace CanOpenXSD_1_1 {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.canopen.org/xml/1.1")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.canopen.org/xml/1.1", IsNullable=false)]
-    public partial class file {
+    public partial class File {
 
         private string uRIField;
 
@@ -4867,14 +4867,14 @@ namespace CanOpenXSD_1_1 {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.canopen.org/xml/1.1", IsNullable=false)]
     public partial class dictionary {
 
-        private file fileField;
+        private File fileField;
 
         private string langField;
 
         private string dictIDField;
 
         /// <remarks/>
-        public file file {
+        public File file {
             get {
                 return this.fileField;
             }

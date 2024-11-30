@@ -218,6 +218,7 @@ namespace ODEditor
 
         private void exportCanOpenNode(DeviceView dv, string FileName, ExporterFactory.Exporter exporterType)
         {
+            bool saveDirty = dv.eds.Dirty; // dispatch update will set it to dirty. Save and restore axtual dirty status
             Warnings.warning_list.Clear();
 
             IExporter exporter = ExporterFactory.getExporter(exporterType);
@@ -241,6 +242,7 @@ namespace ODEditor
             }
 
             dv.dispatch_updateOD();
+           dv.eds.Dirty = saveDirty; // dispatch update will set it to dirty. Restore saved dirty status
         }
 
         private void exportCanOpenNodeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -452,7 +454,7 @@ namespace ODEditor
                         DeviceView d = (DeviceView)c;
                         if (d.eds.Dirty == true)
                         {
-                            page.BackColor = Color.Red;
+                            page.BackColor = Color.Tomato;
                         }
                         else
                         {
@@ -762,6 +764,8 @@ namespace ODEditor
             if (ext == ".dcf")
                 openEDSfile(filepath, InfoSection.Filetype.File_DCF);
 
+            addtoMRU(filepath);
+
         }
 
         private void ODEditor_MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -816,8 +820,8 @@ namespace ODEditor
 
             _mru.Insert(0, path);
 
-            if (_mru.Count > 10)
-                _mru.RemoveAt(10);
+            if (_mru.Count > 20)
+                _mru.RemoveAt(20);
 
             populateMRU();
 
@@ -1321,6 +1325,38 @@ namespace ODEditor
         {
             Preferences p = new Preferences();
             p.ShowDialog();
+        }
+
+        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            TabPage tp;
+            if (e.Button == MouseButtons.Right)
+            {
+                for (int i = 0; i <= tabControl1.TabCount - 1; i++)
+                {
+                    if (tabControl1.GetTabRect(i).Contains(e.Location))
+                    {
+                        tp = tabControl1.TabPages[i];
+
+                        DialogResult dialogResult = MessageBox.Show(tabControl1.TabPages[i].Text, "Close file?", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+
+                                DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
+
+                                if (device.eds.Dirty == true)
+                                {
+                                    if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
+                                        return;
+                                }
+
+                                network.Remove(device.eds);
+
+                                tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
+                        }                        
+                    }
+                }
+            }
         }
     }
 }

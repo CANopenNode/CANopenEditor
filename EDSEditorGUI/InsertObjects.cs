@@ -150,7 +150,7 @@ namespace ODEditor
             DataGridViewCellStyle styleErr = new DataGridViewCellStyle
             {
                 Font = new Font(dataGridView.Font, FontStyle.Bold),
-                ForeColor = Color.Red
+                ForeColor = Color.Tomato
             };
 
             dataGridView.Rows.Clear();

@@ -4999,14 +4999,14 @@ namespace CanOpenXSD_1_0 {
     public partial class dictionary
     {
 
-        private file fileField;
+        private File fileField;
 
         private string langField;
 
         private string dictIDField;
 
         /// <remarks/>
-        public file file
+        public File file
         {
             get
             {
@@ -5054,7 +5054,7 @@ namespace CanOpenXSD_1_0 {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.canopen.org/xml/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://www.canopen.org/xml/1.0", IsNullable = false)]
-    public partial class file
+    public partial class File
     {
 
         private string uRIField;
