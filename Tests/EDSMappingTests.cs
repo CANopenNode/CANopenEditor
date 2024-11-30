@@ -151,7 +151,7 @@ namespace Tests
             };
             eds.ods.Add(od.Index, od);
             var tmp = MappingEDS.MapToProtobuffer(eds);
-            Assert.Equal(objTypeProto, tmp.Objects[od.Index.ToString()].Type);
+            Assert.Equal(objTypeProto, tmp.Objects[od.Index.ToString()].ObjectType);
         }
 
         [Theory]
@@ -201,7 +201,7 @@ namespace Tests
             od.subobjects.Add(0x00, sub);
             eds.ods.Add(od.Index, od);
             var tmp = MappingEDS.MapToProtobuffer(eds);
-            Assert.Equal(datatypeProto, tmp.Objects[od.Index.ToString()].SubObjects["0"].Type);
+            Assert.Equal(datatypeProto, tmp.Objects[od.Index.ToString()].SubObjects["0"].DataType);
         }
 
         [Theory]

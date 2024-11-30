@@ -147,7 +147,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.StorageGroup, opt => opt.Ignore())
                 .ForMember(dest => dest.FlagsPDO, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.objecttype))
+                .ForMember(dest => dest.ObjectType, opt => opt.MapFrom(src => src.objecttype))
                 .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.Label));
                 cfg.CreateMap<ObjectType, OdObject.Types.ObjectType>().ConvertUsing<ODTypeResolver>();
                 cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>().ConvertUsing<ODSDOAccessTypeResolver>();
@@ -155,7 +155,7 @@ namespace libEDSsharp
                 cfg.CreateMap<ODentry, OdSubObject>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.Alias, opt => opt.Ignore())
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.datatype))
+                .ForMember(dest => dest.DataType, opt => opt.MapFrom(src => src.datatype))
                 .ForMember(dest => dest.Sdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Srdo, opt => opt.Ignore())
