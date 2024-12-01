@@ -40,6 +40,9 @@ namespace libEDSsharp
         {
             var config = new MapperConfiguration(cfg =>
             {
+                // workaround for https://github.com/AutoMapper/AutoMapper/issues/2959
+                // Cant update untill after .net framwork is gone
+                cfg.ShouldMapMethod = (m => m.Name == "ARandomStringThatDoesNotMatchAnyFunctionName");
                 cfg.CreateMap<CanOpenDevice, EDSsharp>()
                 .ForMember(dest => dest.Dirty, opt => opt.Ignore())
                 .ForMember(dest => dest.xddfilename_1_1, opt => opt.Ignore())
@@ -120,6 +123,9 @@ namespace libEDSsharp
         {
             var config = new MapperConfiguration(cfg =>
             {
+                // workaround for https://github.com/AutoMapper/AutoMapper/issues/2959
+                // Cant update untill after .net framwork is gone
+                cfg.ShouldMapMethod = (m => m.Name == "ARandomStringThatDoesNotMatchAnyFunctionName");
                 cfg.CreateMap<EDSsharp, CanOpenDevice>()
                 .ForMember(dest => dest.FileInfo, opt => opt.MapFrom(src => src.fi))
                 .ForMember(dest => dest.DeviceInfo, opt => opt.MapFrom(src => src.di))
