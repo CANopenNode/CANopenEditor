@@ -47,6 +47,7 @@
     <PackageReference Include="System.CodeDom" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Google.Protobuf" Version="3.27.2" />
     <PackageReference Include="Google.Protobuf.Tools" Version="3.27.2" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
