@@ -1,9 +1,9 @@
-﻿using Xunit;
-using libEDSsharp;
+﻿using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
-using System.Globalization;
+using libEDSsharp;
 using System;
-using Google.Protobuf.WellKnownTypes;
+using System.Globalization;
+using Xunit;
 
 namespace Tests
 {
