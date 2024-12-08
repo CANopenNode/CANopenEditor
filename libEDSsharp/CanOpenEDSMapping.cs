@@ -134,7 +134,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.parent, opt => opt.Ignore())
                 .ForMember(dest => dest.prop, opt => opt.MapFrom(src => src))
                 .ForMember(dest => dest.uniqueID, opt => opt.Ignore());
-                cfg.CreateMap<OdSubObject, EDSsharp.AccessType>().ConvertUsing<ODSDOAccessTypeResolver>();
+                cfg.CreateMap<OdSubObject, EDSsharp.AccessType>().ConvertUsing<ODAccessTypeResolver>();
                 cfg.CreateMap<OdSubObject, ODentry>()
                 .ForMember(dest => dest.parameter_name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Index, opt => opt.Ignore())
@@ -211,8 +211,8 @@ namespace libEDSsharp
                 .ForMember(dest => dest.ObjectType, opt => opt.MapFrom(src => src.objecttype))
                 .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.Label));
                 cfg.CreateMap<ObjectType, OdObject.Types.ObjectType>().ConvertUsing<ODTypeResolver>();
-                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>().ConvertUsing<ODSDOAccessTypeResolver>();
-                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>().ConvertUsing<ODPDOAccessTypeResolver>();
+                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>().ConvertUsing<ODAccessTypeResolver>();
+                cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>().ConvertUsing<ODAccessTypeResolver>();
                 cfg.CreateMap<ODentry, OdSubObject>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.Alias, opt => opt.Ignore())
@@ -353,10 +353,11 @@ namespace libEDSsharp
         }
     }
     /// <summary>
-    /// Helper class to convert Enum types
+    /// Helper class to convert Access types
     /// </summary>
     /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
-    public class ODSDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>,
+    public class ODAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>,
+                                           ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>,
                                            ITypeConverter<OdSubObject, EDSsharp.AccessType>
     {
         /// <summary>
@@ -386,34 +387,6 @@ namespace libEDSsharp
             }
         }
         /// <summary>
-        /// Resolver to convert SDO access type into eds access into 
-        /// </summary>
-        /// <param name="source">protobuffer sdo access type</param>
-        /// <param name="destination">EDS accesstype</param>
-        /// <param name="member">result object</param>
-        /// <param name="context">resolve context</param>
-        /// <returns>result </returns>
-        public EDSsharp.AccessType Convert(OdSubObject source, EDSsharp.AccessType destination, ResolutionContext context)
-        {
-            if (source.Pdo == OdSubObject.Types.AccessPDO.Tr && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
-                return EDSsharp.AccessType.rw;
-            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
-                return EDSsharp.AccessType.ro;
-            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Wo)
-                return EDSsharp.AccessType.wo;
-            else if (source.Pdo == OdSubObject.Types.AccessPDO.T && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
-                return EDSsharp.AccessType.rwr;
-            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
-                return EDSsharp.AccessType.rww;
-            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
-                return EDSsharp.AccessType.@const;
-            else
-                return EDSsharp.AccessType.UNKNOWN;
-        }
-    }
-    public class ODPDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>
-    {
-        /// <summary>
         /// Resolver to convert eds access into PDO access type
         /// </summary>
         /// <param name="source">EDS accesstype</param>
@@ -439,7 +412,33 @@ namespace libEDSsharp
                     return OdSubObject.Types.AccessPDO.No;
             }
         }
+        /// <summary>
+        /// Resolver to convert SDO access type into eds access into 
+        /// </summary>
+        /// <param name="source">protobuffer sdo access type</param>
+        /// <param name="destination">EDS accesstype</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public EDSsharp.AccessType Convert(OdSubObject source, EDSsharp.AccessType destination, ResolutionContext context)
+        {
+            if (source.Pdo == OdSubObject.Types.AccessPDO.Tr && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rw;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
+                return EDSsharp.AccessType.ro;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Wo)
+                return EDSsharp.AccessType.wo;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.T && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rwr;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rww;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
+                return EDSsharp.AccessType.@const;
+            else
+                return EDSsharp.AccessType.UNKNOWN;
+        }
     }
+
     public class ODStringToShortTypeResolver : ITypeConverter<string, UInt16>
     {
         /// <summary>
