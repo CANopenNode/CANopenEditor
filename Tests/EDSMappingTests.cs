@@ -270,15 +270,247 @@ namespace Tests
         [Fact]
         public void Test_FromProtobufferAssertConfig()
         {
-            var d = new CanOpenDevice
+            var d = new CanOpenDevice { };
+
+            var od = new OdObject
             {
-                FileInfo = new CanOpen_FileInfo(),
-                DeviceInfo = new CanOpen_DeviceInfo(),
-                DeviceCommissioning = new CanOpen_DeviceCommissioning()
+                ObjectType = OdObject.Types.ObjectType.Var,
+                Name = "Test VAR",
             };
+
+            var sub = new OdSubObject
+            {
+                Name = "some value",
+                DataType = OdSubObject.Types.DataType.Unsigned8,
+                Pdo = OdSubObject.Types.AccessPDO.T,
+                Sdo = OdSubObject.Types.AccessSDO.Ro,
+                DefaultValue = "1",
+            };
+            od.SubObjects.Add("0", sub);
+            d.Objects.Add("0x2000", od);
 
             //Assert is called inside the map function
             MappingEDS.MapFromProtobuffer(d);
+        }
+        [Fact]
+        public void Test_FromProtobufferFileInfo()
+        {
+            var d = new CanOpenDevice
+            {
+                FileInfo = new CanOpen_FileInfo()
+            };
+            var CreationTime = DateTime.ParseExact($"11:22AM 11-22-1234", "h:mmtt MM-dd-yyyy", CultureInfo.InvariantCulture);
+            var ModificationTime = DateTime.ParseExact($"11:22AM 11-22-1234", "h:mmtt MM-dd-yyyy", CultureInfo.InvariantCulture);
+
+            d.FileInfo.FileVersion = "FileVersion";
+            d.FileInfo.Description = "Description";
+            d.FileInfo.CreationTime = Timestamp.FromDateTime(CreationTime.ToUniversalTime());
+            d.FileInfo.ModificationTime = Timestamp.FromDateTime(ModificationTime.ToUniversalTime());
+            d.FileInfo.ModifiedBy = "ModifiedBy";
+
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+            Assert.Equal(d.FileInfo.CreatedBy, tmp.fi.CreatedBy);
+            Assert.Equal(d.FileInfo.CreationTime.ToDateTime().ToString("h:mmtt"), tmp.fi.CreationTime);
+            Assert.Equal(d.FileInfo.CreationTime.ToDateTime().ToString("MM-dd-yyyy"), tmp.fi.CreationDate);
+            Assert.Equal(d.FileInfo.Description, tmp.fi.Description);
+            Assert.Equal(d.FileInfo.FileVersion, tmp.fi.FileVersion);
+            Assert.Equal(d.FileInfo.ModifiedBy, tmp.fi.ModifiedBy);
+            Assert.Equal(d.FileInfo.ModificationTime.ToDateTime().ToString("h:mmtt"), tmp.fi.ModificationTime);
+            Assert.Equal(d.FileInfo.ModificationTime.ToDateTime().ToString("MM-dd-yyyy"), tmp.fi.ModificationDate);
+
+            //Assert is called inside the map function
+            MappingEDS.MapFromProtobuffer(d);
+        }
+        [Fact]
+        public void Test_FromProtobufferDeviceInfo()
+        {
+            var d = new CanOpenDevice
+            {
+                DeviceInfo = new CanOpen_DeviceInfo()
+                {
+                    BaudRate10 = true,
+                    BaudRate20 = false,
+                    BaudRate50 = true,
+                    BaudRate125 = false,
+                    BaudRate250 = true,
+                    BaudRate500 = false,
+                    BaudRate800 = true,
+                    BaudRate1000 = false,
+                    BaudRateAuto = true,
+                    LssMaster = false,
+                    LssSlave = true,
+                    VendorName = "VendorName",
+                    ProductName = "ProductName"
+                }
+            };
+
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+            Assert.Equal(d.DeviceInfo.BaudRate10, tmp.di.BaudRate_10);
+            Assert.Equal(d.DeviceInfo.BaudRate20, tmp.di.BaudRate_20);
+            Assert.Equal(d.DeviceInfo.BaudRate50, tmp.di.BaudRate_50);
+            Assert.Equal(d.DeviceInfo.BaudRate125, tmp.di.BaudRate_125);
+            Assert.Equal(d.DeviceInfo.BaudRate250, tmp.di.BaudRate_250);
+            Assert.Equal(d.DeviceInfo.BaudRate500, tmp.di.BaudRate_500);
+            Assert.Equal(d.DeviceInfo.BaudRate800, tmp.di.BaudRate_800);
+            Assert.Equal(d.DeviceInfo.BaudRate1000, tmp.di.BaudRate_1000);
+            Assert.Equal(d.DeviceInfo.BaudRateAuto, tmp.di.BaudRate_auto);
+            Assert.Equal(d.DeviceInfo.LssMaster, tmp.di.LSS_Master);
+            Assert.Equal(d.DeviceInfo.LssSlave, tmp.di.LSS_Supported);
+            Assert.Equal(d.DeviceInfo.VendorName, tmp.di.VendorName);
+            Assert.Equal(d.DeviceInfo.ProductName, tmp.di.ProductName);
+        }
+
+        [Fact]
+        public void Test_FromProtobufferDeviceCommissioning()
+        {
+            var d = new CanOpenDevice
+            {
+                DeviceCommissioning = new CanOpen_DeviceCommissioning
+                {
+                    Baudrate = 456,
+                    NodeId = 123,
+                    NodeName = "NodeName"
+
+                }
+            };
+
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+            Assert.Equal(d.DeviceCommissioning.NodeId, tmp.dc.NodeID);
+            Assert.Equal(d.DeviceCommissioning.NodeName, tmp.dc.NodeName);
+            Assert.Equal(d.DeviceCommissioning.Baudrate, tmp.dc.Baudrate);
+        }
+
+        [Theory]
+        [InlineData(OdObject.Types.ObjectType.Array, ObjectType.ARRAY)]
+        [InlineData(OdObject.Types.ObjectType.Record, ObjectType.RECORD)]
+        [InlineData(OdObject.Types.ObjectType.Var, ObjectType.VAR)]
+        [InlineData(OdObject.Types.ObjectType.Unspecified, ObjectType.UNKNOWN)]
+        public void Test_FromProtobufferODObject(OdObject.Types.ObjectType objTypeProto, ObjectType objTypeEDS)
+        {
+            ushort index = 0x2000;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = objTypeProto,
+                Name = "Name"
+            };
+            d.Objects.Add(index.ToString(), od);
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+            Assert.Equal(index, tmp.ods[index].Index);
+            Assert.Equal(objTypeEDS, tmp.ods[index].objecttype);
+            Assert.Equal(od.Name, tmp.ods[index].parameter_name);
+        }
+
+        [Theory]
+        [InlineData(OdSubObject.Types.DataType.Unspecified, DataType.UNKNOWN)]
+        [InlineData(OdSubObject.Types.DataType.Boolean, DataType.BOOLEAN)]
+        [InlineData(OdSubObject.Types.DataType.Integer8, DataType.INTEGER8)]
+        [InlineData(OdSubObject.Types.DataType.Integer16, DataType.INTEGER16)]
+        [InlineData(OdSubObject.Types.DataType.Integer32, DataType.INTEGER32)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned8, DataType.UNSIGNED8)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned16, DataType.UNSIGNED16)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned32, DataType.UNSIGNED32)]
+        [InlineData(OdSubObject.Types.DataType.Real32, DataType.REAL32)]
+        [InlineData(OdSubObject.Types.DataType.VisibleString, DataType.VISIBLE_STRING)]
+        [InlineData(OdSubObject.Types.DataType.OctetString, DataType.OCTET_STRING)]
+        [InlineData(OdSubObject.Types.DataType.UnicodeString, DataType.UNICODE_STRING)]
+        [InlineData(OdSubObject.Types.DataType.TimeOfDay, DataType.TIME_OF_DAY)]
+        [InlineData(OdSubObject.Types.DataType.TimeDifference, DataType.TIME_DIFFERENCE)]
+        [InlineData(OdSubObject.Types.DataType.Domain, DataType.DOMAIN)]
+        [InlineData(OdSubObject.Types.DataType.Integer24, DataType.INTEGER24)]
+        [InlineData(OdSubObject.Types.DataType.Real64, DataType.REAL64)]
+        [InlineData(OdSubObject.Types.DataType.Integer40, DataType.INTEGER40)]
+        [InlineData(OdSubObject.Types.DataType.Integer48, DataType.INTEGER48)]
+        [InlineData(OdSubObject.Types.DataType.Integer56, DataType.INTEGER56)]
+        [InlineData(OdSubObject.Types.DataType.Integer64, DataType.INTEGER64)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned24, DataType.UNSIGNED24)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned40, DataType.UNSIGNED40)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned48, DataType.UNSIGNED48)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned56, DataType.UNSIGNED56)]
+        [InlineData(OdSubObject.Types.DataType.Unsigned64, DataType.UNSIGNED64)]
+        public void Test_FromProtobufferSubODObjectDatatype(OdSubObject.Types.DataType datatypeProto, DataType datatypeEDS)
+        {
+            ushort index = 0x2000;
+            ushort subindex = 0x1;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = OdObject.Types.ObjectType.Record
+            };
+            var sub = new OdSubObject
+            {
+                DataType = datatypeProto,
+            };
+
+            od.SubObjects.Add(subindex.ToString(), sub);
+            d.Objects.Add(index.ToString(), od);
+
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+
+            Assert.Equal(datatypeEDS, tmp.ods[index].subobjects[subindex].datatype);
+        }
+
+        [Theory]
+        [InlineData(OdSubObject.Types.AccessPDO.Tr, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rw)]
+        [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.Ro, EDSsharp.AccessType.ro)]
+        [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.Wo, EDSsharp.AccessType.wo)]
+        [InlineData(OdSubObject.Types.AccessPDO.T, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rwr)]
+        [InlineData(OdSubObject.Types.AccessPDO.R, OdSubObject.Types.AccessSDO.Rw, EDSsharp.AccessType.rww)]
+        [InlineData(OdSubObject.Types.AccessPDO.R, OdSubObject.Types.AccessSDO.Ro, EDSsharp.AccessType.@const)]
+        [InlineData(OdSubObject.Types.AccessPDO.No, OdSubObject.Types.AccessSDO.No, EDSsharp.AccessType.UNKNOWN)]
+        public void Test_FromProtobufferSubODObjectAccesstype(OdSubObject.Types.AccessPDO accessPDOProto, OdSubObject.Types.AccessSDO accessSDOProto, EDSsharp.AccessType datatypeEDS)
+        {
+            ushort index = 0x2000;
+            ushort subindex = 0x1;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = OdObject.Types.ObjectType.Record
+            };
+            var sub = new OdSubObject
+            {
+                Sdo = accessSDOProto,
+                Pdo = accessPDOProto,
+            };
+
+            od.SubObjects.Add(subindex.ToString(), sub);
+            d.Objects.Add(index.ToString(), od);
+
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+
+            Assert.Equal(datatypeEDS, tmp.ods[index].subobjects[subindex].accesstype);
+        }
+
+        [Fact]
+        public void Test_FromProtobufferSubODObjectMembers()
+        {
+            ushort index = 0x2000;
+            ushort subindex = 0x1;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = OdObject.Types.ObjectType.Record
+            };
+            var sub = new OdSubObject
+            {
+                ActualValue = "123",
+                Name = "some value",
+                HighLimit = "HighLimit",
+                LowLimit = "LowLimit",
+                DefaultValue = "defaultvalue",
+            };
+
+            od.SubObjects.Add(subindex.ToString(), sub);
+            d.Objects.Add(index.ToString(), od);
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+
+            Assert.Equal(sub.ActualValue, tmp.ods[index].subobjects[subindex].actualvalue);
+            Assert.Equal(sub.Name, tmp.ods[index].subobjects[subindex].parameter_name);
+            Assert.Equal(sub.HighLimit, tmp.ods[index].subobjects[subindex].HighLimit);
+            Assert.Equal(sub.LowLimit, tmp.ods[index].subobjects[subindex].LowLimit);
+            Assert.Equal(sub.DefaultValue, tmp.ods[index].subobjects[subindex].defaultvalue);
+            Assert.Equal(index, tmp.ods[index].subobjects[subindex].Index);
+            Assert.Equal(subindex, tmp.ods[index].subobjects[subindex].Subindex);
         }
     }
 }

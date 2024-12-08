@@ -21,6 +21,7 @@ using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -43,6 +44,7 @@ namespace libEDSsharp
                 // workaround for https://github.com/AutoMapper/AutoMapper/issues/2959
                 // Cant update untill after .net framwork is gone
                 cfg.ShouldMapMethod = (m => m.Name == "ARandomStringThatDoesNotMatchAnyFunctionName");
+                cfg.CreateMap<string, UInt16>().ConvertUsing<ODStringToShortTypeResolver>();
                 cfg.CreateMap<CanOpenDevice, EDSsharp>()
                 .ForMember(dest => dest.Dirty, opt => opt.Ignore())
                 .ForMember(dest => dest.xddfilename_1_1, opt => opt.Ignore())
@@ -109,10 +111,63 @@ namespace libEDSsharp
                 .ForMember(dest => dest.NetworkName, opt => opt.Ignore())
                 .ForMember(dest => dest.CANopenManager, opt => opt.Ignore())
                 .ForMember(dest => dest.LSS_SerialNumber, opt => opt.Ignore());
+                cfg.CreateMap<OdObject, CustomProperties>()
+                .ForMember(dest => dest.CO_accessSRDO, opt => opt.Ignore())
+                .ForMember(dest => dest.CO_stringLengthMin, opt => opt.Ignore());
+                cfg.CreateMap<OdObject.Types.ObjectType, ObjectType>().ConvertUsing<ODTypeResolver>();
+                cfg.CreateMap<OdObject, ODentry>()
+                .ForMember(dest => dest.Index, opt => opt.Ignore())
+                .ForMember(dest => dest.parameter_name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.denotation, opt => opt.Ignore())
+                .ForMember(dest => dest.datatype, opt => opt.Ignore())
+                .ForMember(dest => dest.accesstype, opt => opt.Ignore())
+                .ForMember(dest => dest.defaultvalue, opt => opt.Ignore())
+                .ForMember(dest => dest.LowLimit, opt => opt.Ignore())
+                .ForMember(dest => dest.HighLimit, opt => opt.Ignore())
+                .ForMember(dest => dest.actualvalue, opt => opt.Ignore())
+                .ForMember(dest => dest.ObjFlags, opt => opt.Ignore())
+                .ForMember(dest => dest.CompactSubObj, opt => opt.Ignore())
+                .ForMember(dest => dest.count, opt => opt.Ignore())
+                .ForMember(dest => dest.ObjExtend, opt => opt.Ignore())
+                .ForMember(dest => dest.PDOtype, opt => opt.Ignore())
+                .ForMember(dest => dest.Label, opt => opt.Ignore())
+                .ForMember(dest => dest.parent, opt => opt.Ignore())
+                .ForMember(dest => dest.prop, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.uniqueID, opt => opt.Ignore());
+                cfg.CreateMap<OdSubObject, EDSsharp.AccessType>().ConvertUsing<ODSDOAccessTypeResolver>();
+                cfg.CreateMap<OdSubObject, ODentry>()
+                .ForMember(dest => dest.parameter_name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Index, opt => opt.Ignore())
+                .ForMember(dest => dest.denotation, opt => opt.Ignore())
+                .ForMember(dest => dest.accesstype, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.ObjFlags, opt => opt.Ignore())
+                .ForMember(dest => dest.CompactSubObj, opt => opt.Ignore())
+                .ForMember(dest => dest.count, opt => opt.Ignore())
+                .ForMember(dest => dest.ObjExtend, opt => opt.Ignore())
+                .ForMember(dest => dest.PDOtype, opt => opt.Ignore())
+                .ForMember(dest => dest.Label, opt => opt.Ignore())
+                .ForMember(dest => dest.parent, opt => opt.Ignore())
+                .ForMember(dest => dest.prop, opt => opt.Ignore())
+                .ForMember(dest => dest.uniqueID, opt => opt.Ignore())
+                .ForMember(dest => dest.objecttype, opt => opt.Ignore())
+                .ForMember(dest => dest.Description, opt => opt.Ignore())
+                .ForMember(dest => dest.subobjects, opt => opt.Ignore());
             });
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
-            return mapper.Map<EDSsharp>(source);
+
+            var result = mapper.Map<EDSsharp>(source);
+
+            //Post processing, add index / subindex
+            foreach (KeyValuePair<ushort, ODentry> obj in result.ods)
+            {
+                obj.Value.Index = obj.Key;
+                foreach (KeyValuePair<ushort, ODentry> subObj in obj.Value.subobjects)
+                {
+                    subObj.Value.parent = obj.Value;
+                }
+            }
+            return result;
         }
         /// <summary>
         /// Converts from EDS to protobuffer
@@ -243,7 +298,7 @@ namespace libEDSsharp
     /// Helper class to convert object type enum
     /// </summary>
     /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
-    public class ODTypeResolver : ITypeConverter<ObjectType, OdObject.Types.ObjectType>
+    public class ODTypeResolver : ITypeConverter<ObjectType, OdObject.Types.ObjectType>, ITypeConverter<OdObject.Types.ObjectType, ObjectType>
     {
         /// <summary>
         /// Resolver to convert object types
@@ -272,12 +327,37 @@ namespace libEDSsharp
                     return OdObject.Types.ObjectType.Unspecified;
             }
         }
+        /// <summary>
+        /// Resolver to convert object types
+        /// </summary>
+        /// <param name="source">EDS object type object</param>
+        /// <param name="destination">protobuffer object type</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public ObjectType Convert(OdObject.Types.ObjectType source, ObjectType destination, ResolutionContext context)
+        {
+            switch (source)
+            {
+                case OdObject.Types.ObjectType.Unspecified:
+                    return ObjectType.UNKNOWN;
+                case OdObject.Types.ObjectType.Var:
+                    return ObjectType.VAR;
+                case OdObject.Types.ObjectType.Array:
+                    return ObjectType.ARRAY;
+                case OdObject.Types.ObjectType.Record:
+                    return ObjectType.RECORD;
+                default:
+                    return ObjectType.UNKNOWN;
+            }
+        }
     }
     /// <summary>
     /// Helper class to convert Enum types
     /// </summary>
     /// Checkout AutoMapper.Extensions.EnumMapping when .net framework is gone
-    public class ODSDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>
+    public class ODSDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>,
+                                           ITypeConverter<OdSubObject, EDSsharp.AccessType>
     {
         /// <summary>
         /// Resolver to convert eds access into SDO access type
@@ -304,6 +384,31 @@ namespace libEDSsharp
                 default:
                     return OdSubObject.Types.AccessSDO.No;
             }
+        }
+        /// <summary>
+        /// Resolver to convert SDO access type into eds access into 
+        /// </summary>
+        /// <param name="source">protobuffer sdo access type</param>
+        /// <param name="destination">EDS accesstype</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public EDSsharp.AccessType Convert(OdSubObject source, EDSsharp.AccessType destination, ResolutionContext context)
+        {
+            if (source.Pdo == OdSubObject.Types.AccessPDO.Tr && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rw;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
+                return EDSsharp.AccessType.ro;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.No && source.Sdo == OdSubObject.Types.AccessSDO.Wo)
+                return EDSsharp.AccessType.wo;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.T && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rwr;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Rw)
+                return EDSsharp.AccessType.rww;
+            else if (source.Pdo == OdSubObject.Types.AccessPDO.R && source.Sdo == OdSubObject.Types.AccessSDO.Ro)
+                return EDSsharp.AccessType.@const;
+            else
+                return EDSsharp.AccessType.UNKNOWN;
         }
     }
     public class ODPDOAccessTypeResolver : ITypeConverter<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>
@@ -332,6 +437,29 @@ namespace libEDSsharp
                 case EDSsharp.AccessType.UNKNOWN:
                 default:
                     return OdSubObject.Types.AccessPDO.No;
+            }
+        }
+    }
+    public class ODStringToShortTypeResolver : ITypeConverter<string, UInt16>
+    {
+        /// <summary>
+        /// Resolver to convert index & subindex string into short, will try hex, then descimal
+        /// </summary>
+        /// <param name="source">string containing index or subindex</param>
+        /// <param name="destination">short int interpreted from the string</param>
+        /// <param name="member">result object</param>
+        /// <param name="context">resolve context</param>
+        /// <returns>result </returns>
+        public UInt16 Convert(string source, UInt16 destination, ResolutionContext context)
+        {
+            if (source.StartsWith("0x"))
+            {
+                var hex = source.Substring(2);
+                return System.Convert.ToUInt16(hex, 16);
+            }
+            else
+            {
+                return System.Convert.ToUInt16(source);
             }
         }
     }
