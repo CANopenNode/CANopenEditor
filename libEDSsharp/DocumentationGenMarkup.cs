@@ -108,7 +108,7 @@ Device Information
             eds.di.Granularity, eds.di.NrOfRXPDO.ToString(), eds.di.NrOfTXPDO.ToString(),
             eds.di.LSS_Supported, eds.di.LSS_Master, eds.di.NG_Slave, eds.di.NG_Master));
 
-            file.WriteLine($"#### Supported Baud rates");
+            file.WriteLine($"### Supported Baud rates");
             file.WriteLine($"* [{(eds.di.BaudRate_10 ? "x" : " ")}] 10 kBit/s");
             file.WriteLine($"* [{(eds.di.BaudRate_20 ? "x" : " ")}] 20 kBit/s");
             file.WriteLine($"* [{(eds.di.BaudRate_50 ? "x" : " ")}] 50 kBit/s");
