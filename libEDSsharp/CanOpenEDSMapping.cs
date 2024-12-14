@@ -148,6 +148,8 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Label, opt => opt.Ignore())
                 .ForMember(dest => dest.parent, opt => opt.Ignore())
                 .ForMember(dest => dest.prop, opt => opt.Ignore())
+                .ForPath(dest => dest.prop.CO_accessSRDO, opt => opt.MapFrom(src => src.Srdo))
+                .ForPath(dest => dest.prop.CO_stringLengthMin, opt => opt.MapFrom(src => src.StringLengthMin))
                 .ForMember(dest => dest.uniqueID, opt => opt.Ignore())
                 .ForMember(dest => dest.objecttype, opt => opt.Ignore())
                 .ForMember(dest => dest.Description, opt => opt.Ignore())

@@ -512,5 +512,53 @@ namespace Tests
             Assert.Equal(index, tmp.ods[index].subobjects[subindex].Index);
             Assert.Equal(subindex, tmp.ods[index].subobjects[subindex].Subindex);
         }
+        [Fact]
+        public void Test_FromProtobufferODObject_CustomProperties()
+        {
+            ushort index = 0x2000;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = OdObject.Types.ObjectType.Record,
+                Disabled = true,
+                CountLabel = "CountLabel",
+                StorageGroup = "StorageGroup"
+            };
+
+            d.Objects.Add(index.ToString(), od);
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+
+            Assert.Equal(od.Disabled, tmp.ods[index].prop.CO_disabled);
+            Assert.Equal(od.CountLabel, tmp.ods[index].prop.CO_countLabel);
+            Assert.Equal(od.StorageGroup, tmp.ods[index].prop.CO_storageGroup);
+        }
+        [Theory]
+        [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no )]
+        [InlineData(OdSubObject.Types.AccessSRDO.Rx, AccessSRDO.rx)]
+        [InlineData(OdSubObject.Types.AccessSRDO.Trx, AccessSRDO.trx)]
+        [InlineData(OdSubObject.Types.AccessSRDO.Tx, AccessSRDO.tx)]
+        public void Test_FromProtobufferSubODObject_CustomProperties(OdSubObject.Types.AccessSRDO accessSRDO, AccessSRDO co_prop)
+        {
+            ushort index = 0x2000;
+            ushort subindex = 0x1;
+            var d = new CanOpenDevice();
+            var od = new OdObject
+            {
+                ObjectType = OdObject.Types.ObjectType.Record
+            };
+            var sub = new OdSubObject
+            {
+                Srdo = accessSRDO,
+                StringLengthMin = 123,
+            };
+
+            od.SubObjects.Add(subindex.ToString(), sub);
+            d.Objects.Add(index.ToString(), od);
+            var tmp = MappingEDS.MapFromProtobuffer(d);
+
+            Assert.Equal(co_prop, tmp.ods[index].subobjects[subindex].prop.CO_accessSRDO);
+            //Assert.Equal(sub.ActualValue, tmp.ods[index].subobjects[subindex].prop.CO_flagsPDO);
+            Assert.Equal(sub.StringLengthMin, tmp.ods[index].subobjects[subindex].prop.CO_stringLengthMin);
+        }
     }
 }
