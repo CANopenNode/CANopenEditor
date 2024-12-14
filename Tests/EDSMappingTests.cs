@@ -587,7 +587,7 @@ namespace Tests
             Assert.Equal(od.StorageGroup, tmp.ods[index].prop.CO_storageGroup);
         }
         [Theory]
-        [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no )]
+        [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no)]
         [InlineData(OdSubObject.Types.AccessSRDO.Rx, AccessSRDO.rx)]
         [InlineData(OdSubObject.Types.AccessSRDO.Trx, AccessSRDO.trx)]
         [InlineData(OdSubObject.Types.AccessSRDO.Tx, AccessSRDO.tx)]
