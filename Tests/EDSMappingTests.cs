@@ -268,6 +268,60 @@ namespace Tests
             Assert.Equal(sub.defaultvalue, tmp.Objects[od.Index.ToString()].SubObjects["0"].DefaultValue);
         }
         [Fact]
+        public void Test_ToProtobufferODObject_CustomProperties()
+        {
+            var eds = new EDSsharp
+            {
+                ods = new System.Collections.Generic.SortedDictionary<ushort, ODentry>()
+            };
+            var od = new ODentry
+            {
+                objecttype = ObjectType.RECORD,
+                Index = 0x2000,
+            };
+            od.prop.CO_disabled = true;
+            od.prop.CO_countLabel = "CO_countLabel";
+            od.prop.CO_storageGroup = "CO_storageGroup";
+
+            eds.ods.Add(od.Index, od);
+            var tmp = MappingEDS.MapToProtobuffer(eds);
+
+            Assert.Equal(od.prop.CO_disabled, tmp.Objects[od.Index.ToString()].Disabled);
+            Assert.Equal(od.prop.CO_countLabel, tmp.Objects[od.Index.ToString()].CountLabel);
+            Assert.Equal(od.prop.CO_storageGroup, tmp.Objects[od.Index.ToString()].StorageGroup);
+        }
+        [Theory]
+        [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no)]
+        [InlineData(OdSubObject.Types.AccessSRDO.Rx, AccessSRDO.rx)]
+        [InlineData(OdSubObject.Types.AccessSRDO.Trx, AccessSRDO.trx)]
+        [InlineData(OdSubObject.Types.AccessSRDO.Tx, AccessSRDO.tx)]
+        public void Test_ToProtobufferSubODObject_CustomProperties(OdSubObject.Types.AccessSRDO accessSRDO, AccessSRDO co_prop)
+        {
+            var eds = new EDSsharp
+            {
+                ods = new System.Collections.Generic.SortedDictionary<ushort, ODentry>()
+            };
+            var od = new ODentry
+            {
+                objecttype = ObjectType.RECORD,
+                Index = 0x2000
+            };
+            var sub = new ODentry
+            {
+                parent = od,
+            };
+            sub.prop.CO_accessSRDO = co_prop;
+            sub.prop.CO_stringLengthMin = 123;
+
+            od.subobjects.Add(0x00, sub);
+            eds.ods.Add(od.Index, od);
+            var tmp = MappingEDS.MapToProtobuffer(eds);
+
+            Assert.Equal(accessSRDO, tmp.Objects[od.Index.ToString()].SubObjects["0"].Srdo);
+            Assert.Equal(sub.prop.CO_stringLengthMin, tmp.Objects[od.Index.ToString()].SubObjects["0"].StringLengthMin);
+        }
+
+        [Fact]
         public void Test_FromProtobufferAssertConfig()
         {
             var d = new CanOpenDevice { };

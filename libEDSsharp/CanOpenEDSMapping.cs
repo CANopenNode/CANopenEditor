@@ -205,13 +205,13 @@ namespace libEDSsharp
                 .ForMember(dest => dest.LssMaster, opt => opt.MapFrom(src => src.LSS_Master));
                 cfg.CreateMap<DeviceCommissioning, CanOpen_DeviceCommissioning>();
                 cfg.CreateMap<ODentry, OdObject>()
-                .ForMember(dest => dest.Disabled, opt => opt.Ignore())
+                .ForMember(dest => dest.Disabled, opt => opt.MapFrom(src => src.prop.CO_disabled))
                 .ForMember(dest => dest.Alias, opt => opt.Ignore())
-                .ForMember(dest => dest.StorageGroup, opt => opt.Ignore())
+                .ForMember(dest => dest.StorageGroup, opt => opt.MapFrom(src => src.prop.CO_storageGroup))
                 .ForMember(dest => dest.FlagsPDO, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.ObjectType, opt => opt.MapFrom(src => src.objecttype))
-                .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.Label));
+                .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.prop.CO_countLabel));
                 cfg.CreateMap<ObjectType, OdObject.Types.ObjectType>().ConvertUsing<ODTypeResolver>();
                 cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessSDO>().ConvertUsing<ODAccessTypeResolver>();
                 cfg.CreateMap<EDSsharp.AccessType, OdSubObject.Types.AccessPDO>().ConvertUsing<ODAccessTypeResolver>();
@@ -221,8 +221,8 @@ namespace libEDSsharp
                 .ForMember(dest => dest.DataType, opt => opt.MapFrom(src => src.datatype))
                 .ForMember(dest => dest.Sdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.accesstype))
-                .ForMember(dest => dest.Srdo, opt => opt.Ignore())
-                .ForMember(dest => dest.StringLengthMin, opt => opt.MapFrom(src => src.Lengthofstring));
+                .ForMember(dest => dest.Srdo, opt => opt.MapFrom(src => src.prop.CO_accessSRDO))
+                .ForMember(dest => dest.StringLengthMin, opt => opt.MapFrom(src => src.prop.CO_stringLengthMin));
             });
 
             config.AssertConfigurationIsValid();
