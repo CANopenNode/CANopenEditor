@@ -55,7 +55,6 @@
           </ListBox>
         </StackPanel>
       <view:DeviceView DataContext="{Binding SelectedDevice}" />
-      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
   </DockPanel>
 
 
