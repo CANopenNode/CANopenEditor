@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace EDSEditorGUI2;
+namespace EDSEditorGUI2.Views;
 
 public partial class DeviceODView : UserControl
 {
