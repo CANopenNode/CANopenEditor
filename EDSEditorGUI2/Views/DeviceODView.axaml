@@ -14,16 +14,19 @@
     <Grid ColumnDefinitions="200,4,*">
       <Grid RowDefinitions="*,4,*,4,*" Grid.Column="0">
         <view:ODIndexRangeView Grid.Row="0" DataContext="{Binding}"
+                               x:Name="ODView_Com"
                                Heading="Communication Specific Parameters"
                                MinIndex="0x1000"
                                MaxIndex="0x1FFF"/>
         <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
         <view:ODIndexRangeView Grid.Row="2" DataContext="{Binding}"
+                               x:Name="ODView_Manufacture"
                                Heading="Manufacturer Specific Parameters"
                                MinIndex="0x2000"
                                MaxIndex="0x5FFF"/>
         <GridSplitter Grid.Row="3" Background="Black" ResizeDirection="Rows"/>
         <view:ODIndexRangeView Grid.Row="4" DataContext="{Binding}"
+                               x:Name="ODView_Device"
                                Heading="Device Profile Specific Parameters"
                                MinIndex="0x6000"
                                MaxIndex="0x9FFF"/>
@@ -31,7 +34,20 @@
 
       <GridSplitter Grid.Column="1" Background="Black" ResizeDirection="Columns"/>
       <Grid RowDefinitions="*,4,*" Grid.Column="2">
-        <Rectangle Grid.Row="0" Fill="Red"/>
+        <DataGrid Margin="2" ItemsSource="{Binding SelectedObject.SubObjects}"
+                  x:Name="grid"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="Gray">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Sub" Width="*" Binding="{Binding Key}"/>
+            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Value.Name}" />
+            <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Value.Type}" />
+            <DataGridTextColumn Header="SDO" Width="*" Binding="{Binding Value.Sdo}" />
+            <DataGridTextColumn Header="PDO" Width="*" Binding="{Binding Value.Pdo}" />
+            <DataGridTextColumn Header="SRDO" Width="*" Binding="{Binding Value.Srdo}" />
+            <DataGridTextColumn Header="Default Value" Width="*" Binding="{Binding Value.DefaultValue}" />
+          </DataGrid.Columns>
+        </DataGrid>
         <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
         <Rectangle Grid.Row="2" Fill="Green"/>
       </Grid>
