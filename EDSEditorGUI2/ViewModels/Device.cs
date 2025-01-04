@@ -13,7 +13,7 @@ namespace EDSEditorGUI2.ViewModels
 
             _DeviceInfo = new(Model.DeviceInfo);
             _DeviceInfo.PropertyChanged += (s, e) => { OnPropertyChanged(nameof(DeviceInfo)); };
-            //Model.Objects
+            _objects = new(_model.Objects);
         }
 
         private DeviceInfo _DeviceInfo;
@@ -33,7 +33,6 @@ namespace EDSEditorGUI2.ViewModels
             get => _objects;
             set
             {
-                //Model.Objects = value.Model;
                 OnPropertyChanged(nameof(Objects));
             }
         }

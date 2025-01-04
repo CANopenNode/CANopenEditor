@@ -1,10 +1,66 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
              xmlns:vm="using:EDSEditorGUI2.ViewModels"
              xmlns:view="using:EDSEditorGUI2.Views"
+             xmlns:converter="using:EDSEditorGUI2.Converter"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EDSEditorGUI2.Views.DeviceODView"
              x:DataType="vm:DeviceOD">
+
+  <dialogHost:DialogHost Identifier="NoAnimationDialogHost" DialogClosing="OnDialogClosing">
+    <Grid ColumnDefinitions="200,4,*">
+      <Grid RowDefinitions="*,4,*,4,*" Grid.Column="0">
+        <view:ODIndexRangeView Grid.Row="0" DataContext="{Binding}"
+                               Heading="Communication Specific Parameters"
+                               MinIndex="0x1000"
+                               MaxIndex="0x1FFF"/>
+        <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
+        <view:ODIndexRangeView Grid.Row="2" DataContext="{Binding}"
+                               Heading="Manufacturer Specific Parameters"
+                               MinIndex="0x2000"
+                               MaxIndex="0x5FFF"/>
+        <GridSplitter Grid.Row="3" Background="Black" ResizeDirection="Rows"/>
+        <view:ODIndexRangeView Grid.Row="4" DataContext="{Binding}"
+                               Heading="Device Profile Specific Parameters"
+                               MinIndex="0x6000"
+                               MaxIndex="0x9FFF"/>
+      </Grid>
+
+      <GridSplitter Grid.Column="1" Background="Black" ResizeDirection="Columns"/>
+      <Grid RowDefinitions="*,4,*" Grid.Column="2">
+        <Rectangle Grid.Row="0" Fill="Red"/>
+        <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
+        <Rectangle Grid.Row="2" Fill="Green"/>
+      </Grid>
+    </Grid>
+  </dialogHost:DialogHost>
+
+  <UserControl.Resources>
+    <converter:NewIndexMultiConvert x:Key="NewIndexMultiConvert" />
+    <StackPanel x:Key="NewIndexDialog">
+      <TextBlock Text="Index (hex):"/>
+      <!-- Need to be fixed to accept only hex -->
+      <TextBox Watermark="1000" x:Name="index"/>
+      <TextBlock Text="Name:" />
+      <TextBox Text="" x:Name="name"/>
+      <TextBlock Text="Object Type:" />
+      <ListBox SelectionMode="Single,AlwaysSelected" x:Name="type"/>
+      <StackPanel Orientation="Horizontal">
+        <Button IsDefault="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">
+          Create
+          <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource NewIndexMultiConvert}">
+              <Binding Path="Text" ElementName="index" />
+              <Binding Path="Text" ElementName="name" />
+              <Binding Path="SelectedIndex" ElementName="type" />
+            </MultiBinding>
+          </Button.CommandParameter>
+        </Button>
+        <Button IsCancel="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
+      </StackPanel>
+    </StackPanel>
+  </UserControl.Resources>
 </UserControl>
