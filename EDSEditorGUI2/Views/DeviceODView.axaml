@@ -6,7 +6,7 @@
              xmlns:converter="using:EDSEditorGUI2.Converter"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
              x:Class="EDSEditorGUI2.Views.DeviceODView"
              x:DataType="vm:DeviceOD">
 
@@ -49,7 +49,64 @@
           </DataGrid.Columns>
         </DataGrid>
         <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
-        <Rectangle Grid.Row="2" Fill="Green"/>
+        <StackPanel Grid.Row="2">
+          <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="100,*" Grid.Column="2">
+            <TextBlock Text="Index" Grid.Row="0" Grid.Column="0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+              <TextBox Text="" />
+              <TextBlock Text="Sub Index" />
+              <TextBox Text="" />
+            </StackPanel>
+
+            <TextBlock Text="Name" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="1" Grid.Column="1" />
+
+            <TextBlock Text="Denotation" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="2" Grid.Column="1" />
+
+            <TextBlock Text="Description" Grid.Row="3" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="3" Grid.Column="1" Height="100" />
+          </Grid>
+          <TextBlock Text="Object settings" />
+          
+          <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="100,*,*,*,*,*" >
+            <TextBlock Text="Object Type" Grid.Row="0" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="0" Grid.Column="1" />
+            <TextBlock Text="HighLimit" Grid.Row="0" Grid.Column="2"/>
+            <TextBox Text="" Grid.Row="0" Grid.Column="3" />
+            <TextBlock Text="Count Label" Grid.Row="0" Grid.Column="4"/>
+            <TextBox Text="" Grid.Row="0" Grid.Column="5" />
+
+            <TextBlock Text="Data Type" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="1" Grid.Column="1" />
+            <TextBlock Text="LowLimit" Grid.Row="1" Grid.Column="2"/>
+            <TextBox Text="" Grid.Row="1" Grid.Column="3" />
+            <TextBlock Text="Storage Group" Grid.Row="1" Grid.Column="4"/>
+            <TextBox Text="" Grid.Row="1" Grid.Column="5" />
+
+            <TextBlock Text="Access SDO" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="2" Grid.Column="1" />
+            <TextBlock Text="Actual Value" Grid.Row="2" Grid.Column="2"/>
+            <TextBox Text="" Grid.Row="2" Grid.Column="3" />
+            <TextBlock Text="Enabled" Grid.Row="2" Grid.Column="4"/>
+            <CheckBox Grid.Row="2" Grid.Column="5"/>
+
+            <TextBlock Text="Access PDO" Grid.Row="3" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="3" Grid.Column="1" />
+            <TextBlock Text="String Len Min" Grid.Row="3" Grid.Column="2"/>
+            <TextBox Text="" Grid.Row="3" Grid.Column="3" />
+            <TextBlock Text="Count TPDO COS" Grid.Row="3" Grid.Column="4"/>
+            <CheckBox Grid.Row="3" Grid.Column="5"/>
+
+            <TextBlock Text="SRDO PDO" Grid.Row="4" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="4" Grid.Column="1" />
+
+            <TextBlock Text="Default value" Grid.Row="5" Grid.Column="0"/>
+            <TextBox Text="" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
+            <Button Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2">Save</Button>
+            <CheckBox Grid.Row="5" Grid.Column="5">Autosave</CheckBox>
+          </Grid>
+        </StackPanel>
       </Grid>
     </Grid>
   </dialogHost:DialogHost>
