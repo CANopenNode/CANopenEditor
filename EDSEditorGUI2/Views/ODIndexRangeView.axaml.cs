@@ -2,7 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using DialogHostAvalonia;
+using LibCanOpen;
 using System;
+using System.Linq;
 
 namespace EDSEditorGUI2.Views;
 
@@ -11,6 +13,9 @@ public partial class ODIndexRangeView : UserControl
     public ODIndexRangeView()
     {
         InitializeComponent();
+        var values = Enum.GetNames(typeof(OdObject.Types.ObjectType)).Skip(1).ToArray();
+        type.ItemsSource = values;
+
         grid.LoadingRow += GridLoadingRow;
     }
 
@@ -54,16 +59,12 @@ public partial class ODIndexRangeView : UserControl
 
     private async void AddIndex(object? sender, RoutedEventArgs e)
     {
-        //TODO: find a way to make it more rubust and remove the parent parent thingy
-        var DialogHostRes = Parent.Parent.Parent.Parent.Resources;
-        await DialogHost.Show(DialogHostRes["NewIndexDialog"]!, "NoAnimationDialogHost");
+        await DialogHost.Show(Resources["NewIndexDialog"]!, "NoAnimationDialogHost");
     }
 
     private async void RemoveIndex(object? sender, RoutedEventArgs e)
     {
-        //TODO: find a way to make it more rubust and remove the parent parent thingy
-        var DialogHostRes = Parent.Parent.Parent.Parent.Resources;
-        await DialogHost.Show(DialogHostRes["NewIndexDialog"]!, "NoAnimationDialogHost");
+        await DialogHost.Show(Resources["NewIndexDialog"]!, "NoAnimationDialogHost");
     }
 
     private void DataGrid_SelectionChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)

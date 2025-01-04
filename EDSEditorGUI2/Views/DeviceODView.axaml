@@ -110,30 +110,4 @@
       </Grid>
     </Grid>
   </dialogHost:DialogHost>
-
-  <UserControl.Resources>
-    <converter:NewIndexMultiConvert x:Key="NewIndexMultiConvert" />
-    <StackPanel x:Key="NewIndexDialog">
-      <TextBlock Text="Index (hex):"/>
-      <!-- Need to be fixed to accept only hex -->
-      <TextBox Watermark="1000" x:Name="index"/>
-      <TextBlock Text="Name:" />
-      <TextBox Text="" x:Name="name"/>
-      <TextBlock Text="Object Type:" />
-      <ListBox SelectionMode="Single,AlwaysSelected" x:Name="type"/>
-      <StackPanel Orientation="Horizontal">
-        <Button IsDefault="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">
-          Create
-          <Button.CommandParameter>
-            <MultiBinding Converter="{StaticResource NewIndexMultiConvert}">
-              <Binding Path="Text" ElementName="index" />
-              <Binding Path="Text" ElementName="name" />
-              <Binding Path="SelectedIndex" ElementName="type" />
-            </MultiBinding>
-          </Button.CommandParameter>
-        </Button>
-        <Button IsCancel="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
-      </StackPanel>
-    </StackPanel>
-  </UserControl.Resources>
 </UserControl>

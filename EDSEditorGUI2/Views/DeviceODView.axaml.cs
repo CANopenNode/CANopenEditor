@@ -4,7 +4,6 @@ using EDSEditorGUI2.Converter;
 using LibCanOpen;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EDSEditorGUI2.Views;
 
@@ -14,9 +13,6 @@ public partial class DeviceODView : UserControl
     public DeviceODView()
     {
         InitializeComponent();
-
-        var values = Enum.GetNames(typeof(OdObject.Types.ObjectType)).Skip(1).ToArray();
-        type.ItemsSource = values;
         ODView_Com.grid.SelectionChanged += IndexGridSelectionChanged;
         ODView_Manufacture.grid.SelectionChanged += IndexGridSelectionChanged;
         ODView_Device.grid.SelectionChanged += IndexGridSelectionChanged;

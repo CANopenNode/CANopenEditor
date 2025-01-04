@@ -29,7 +29,7 @@
               <PathIcon Data="{StaticResource add_regular}" />
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Delete..." Command="{Binding RemoveIndex}">
+          <MenuItem Header="Delete..." Click="RemoveIndex">
             <MenuItem.Icon>
               <PathIcon Data="{StaticResource remove_regular}" />
             </MenuItem.Icon>
@@ -39,4 +39,31 @@
       </DataGrid.ContextMenu>
     </DataGrid>
   </StackPanel>
+  <UserControl.Resources>
+    <converter:NewIndexMultiConvert x:Key="NewIndexMultiConvert" />
+    <!-- New index dialog -->
+    <StackPanel x:Key="NewIndexDialog">
+      <TextBlock Text="Index (hex):"/>
+      <!-- Need to be fixed to accept only hex -->
+      <TextBox Watermark="1000" x:Name="index"/>
+      <TextBlock Text="Name:" />
+      <TextBox Text="" x:Name="name"/>
+      <TextBlock Text="Object Type:" />
+      <ListBox SelectionMode="Single,AlwaysSelected" x:Name="type"/>
+      <StackPanel Orientation="Horizontal">
+        <Button IsDefault="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">
+          Create
+          <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource NewIndexMultiConvert}">
+              <Binding Path="Text" ElementName="index" />
+              <Binding Path="Text" ElementName="name" />
+              <Binding Path="SelectedIndex" ElementName="type" />
+            </MultiBinding>
+          </Button.CommandParameter>
+        </Button>
+        <Button IsCancel="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
+      </StackPanel>
+    </StackPanel>
+  </UserControl.Resources>
+  
 </UserControl>
