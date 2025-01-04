@@ -1,14 +1,10 @@
-﻿using Avalonia.Interactivity;
-using CommunityToolkit.Mvvm.ComponentModel;
-using DialogHostAvalonia;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Google.Protobuf.Collections;
 using LibCanOpen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace EDSEditorGUI2.ViewModels;
 public partial class DeviceOD : ObservableObject
@@ -19,10 +15,10 @@ public partial class DeviceOD : ObservableObject
     ReadOnlyObservableCollection<KeyValuePair<string, OdObject>> _DataTypes;
 
     [ObservableProperty]
-    OdObject _SelectedObject;
+    KeyValuePair<string, OdObject> _SelectedObject;
 
     [ObservableProperty]
-    OdSubObject _SelectedSubObject;
+    KeyValuePair<string, OdSubObject> _SelectedSubObject;
 
     public DeviceOD(MapField<string, OdObject> model)
     {
@@ -35,17 +31,6 @@ public partial class DeviceOD : ObservableObject
     private void ViewModel_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(ViewModel));
-/*
-        var newObj = new OdObject();
-        newObj.Name = "name1";
-        newObj.Type = OdObject.Types.ObjectType.Var;
-        Model.Add("1000", newObj);
-
-        var newObj2 = new OdObject();
-        newObj.Name = "name2";
-        newObj.Type = OdObject.Types.ObjectType.Array;
-        Model.Add("1001", newObj2);
-*/
         HackyUpdate();
     }
 
@@ -69,7 +54,7 @@ public partial class DeviceOD : ObservableObject
         }
     }
 
-    public void AddIndex(int index, string name, OdObject.Types.ObjectType type)  
+    public void AddIndex(int index, string name, OdObject.Types.ObjectType type)
     {
         var strIndex = index.ToString("X4");
         var newObj = new OdObject
@@ -122,7 +107,7 @@ public partial class DeviceOD : ObservableObject
 
     public void RemoveIndex(object sender)
     {
-        
+
     }
     [ObservableProperty]
     ObservableCollection<KeyValuePair<string, OdObject>> _viewModel;
