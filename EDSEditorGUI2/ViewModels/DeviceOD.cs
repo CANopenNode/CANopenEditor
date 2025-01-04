@@ -77,7 +77,46 @@ public partial class DeviceOD : ObservableObject
             Name = name,
             Type = type
         };
-        ViewModel.Add(new KeyValuePair<string, OdObject>(strIndex,newObj));
+
+        // create OD entry
+        if (type == OdObject.Types.ObjectType.Var)
+        {
+            var newSub = new OdSubObject()
+            {
+                Name = name,
+                Type = OdSubObject.Types.DataType.Unsigned32,
+                Sdo = OdSubObject.Types.AccessSDO.Rw,
+                Pdo = OdSubObject.Types.AccessPDO.No,
+                Srdo = OdSubObject.Types.AccessSRDO.No,
+                DefaultValue = "0"
+            };
+            newObj.SubObjects.Add("0", newSub);
+        }
+        else
+        {
+            var CountSub = new OdSubObject()
+            {
+                Name = "Highest sub-index supported",
+                Type = OdSubObject.Types.DataType.Unsigned8,
+                Sdo = OdSubObject.Types.AccessSDO.Ro,
+                Pdo = OdSubObject.Types.AccessPDO.No,
+                Srdo = OdSubObject.Types.AccessSRDO.No,
+                DefaultValue = "0x01"
+            };
+            var Sub1 = new OdSubObject()
+            {
+                Name = "Sub Object 1",
+                Type = OdSubObject.Types.DataType.Unsigned32,
+                Sdo = OdSubObject.Types.AccessSDO.Rw,
+                Pdo = OdSubObject.Types.AccessPDO.No,
+                Srdo = OdSubObject.Types.AccessSRDO.No,
+                DefaultValue = "0"
+            };
+            newObj.SubObjects.Add("0", CountSub);
+            newObj.SubObjects.Add("1", Sub1);
+        }
+
+        ViewModel.Add(new KeyValuePair<string, OdObject>(strIndex, newObj));
         Model.Add(strIndex, newObj);
     }
 
