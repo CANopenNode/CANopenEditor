@@ -54,9 +54,4 @@ public partial class DeviceODView : UserControl
             }
         }
     }
-
-    private async void AddIndex(object? sender, RoutedEventArgs e)
-    {
-        await DialogHost.Show(Resources["NewIndexDialog"]!, "NoAnimationDialogHost");
-    }
 }
