@@ -1,5 +1,5 @@
-﻿using Avalonia.Data.Converters;
-using Avalonia.Data;
+﻿using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Media.Immutable;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ public class NewIndexRequest(int index, string name, LibCanOpen.OdObject.Types.O
 {
     public int Index { get; } = index;
     public string Name { get; } = name;
-    public LibCanOpen.OdObject.Types.ObjectType Type {  get; } = type;
+    public LibCanOpen.OdObject.Types.ObjectType Type { get; } = type;
 }
 
 public sealed class NewIndexMultiConvert : IMultiValueConverter
@@ -33,7 +33,7 @@ public sealed class NewIndexMultiConvert : IMultiValueConverter
         var typeValues = Enum.GetNames(typeof(LibCanOpen.OdObject.Types.ObjectType)).Skip(1).ToArray();
         bool parseOk = Enum.TryParse(typeValues[typeIndex], out LibCanOpen.OdObject.Types.ObjectType type);
 
-        if(parseOk)
+        if (parseOk)
         {
             var indexRequest = new NewIndexRequest(index, name, type);
             return indexRequest;

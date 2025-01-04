@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using DialogHostAvalonia;
 using System;
 
@@ -31,7 +29,7 @@ public partial class ODIndexRangeView : UserControl
     }
 
     public static readonly StyledProperty<string> HeadingProperty =
-        AvaloniaProperty.Register<ODIndexRangeView,string >(nameof(HeadingProperty));
+        AvaloniaProperty.Register<ODIndexRangeView, string>(nameof(HeadingProperty));
     public string Heading
     {
         get { return GetValue(HeadingProperty); }

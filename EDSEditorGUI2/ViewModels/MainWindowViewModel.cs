@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Metrics;
-using Avalonia.Interactivity;
-using CommunityToolkit.Mvvm.ComponentModel;
-using LibCanOpen;
 
 namespace EDSEditorGUI2.ViewModels;
 

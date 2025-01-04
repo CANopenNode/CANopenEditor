@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LibCanOpen;
-using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace EDSEditorGUI2.ViewModels
 {
@@ -9,7 +7,9 @@ namespace EDSEditorGUI2.ViewModels
     {
         [ObservableProperty]
         CanOpenDevice _model;
-        public Device(CanOpenDevice model) { Model = model;
+        public Device(CanOpenDevice model)
+        {
+            Model = model;
 
             _DeviceInfo = new(Model.DeviceInfo);
             _DeviceInfo.PropertyChanged += (s, e) => { OnPropertyChanged(nameof(DeviceInfo)); };
