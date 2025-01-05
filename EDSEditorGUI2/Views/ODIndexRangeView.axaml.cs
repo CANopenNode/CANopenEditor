@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using DialogHostAvalonia;
+using EDSEditorGUI2.Converter;
 using LibCanOpen;
 using System;
 using System.Linq;
@@ -59,7 +60,18 @@ public partial class ODIndexRangeView : UserControl
 
     private async void AddIndex(object? sender, RoutedEventArgs e)
     {
-        await DialogHost.Show(Resources["NewIndexDialog"]!, "NoAnimationDialogHost");
+        await DialogHost.Show(Resources["NewIndexDialog"]!, "NoAnimationDialogHost", OnDialogClosing);
+    }
+
+    private void OnDialogClosing(object? sender, DialogClosingEventArgs e)
+    {
+        if (e.Parameter != null)
+        {
+            if (DataContext is ViewModels.DeviceOD dc && e.Parameter is NewIndexRequest param)
+            {
+                dc.AddIndex(param.Index, param.Name, param.Type);
+            }
+        }
     }
 
     private async void RemoveIndex(object? sender, RoutedEventArgs e)

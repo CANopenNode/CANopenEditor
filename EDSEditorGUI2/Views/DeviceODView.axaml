@@ -10,7 +10,7 @@
              x:Class="EDSEditorGUI2.Views.DeviceODView"
              x:DataType="vm:DeviceOD">
 
-  <dialogHost:DialogHost Identifier="NoAnimationDialogHost" DialogClosing="OnDialogClosing">
+  <dialogHost:DialogHost Identifier="NoAnimationDialogHost" >
     <Grid ColumnDefinitions="200,4,*">
       <Grid RowDefinitions="*,4,*,4,*" Grid.Column="0">
         <view:ODIndexRangeView Grid.Row="0" DataContext="{Binding}"

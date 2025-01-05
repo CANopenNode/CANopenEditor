@@ -1,6 +1,4 @@
 using Avalonia.Controls;
-using DialogHostAvalonia;
-using EDSEditorGUI2.Converter;
 using LibCanOpen;
 using System;
 using System.Collections.Generic;
@@ -41,16 +39,6 @@ public partial class DeviceODView : UserControl
         foreach (var v in Enum.GetNames(typeof(OdSubObject.Types.AccessSRDO)))
         {
             combo_srdo.Items.Add(v);
-        }
-    }
-    private void OnDialogClosing(object? sender, DialogClosingEventArgs e)
-    {
-        if (e.Parameter != null)
-        {
-            if (DataContext is ViewModels.DeviceOD dc && e.Parameter is NewIndexRequest param)
-            {
-                dc.AddIndex(param.Index, param.Name, param.Type);
-            }
         }
     }
 
