@@ -12,7 +12,7 @@
 
   <StackPanel Grid.Row="0" >
     <TextBlock Text="Heading" x:Name="HeadingText"/>
-    <DataGrid Margin="2" ItemsSource="{Binding ViewModel}"
+    <DataGrid Margin="2" ItemsSource="{Binding Data}"
               x:Name="grid"
               GridLinesVisibility="All"
               BorderThickness="1" BorderBrush="Gray"

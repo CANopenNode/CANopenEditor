@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using LibCanOpen;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ public partial class DeviceODView : UserControl
     {
         if (sender is DataGrid s && DataContext is ViewModels.DeviceOD dc)
         {
-            if (s.SelectedItem is KeyValuePair<string, OdObject> selected)
+            if (s.SelectedItem is KeyValuePair<string, ViewModels.OdObject> selected)
             {
                 dc.SelectedObject = selected;
                 foreach (var dg in _odViews)
@@ -64,7 +65,7 @@ public partial class DeviceODView : UserControl
     {
         if (sender is DataGrid s && DataContext is ViewModels.DeviceOD dc)
         {
-            if (s.SelectedItem is KeyValuePair<string, OdSubObject> selected)
+            if (s.SelectedItem is KeyValuePair<string, ViewModels.OdSubObject> selected)
             {
                 dc.SelectedSubObject = selected;
             }

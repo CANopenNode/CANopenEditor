@@ -1,41 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LibCanOpen;
 
 namespace EDSEditorGUI2.ViewModels
 {
     public partial class Device : ObservableObject
     {
+        public Device()
+        {
+        }
+
         [ObservableProperty]
-        CanOpenDevice _model;
-        public Device(CanOpenDevice model)
-        {
-            Model = model;
+        private FileInfo _fileInfo = new();
 
-            _DeviceInfo = new(Model.DeviceInfo);
-            _DeviceInfo.PropertyChanged += (s, e) => { OnPropertyChanged(nameof(DeviceInfo)); };
-            _objects = new(_model.Objects);
-        }
+        [ObservableProperty]
+        private DeviceInfo _deviceInfo = new();
 
-        private DeviceInfo _DeviceInfo;
-        public DeviceInfo DeviceInfo
-        {
-            get => _DeviceInfo;
-            set
-            {
-                Model.DeviceInfo = value.Model;
-                OnPropertyChanged(nameof(DeviceInfo));
-            }
-        }
+        [ObservableProperty]
+        private DeviceCommissioning _deviceCommissioning = new();
 
-        private DeviceOD _objects;
-        public DeviceOD Objects
-        {
-            get => _objects;
-            set
-            {
-                OnPropertyChanged(nameof(Objects));
-            }
-        }
+        [ObservableProperty]
+        private DeviceOD _objects = new();
 
         public void OnClickCommand()
         {

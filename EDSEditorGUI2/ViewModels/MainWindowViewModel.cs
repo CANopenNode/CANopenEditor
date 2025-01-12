@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EDSEditorGUI2.Mapper;
 using System.Collections.ObjectModel;
 
 namespace EDSEditorGUI2.ViewModels;
@@ -29,7 +30,8 @@ public partial class MainWindowViewModel : ViewModelBase
         //device.Dock = DockStyle.Fill;
         //device.dispatch_updateOD();
 
-        Network.Add(new Device(device));
+        var DeviceView = ProtobufferViewModelMapper.MapFromProtobuffer(device);
+        Network.Add(DeviceView);
     }
 #pragma warning disable CA1822 // Mark members as static
     public string Greeting => "Welcome to Avalonia!";

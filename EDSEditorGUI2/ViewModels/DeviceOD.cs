@@ -1,18 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Google.Protobuf.Collections;
-using LibCanOpen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace EDSEditorGUI2.ViewModels;
 public partial class DeviceOD : ObservableObject
 {
-    [ObservableProperty]
-    private MapField<string, OdObject> _model;
-    [ObservableProperty]
-    ReadOnlyObservableCollection<KeyValuePair<string, OdObject>> _DataTypes;
+    public ObservableCollection<KeyValuePair<string, OdObject>> Data { get; } = [];
 
     [ObservableProperty]
     KeyValuePair<string, OdObject> _SelectedObject;
@@ -20,25 +14,8 @@ public partial class DeviceOD : ObservableObject
     [ObservableProperty]
     KeyValuePair<string, OdSubObject> _SelectedSubObject;
 
-    public DeviceOD(MapField<string, OdObject> model)
+    public DeviceOD()
     {
-        Model = model;
-        _viewModel = new(Model);
-        _viewModel.CollectionChanged += ViewModel_CollectionChanged;
-        HackyUpdate();
-    }
-
-    private void ViewModel_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        OnPropertyChanged(nameof(ViewModel));
-        HackyUpdate();
-    }
-
-    private void HackyUpdate()
-    {
-        //Hack should be rewritten
-        var temp = Model.Where(key => 0x0001 <= IndexStringToInt(key.Key) && IndexStringToInt(key.Key) <= 0x025F);
-        DataTypes = new(new ObservableCollection<KeyValuePair<string, OdObject>>(temp));
     }
 
     private static int IndexStringToInt(string str)
@@ -54,7 +31,7 @@ public partial class DeviceOD : ObservableObject
         }
     }
 
-    public void AddIndex(int index, string name, OdObject.Types.ObjectType type)
+    public void AddIndex(int index, string name, LibCanOpen.OdObject.Types.ObjectType type)
     {
         var strIndex = index.ToString("X4");
         var newObj = new OdObject
@@ -64,51 +41,48 @@ public partial class DeviceOD : ObservableObject
         };
 
         // create OD entry
-        if (type == OdObject.Types.ObjectType.Var)
+        if (type == LibCanOpen.OdObject.Types.ObjectType.Var)
         {
             var newSub = new OdSubObject()
             {
                 Name = name,
-                Type = OdSubObject.Types.DataType.Unsigned32,
-                Sdo = OdSubObject.Types.AccessSDO.Rw,
-                Pdo = OdSubObject.Types.AccessPDO.No,
-                Srdo = OdSubObject.Types.AccessSRDO.No,
+                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
+                Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
+                Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
                 DefaultValue = "0"
             };
-            newObj.SubObjects.Add("0", newSub);
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", newSub));
         }
         else
         {
             var CountSub = new OdSubObject()
             {
                 Name = "Highest sub-index supported",
-                Type = OdSubObject.Types.DataType.Unsigned8,
-                Sdo = OdSubObject.Types.AccessSDO.Ro,
-                Pdo = OdSubObject.Types.AccessPDO.No,
-                Srdo = OdSubObject.Types.AccessSRDO.No,
+                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned8,
+                Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Ro,
+                Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
+                Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
                 DefaultValue = "0x01"
             };
             var Sub1 = new OdSubObject()
             {
                 Name = "Sub Object 1",
-                Type = OdSubObject.Types.DataType.Unsigned32,
-                Sdo = OdSubObject.Types.AccessSDO.Rw,
-                Pdo = OdSubObject.Types.AccessPDO.No,
-                Srdo = OdSubObject.Types.AccessSRDO.No,
+                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
+                Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
+                Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
                 DefaultValue = "0"
             };
-            newObj.SubObjects.Add("0", CountSub);
-            newObj.SubObjects.Add("1", Sub1);
-        }
 
-        ViewModel.Add(new KeyValuePair<string, OdObject>(strIndex, newObj));
-        Model.Add(strIndex, newObj);
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", CountSub));
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("1", Sub1));
+        }
+        Data.Add(new KeyValuePair<string, OdObject>(strIndex, newObj));
     }
 
     public void RemoveIndex(object sender)
     {
 
     }
-    [ObservableProperty]
-    ObservableCollection<KeyValuePair<string, OdObject>> _viewModel;
 }

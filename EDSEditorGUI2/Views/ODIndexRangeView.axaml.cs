@@ -25,9 +25,9 @@ public partial class ODIndexRangeView : UserControl
     /// </summary>
     /// <param name="sender">sender object</param>
     /// <param name="e">event param</param>
-    private void GridLoadingRow(object sender, DataGridRowEventArgs e)
+    private void GridLoadingRow(object? sender, DataGridRowEventArgs e)
     {
-        var dc = (System.Collections.Generic.KeyValuePair<string, LibCanOpen.OdObject>)e.Row.DataContext;
+        var dc = (System.Collections.Generic.KeyValuePair<string, ViewModels.OdObject>)e.Row.DataContext;
         int index = int.Parse(dc.Key, System.Globalization.NumberStyles.HexNumber);
         int min = Convert.ToInt32(MinIndex, 16);
         int max = Convert.ToInt32(MaxIndex, 16);
