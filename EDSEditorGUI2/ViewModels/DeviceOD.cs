@@ -9,10 +9,13 @@ public partial class DeviceOD : ObservableObject
     public ObservableCollection<KeyValuePair<string, OdObject>> Data { get; } = [];
 
     [ObservableProperty]
-    KeyValuePair<string, OdObject> _SelectedObject;
+    KeyValuePair<string, OdObject> _selectedObject;
 
     [ObservableProperty]
-    KeyValuePair<string, OdSubObject> _SelectedSubObject;
+    KeyValuePair<string, OdSubObject> _selectedSubObject;
+
+    [ObservableProperty]
+    ObservableCollection<KeyValuePair<string, OdSubObject>> _selectedSubObjects = [];
 
     public DeviceOD()
     {
@@ -52,7 +55,7 @@ public partial class DeviceOD : ObservableObject
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
                 DefaultValue = "0"
             };
-            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", newSub));
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x0", newSub));
         }
         else
         {
@@ -75,8 +78,8 @@ public partial class DeviceOD : ObservableObject
                 DefaultValue = "0"
             };
 
-            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", CountSub));
-            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("1", Sub1));
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x0", CountSub));
+            newObj.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x1", Sub1));
         }
         Data.Add(new KeyValuePair<string, OdObject>(strIndex, newObj));
     }

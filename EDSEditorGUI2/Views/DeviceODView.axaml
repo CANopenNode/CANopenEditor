@@ -47,6 +47,25 @@
             <DataGridTextColumn Header="SRDO" Width="*" Binding="{Binding Value.Srdo}" />
             <DataGridTextColumn Header="Default Value" Width="*" Binding="{Binding Value.DefaultValue}" />
           </DataGrid.Columns>
+          <DataGrid.ContextMenu>
+            <ContextMenu>
+              <MenuItem Header="Add" Click="ContextMenuSubObjectAddClick">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource add_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Remove (shift up)" Click="ContextMenuSubObjectRemoveClick" x:Name="contextMenu_subObject_removeSubItemToolStripMenuItem">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource remove_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Remove (leave gap)" Click="ContextMenuSubObjectRemoveClick">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource remove_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+            </ContextMenu>
+          </DataGrid.ContextMenu>
         </DataGrid>
         <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
         <StackPanel Grid.Row="2">

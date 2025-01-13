@@ -3,6 +3,8 @@ using Avalonia.Interactivity;
 using LibCanOpen;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EDSEditorGUI2.Views;
 
@@ -68,6 +70,43 @@ public partial class DeviceODView : UserControl
             if (s.SelectedItem is KeyValuePair<string, ViewModels.OdSubObject> selected)
             {
                 dc.SelectedSubObject = selected;
+                dc.SelectedSubObjects.Clear();
+                foreach (var row in s.SelectedItems)
+                {
+                    if (row is KeyValuePair<string, ViewModels.OdSubObject> subObj)
+                    {
+                        dc.SelectedSubObjects.Add(subObj);
+                    }
+                }
+            }
+        }
+    }
+    private void ContextMenuSubObjectAddClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.DeviceOD dc)
+        {
+            var selectedObj = dc.SelectedObject.Value;
+            ObservableCollection<KeyValuePair<string, ViewModels.OdSubObject>> selection = [];
+
+            foreach (var row in dc.SelectedSubObjects)
+            {
+                selectedObj.AddSubEntry(row);
+            }
+        }
+    }
+    private void ContextMenuSubObjectRemoveClick(object? sender, RoutedEventArgs e)
+    {
+        bool renumber = sender == contextMenu_subObject_removeSubItemToolStripMenuItem;
+
+        if (DataContext is ViewModels.DeviceOD dc)
+        {
+            var selectedObject = dc.SelectedObject.Value;
+
+            //Clone the list because we cant modify the list we iterate on 
+            var selectedObj = dc.SelectedSubObjects.ToList();
+            foreach (var item in selectedObj)
+            {
+                selectedObject.RemoveSubEntry(item, renumber);
             }
         }
     }
