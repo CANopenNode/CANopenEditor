@@ -5,10 +5,10 @@ namespace EDSEditorGUI2.ViewModels;
 public partial class DeviceInfo : ObservableObject
 {
     [ObservableProperty]
-    string _vendorName;
+    string _vendorName = string.Empty;
 
     [ObservableProperty]
-    string _productName;
+    string _productName = string.Empty;
 
     [ObservableProperty]
     bool _baudRate10;
