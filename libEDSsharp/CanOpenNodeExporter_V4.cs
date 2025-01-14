@@ -602,8 +602,33 @@ namespace libEDSsharp
     https://github.com/CANopenNode/CANopenEditor
 
     DON'T EDIT THIS FILE MANUALLY, UNLESS YOU KNOW WHAT YOU ARE DOING !!!!
-*******************************************************************************/
+*******************************************************************************
 
+    File info:
+        File Names:   {1}.h; {1}.c
+        Project File: {2}
+        File Version: {3}
+
+        Created:      {4}
+        Created By:   {5}
+        Modified:     {6}
+        Modified By:  {7}
+
+    Device Info:
+        Vendor Name:  {8}
+        Vendor ID:    {9}
+        Product Name: {10}
+        Product ID:   {11}
+
+        Description:  {12}
+*******************************************************************************/",
+            gitVersion, odname,
+            Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
+            eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
+            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
+            eds.fi.Description));
+
+            file.WriteLine(string.Format(@"
 #define OD_DEFINITION
 #include ""301/CO_ODinterface.h""
 #include ""{1}.h""
