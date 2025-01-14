@@ -100,8 +100,16 @@ namespace libEDSsharp
                 dev = (ISO15745ProfileContainer)serializer.Deserialize(reader);
                 reader.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                if (e is System.InvalidOperationException)
+                {
+                    Warnings.warning_list.Add(String.Format("{0} {1} Action aborted!", e.Message, e.InnerException.Message));
+                }
+                else
+                {
+                    Warnings.warning_list.Add(String.Format("{0} Action aborted!", e.ToString()));
+                }
                 return null;
             }
 

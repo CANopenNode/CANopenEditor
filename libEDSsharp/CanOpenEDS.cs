@@ -825,8 +825,13 @@ namespace libEDSsharp
             int lineno = 1;
             foreach (string linex in System.IO.File.ReadLines(filename))
             {
-                Parseline(linex, lineno);
-                lineno++;
+                try
+                {
+                    Parseline(linex, lineno);
+                    lineno++;
+                }
+                catch (Exception) { Warnings.warning_list.Add("Failed to open file \n" + filename);}
+
             }
 
             di = new DeviceInfo(eds["DeviceInfo"]);
