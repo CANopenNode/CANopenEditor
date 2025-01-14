@@ -8,14 +8,24 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        dotnet: [net481, net8]
+        configuration: [Debug, Release]
 
     runs-on: windows-latest
 #    runs-on: ubuntu-latest # Error: setup-msbuild can only be run on Windows runners
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v2
+    - name: C# problem matcher
+      run: |
+        Invoke-WebRequest "https://raw.githubusercontent.com/actions/setup-dotnet/main/.github/csc.json" -OutFile "csc.json"
+        echo "::add-matcher::csc.json"
 #      uses: actions/setup-dotnet@v2
 #      with:
 #        dotnet-version: 5.0.x
@@ -23,16 +33,19 @@ jobs:
 #      run: dotnet restore
     - name: Add Packages
       run: |
-        nuget install EDSEditorGUI/packages.config -OutputDirectory packages
-#        nuget install Tests/packages.config -OutputDirectory packages
+        dotnet restore
     - name: Build
 #      run: make all # builds the Debug configuration
-      run: msbuild EDSEditorGUI /property:Configuration=Release
+      run: |
+        msbuild -p:Build${{ matrix.dotnet }}=true /property:Configuration=${{ matrix.configuration }}
 #      run: dotnet build --no-restore
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: |
+          dotnet test --no-build --verbosity normal Tests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\tests.dll
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: EDSEditor
-        path: EDSEditorGUI\bin\Release\
+        name: EDSEditor_${{ matrix.dotnet }}
+        path: |
+          EDSEditorGUI\bin\Release\
+          EDSSharp\bin\Release\

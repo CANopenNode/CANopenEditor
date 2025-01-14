@@ -68,6 +68,17 @@ namespace ODEditor
             checkBox_lss.Checked = eds.di.LSS_Supported;
             checkBox_lssMaster.Checked = eds.di.LSS_Master;
 
+            checkBox_ngSlave.Checked = eds.di.NG_Slave;
+            checkBox_ngMaster.Checked = eds.di.NG_Master;
+
+            if (textBox_NG_NumOfNodes.Enabled)
+                textBox_NG_NumOfNodes.Text = eds.di.NrOfNG_MonitoredNodes.ToString();
+            else
+            {
+                textBox_NG_NumOfNodes.Text = "";
+                eds.di.NrOfNG_MonitoredNodes = 0;
+            }
+
             textBox_projectFileName.Text = Path.GetFileName(eds.projectFilename);
             if (eds.xddfilename_1_1 != "")
                 textBox_projectFileVersion.Text = "v1.1";
@@ -149,6 +160,19 @@ namespace ODEditor
                 eds.di.Granularity = Convert.ToByte(textBox_granularity.Text);
                 eds.di.LSS_Supported = checkBox_lss.Checked;
                 eds.di.LSS_Master = checkBox_lssMaster.Checked;
+
+                // ToDO: Node guarding ist confiured manually, but should reflect the OD settings
+                // NG_Slave active if heartbeat producer time (0x1017) == 0  and Guardtime (0x100C)  != 0
+                // NG_Master active (according DSP302) if consumer time (0x1016) == 0  and NodeID is in network list (0x1F81) and Guardtime (0x100C)  != 0 
+                // NrOfNG_MonitoredNodes should be the sum of all NodeIDs that are in network list (0x1F81) if heartbeat consumer time (0x1016) == 0  and Guardtime (0x100C)  != 0 
+                textBox_NG_NumOfNodes.Enabled = checkBox_ngMaster.Checked;
+                eds.di.NG_Slave = checkBox_ngSlave.Checked; 
+                eds.di.NG_Master = checkBox_ngMaster.Checked;
+                System.UInt16.TryParse(textBox_NG_NumOfNodes.Text,out eds.di.NrOfNG_MonitoredNodes);
+                if (eds.di.NrOfNG_MonitoredNodes > 127)
+                {
+                    MessageBox.Show("Number of monitored nodes must be between 0 and 127");
+                }
 
                 doUpdatePDOs();
                

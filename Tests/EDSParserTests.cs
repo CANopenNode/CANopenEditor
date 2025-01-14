@@ -38,7 +38,7 @@ namespace Tests
 
         }
 
-        public void injectobject(string testobject)
+        void injectobject(string testobject)
         {
             eds.Clear();
 
@@ -119,7 +119,7 @@ CompactSubObj=9
 
         }
 
-        public void test_object_coverage(List<string> AlwaysSet, List<string> MandatorySet, List<string> OptionalSet)
+        void test_object_coverage(List<string> AlwaysSet, List<string> MandatorySet, List<string> OptionalSet)
         {
             int MandatoryBitMask = (int)Math.Pow(2, MandatorySet.Count);
 

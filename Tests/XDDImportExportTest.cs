@@ -179,6 +179,7 @@ namespace Tests
             if (od.subobjects[1].PDOtype != PDOMappingType.optional)
                 throw new Exception("TPDOMappingType.optional not set in EDS for ARRAY");
 
+            Assert.True(od.subobjects[0].datatype == DataType.UNSIGNED8, "array subindex 0 datatype is changed");
 
 
         }

@@ -1,18 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13D2D8ED-242B-4283-BF14-AA79FE875F7C}</ProjectGuid>
+    <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
+    <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net481;net8.0-windows</TargetFrameworks>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ODEditor</RootNamespace>
     <AssemblyName>EDSEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,28 +21,11 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Index_8287_16x.ico</ApplicationIcon>
@@ -56,184 +33,47 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>.\Microsoft.mshtml.dll</HintPath>
     </Reference>
-    <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
-      <HintPath>..\packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeviceInfoView.cs">
+    <Compile Update="DeviceInfoView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DeviceInfoView.Designer.cs">
-      <DependentUpon>DeviceInfoView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DeviceODView.cs">
+    <Compile Update="DeviceODView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DeviceODView.Designer.cs">
-      <DependentUpon>DeviceODView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DevicePDOView2.cs">
+    <Compile Update="DevicePDOView2.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DevicePDOView2.Designer.cs">
-      <DependentUpon>DevicePDOView2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DeviceView.cs">
+    <Compile Update="DeviceView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DeviceView.Designer.cs">
-      <DependentUpon>DeviceView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ListViewEx.cs">
+    <Compile Update="ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ModuleInfo.cs">
+    <Compile Update="ModuleInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ModuleInfo.Designer.cs">
-      <DependentUpon>ModuleInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyTabUserControl.cs">
+    <Compile Update="MyTabUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="InsertObjects.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="InsertObjects.Designer.cs">
-      <DependentUpon>InsertObjects.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewIndex.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewIndex.Designer.cs">
-      <DependentUpon>NewIndex.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewItem.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewItem.Designer.cs">
-      <DependentUpon>NewItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Preferences.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Preferences.Designer.cs">
-      <DependentUpon>Preferences.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReportView.Designer.cs">
-      <DependentUpon>ReportView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TableLayoutDB.cs">
+    <Compile Update="TableLayoutDB.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UpdateODViewEventArgs.cs" />
-    <Compile Include="Warnings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Warnings.Designer.cs">
-      <DependentUpon>Warnings.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="DeviceInfoView.resx">
-      <DependentUpon>DeviceInfoView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DeviceODView.resx">
-      <DependentUpon>DeviceODView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DevicePDOView2.resx">
-      <DependentUpon>DevicePDOView2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DeviceView.resx">
-      <DependentUpon>DeviceView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModuleInfo.resx">
-      <DependentUpon>ModuleInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyTabUserControl.resx">
-      <DependentUpon>MyTabUserControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InsertObjects.resx">
-      <DependentUpon>InsertObjects.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewIndex.resx">
-      <DependentUpon>NewIndex.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewItem.resx">
-      <DependentUpon>NewItem.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Preferences.resx">
-      <DependentUpon>Preferences.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="ReportView.resx">
-      <DependentUpon>ReportView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Warnings.resx">
-      <DependentUpon>Warnings.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.manifest" />
-    <None Include="packages.config" />
-    <None Include="Profiles\DS301_profile.xpd">
+    <None Include="Profiles\*.xpd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Profiles\DS401_profile.xpd" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libEDSsharp\libEDSsharp.csproj">
-      <Project>{cc0fa4b1-2bfc-43b3-8c56-b428df2d24e7}</Project>
-      <Name>libEDSsharp</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\libEDSsharp\libEDSsharp.csproj" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -249,51 +89,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index_8287_16x.ico" />
-    <Content Include="Profiles\DS301_profile_old.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Profiles\DSP302-NMTMaster.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="Resources\PrintSetup_11011.png" />
-    <None Include="Resources\Print_11009.png" />
-    <None Include="Resources\PrintPreviewControl_698.png" />
-    <None Include="Resources\Index_8287_16x.png" />
-    <None Include="Resources\GenericVSEditor_9905.png" />
-    <None Include="Resources\EventLog_5735.png" />
-    <None Include="Resources\ListBox_686.png" />
-    <None Include="Resources\notebook_16xLG.png" />
-    <None Include="Resources\move_to_bottom.png" />
-    <None Include="Resources\move_to_top.png" />
     <Content Include="style.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Remove_16xLG.png" />
-    <None Include="Resources\action_add_16xLG.png" />
-    <None Include="Resources\305_Close_16x16_72.png" />
-    <None Include="Resources\DriverTemplate_32x.png" />
-    <None Include="Resources\InsertColumn_5626.png" />
-    <None Include="Resources\ExporttoScript_9881.png" />
-    <None Include="Resources\Compile_191.png" />
-    <None Include="Resources\GenerateAll.png" />
-    <None Include="Resources\Close_6519.png" />
-    <None Include="Resources\Open_6529.png" />
-    <None Include="Resources\NewFile_6276.png" />
-    <None Include="Resources\Save_6530.png" />
-    <None Include="Resources\Save.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="SourceGrid" Version="4.4.0" Condition="'$(TargetFramework)' == 'net481'"/>
+    <PackageReference Include="SourceGrid-huanlin" Version="6.0.10" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
   <PropertyGroup>
-    <PreBuildEvent>git describe --tags --long --dirty &gt; "$(ProjectDir)version.txt" || exit 0</PreBuildEvent>
+    <PreBuildEvent>git describe --tags --long --dirty &gt; "$(MSBuildProjectDirectory)\version.txt" || exit 0</PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

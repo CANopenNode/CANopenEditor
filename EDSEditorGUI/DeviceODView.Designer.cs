@@ -145,7 +145,7 @@ namespace ODEditor
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer4);
             this.splitContainer1.Size = new System.Drawing.Size(1138, 745);
-            this.splitContainer1.SplitterDistance = 281;
+            this.splitContainer1.SplitterDistance = 280;
             this.splitContainer1.TabIndex = 2;
             this.splitContainer1.TabStop = false;
             // 
@@ -164,8 +164,8 @@ namespace ODEditor
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(281, 745);
-            this.splitContainer2.SplitterDistance = 246;
+            this.splitContainer2.Size = new System.Drawing.Size(280, 745);
+            this.splitContainer2.SplitterDistance = 245;
             this.splitContainer2.TabIndex = 0;
             this.splitContainer2.TabStop = false;
             // 
@@ -181,7 +181,7 @@ namespace ODEditor
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 244);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 243);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // listView_communication_objects
@@ -194,7 +194,7 @@ namespace ODEditor
             this.listView_communication_objects.HideSelection = false;
             this.listView_communication_objects.Location = new System.Drawing.Point(3, 23);
             this.listView_communication_objects.Name = "listView_communication_objects";
-            this.listView_communication_objects.Size = new System.Drawing.Size(273, 218);
+            this.listView_communication_objects.Size = new System.Drawing.Size(272, 217);
             this.listView_communication_objects.TabIndex = 0;
             this.listView_communication_objects.UseCompatibleStateImageBehavior = false;
             this.listView_communication_objects.View = System.Windows.Forms.View.Details;
@@ -235,8 +235,8 @@ namespace ODEditor
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.tableLayoutPanel3);
-            this.splitContainer3.Size = new System.Drawing.Size(281, 495);
-            this.splitContainer3.SplitterDistance = 245;
+            this.splitContainer3.Size = new System.Drawing.Size(280, 496);
+            this.splitContainer3.SplitterDistance = 244;
             this.splitContainer3.TabIndex = 0;
             this.splitContainer3.TabStop = false;
             // 
@@ -252,7 +252,7 @@ namespace ODEditor
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(279, 243);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(278, 242);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
             // label2
@@ -274,7 +274,7 @@ namespace ODEditor
             this.listView_manufacturer_objects.HideSelection = false;
             this.listView_manufacturer_objects.Location = new System.Drawing.Point(3, 23);
             this.listView_manufacturer_objects.Name = "listView_manufacturer_objects";
-            this.listView_manufacturer_objects.Size = new System.Drawing.Size(273, 217);
+            this.listView_manufacturer_objects.Size = new System.Drawing.Size(272, 216);
             this.listView_manufacturer_objects.TabIndex = 0;
             this.listView_manufacturer_objects.UseCompatibleStateImageBehavior = false;
             this.listView_manufacturer_objects.View = System.Windows.Forms.View.Details;
@@ -303,7 +303,7 @@ namespace ODEditor
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(279, 244);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(278, 246);
             this.tableLayoutPanel3.TabIndex = 8;
             // 
             // label3
@@ -325,7 +325,7 @@ namespace ODEditor
             this.listView_deviceProfile_objects.HideSelection = false;
             this.listView_deviceProfile_objects.Location = new System.Drawing.Point(3, 23);
             this.listView_deviceProfile_objects.Name = "listView_deviceProfile_objects";
-            this.listView_deviceProfile_objects.Size = new System.Drawing.Size(273, 218);
+            this.listView_deviceProfile_objects.Size = new System.Drawing.Size(272, 220);
             this.listView_deviceProfile_objects.TabIndex = 0;
             this.listView_deviceProfile_objects.UseCompatibleStateImageBehavior = false;
             this.listView_deviceProfile_objects.View = System.Windows.Forms.View.Details;
@@ -366,8 +366,8 @@ namespace ODEditor
             this.splitContainer4.Panel2.Controls.Add(this.label6);
             this.splitContainer4.Panel2.Controls.Add(this.textBox_name);
             this.splitContainer4.Panel2.Controls.Add(this.textBox_description);
-            this.splitContainer4.Size = new System.Drawing.Size(853, 745);
-            this.splitContainer4.SplitterDistance = 225;
+            this.splitContainer4.Size = new System.Drawing.Size(854, 745);
+            this.splitContainer4.SplitterDistance = 224;
             this.splitContainer4.TabIndex = 28;
             this.splitContainer4.TabStop = false;
             // 
@@ -389,7 +389,7 @@ namespace ODEditor
             this.listView_subObjects.HideSelection = false;
             this.listView_subObjects.Location = new System.Drawing.Point(0, 0);
             this.listView_subObjects.Name = "listView_subObjects";
-            this.listView_subObjects.Size = new System.Drawing.Size(850, 223);
+            this.listView_subObjects.Size = new System.Drawing.Size(851, 223);
             this.listView_subObjects.TabIndex = 0;
             this.listView_subObjects.UseCompatibleStateImageBehavior = false;
             this.listView_subObjects.View = System.Windows.Forms.View.Details;
@@ -496,22 +496,22 @@ namespace ODEditor
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.comboBox_accessPDO);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 328);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(0, 329);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(853, 188);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(854, 188);
             this.groupBox1.TabIndex = 33;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Object settings";
             // 
             // checkBox_autosave
             // 
-            this.checkBox_autosave.Location = new System.Drawing.Point(702, 148);
+            this.checkBox_autosave.Location = new System.Drawing.Point(634, 146);
             this.checkBox_autosave.Name = "checkBox_autosave";
-            this.checkBox_autosave.Size = new System.Drawing.Size(139, 17);
+            this.checkBox_autosave.Size = new System.Drawing.Size(116, 21);
             this.checkBox_autosave.TabIndex = 35;
-            this.checkBox_autosave.Text = "Save changes on leave";
+            this.checkBox_autosave.Text = "Autosave changes";
             this.checkBox_autosave.UseVisualStyleBackColor = true;
             // 
             // textBox_stringLengthMin
@@ -627,7 +627,7 @@ namespace ODEditor
             this.button_saveChanges.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_saveChanges.Location = new System.Drawing.Point(485, 138);
             this.button_saveChanges.Name = "button_saveChanges";
-            this.button_saveChanges.Size = new System.Drawing.Size(211, 35);
+            this.button_saveChanges.Size = new System.Drawing.Size(143, 35);
             this.button_saveChanges.TabIndex = 50;
             this.button_saveChanges.Text = "Save Changes";
             this.button_saveChanges.UseVisualStyleBackColor = true;
@@ -683,6 +683,7 @@ namespace ODEditor
             // comboBox_objectType
             // 
             this.comboBox_objectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_objectType.Enabled = false;
             this.comboBox_objectType.FormattingEnabled = true;
             this.comboBox_objectType.Location = new System.Drawing.Point(108, 18);
             this.comboBox_objectType.Name = "comboBox_objectType";
@@ -790,7 +791,7 @@ namespace ODEditor
             this.textBox_denotation.BackColor = System.Drawing.Color.PeachPuff;
             this.textBox_denotation.Location = new System.Drawing.Point(90, 60);
             this.textBox_denotation.Name = "textBox_denotation";
-            this.textBox_denotation.Size = new System.Drawing.Size(760, 20);
+            this.textBox_denotation.Size = new System.Drawing.Size(761, 20);
             this.textBox_denotation.TabIndex = 3;
             this.textBox_denotation.TextChanged += new System.EventHandler(this.DataDirty);
             // 
@@ -836,7 +837,7 @@ namespace ODEditor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_name.Location = new System.Drawing.Point(90, 34);
             this.textBox_name.Name = "textBox_name";
-            this.textBox_name.Size = new System.Drawing.Size(760, 20);
+            this.textBox_name.Size = new System.Drawing.Size(761, 20);
             this.textBox_name.TabIndex = 2;
             this.textBox_name.TextChanged += new System.EventHandler(this.DataDirty);
             // 
@@ -852,7 +853,7 @@ namespace ODEditor
             this.textBox_description.Multiline = true;
             this.textBox_description.Name = "textBox_description";
             this.textBox_description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_description.Size = new System.Drawing.Size(760, 227);
+            this.textBox_description.Size = new System.Drawing.Size(761, 227);
             this.textBox_description.TabIndex = 4;
             this.textBox_description.TextChanged += new System.EventHandler(this.DataDirty);
             // 

@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package LibCanOpen;
+
+import "google/protobuf/timestamp.proto";
+
+/* File information related properties. */
+message CanOpen_FileInfo
+{
+    string fileVersion = 1; // Actual file version (as string).
+    string description = 2; // File description.
+    google.protobuf.Timestamp creationTime = 3; // File creation time.
+    string createdBy = 4; // Name or a description of the file creator.
+    google.protobuf.Timestamp modificationTime = 5; // Time of the last modification.
+    string modifiedBy = 6; // Name or a description of the creator.
+}
+
+/* CANopen device information related properties. */
+message CanOpen_DeviceInfo
+{
+    string vendorName = 1; // Vendor name.
+    string productName = 3; // Product name.
+    bool baudRate10 = 100; // Support of the baud rate 10 kbit/s.
+    bool baudRate20 = 101; // Support of the baud rate 20 kbit/s.
+    bool baudRate50 = 102; // Support of the baud rate 50 kbit/s.
+    bool baudRate125 = 103; // Support of the baud rate 125 kbit/s.
+    bool baudRate250 = 104; // Support of the baud rate 250 kbit/s.
+    bool baudRate500 = 105; // Support of the baud rate 500 kbit/s.
+    bool baudRate800 = 106; // Support of the baud rate 800 kbit/s.
+    bool baudRate1000 = 107; // Support of the baud rate 1000 kbit/s.
+    bool baudRateAuto = 108; // Support of the auto baud rate.
+    bool lssSlave = 150; // Support of the LSS slave functionality.
+    bool lssMaster = 151; // Support of the LSS master functionality.
+}
+
+/* Actual CANopen device properties. */
+message CanOpen_DeviceCommissioning
+{
+    uint32 nodeId = 1; // CANopen device’s address.
+    string nodeName = 2; // Node name.
+    uint32 baudrate = 3; // CANopen device’s baudrate.
+}
+
+/* Object Dictionary SubEntry on specific Subindex. Sorted dictionary of them is part of the OdEntry. If OdEntry
+ * ObjectType is "record", then each SubEntry in the dictionary may be unique. If OdEntry ObjectType is "array",
+ * then some properties of all SubEntries must be equal. If OdEntry ObjectType is "var", then one SubEntry exists. */
+message OdSubObject
+{
+    /* Object dictionary basic data types from CiA 301. */
+    enum DataType
+    {
+        UNSPECIFIED = 0x00; // Unspecified, should not be used.
+        BOOLEAN = 0x01; // Boolean.
+        INTEGER8 = 0x02; // 8-bit signed integer.
+        INTEGER16 = 0x03; // 16-bit signed integer.
+        INTEGER32 = 0x04; // 32-bit signed integer.
+        UNSIGNED8 = 0x05; // 8-bit unsigned integer.
+        UNSIGNED16 = 0x06; // 16-bit unsigned integer.
+        UNSIGNED32 = 0x07; // 32-bit unsigned integer.
+        REAL32 = 0x08; // 32-bit floating point number.
+        VISIBLE_STRING = 0x09; /* Null terminated string (8-bit chars). It may contain control characters and UTF-8
+                                * characters. StringLengthMin specifies minimum buffer length for the string. */
+        OCTET_STRING = 0x0A; // Fixed length array of bytes.
+        UNICODE_STRING = 0x0B; /* Null terminated string (16-bit chars). Not recommended to use.
+                                * StringLengthMin specifies minimum buffer length for the string. */
+        TIME_OF_DAY = 0x0C; // 48 bit long structure.
+        TIME_DIFFERENCE = 0x0D; // 48 bit long structure.
+        DOMAIN = 0x0F; // Data block of any length, don't have default value.
+        INTEGER24 = 0x10; // 24-bit signed integer, should not be used.
+        REAL64 = 0x11; // 64-bit floating point number.
+        INTEGER40 = 0x12; // 40-bit signed integer, should not be used.
+        INTEGER48 = 0x13; // 48-bit signed integer, should not be used.
+        INTEGER56 = 0x14; // 56-bit signed integer, should not be used.
+        INTEGER64 = 0x15; // 64-bit signed integer.
+        UNSIGNED24 = 0x16; // 24-bit unsigned integer, should not be used.
+        UNSIGNED40 = 0x18; // 40-bit unsigned integer, should not be used.
+        UNSIGNED48 = 0x19; // 48-bit unsigned integer, should not be used.
+        UNSIGNED56 = 0x1A; // 56-bit unsigned integer, should not be used.
+        UNSIGNED64 = 0x1B; // 64-bit unsigned integer.
+    }
+
+    /* CANopen SDO access permissions. */
+    enum AccessSDO
+    {
+        ACCESS_SDO_NO = 0; // No access.
+        ACCESS_SDO_RO = 1; // Read only access.
+        ACCESS_SDO_WO = 2; // Write only access.
+        ACCESS_SDO_RW = 3; // Read and write access.
+    }
+
+    /* CANopen PDO access permissions. */
+    enum AccessPDO
+    {
+        ACCESS_PDO_NO = 0; // No access.
+        ACCESS_PDO_T = 1; // TPDO access.
+        ACCESS_PDO_R = 2; // RPDO access.
+        ACCESS_PDO_TR = 3; // TPDO and RPDO access.
+    }
+
+    /* CANopen SRDO access permissions. */
+    enum AccessSRDO
+    {
+        ACCESS_SRDO_NO = 0; // no access.
+        ACCESS_SRDO_TX = 1; // SRDO TX access.
+        ACCESS_SRDO_RX = 2; // SRDO RX access.
+        ACCESS_SRDO_TRX = 3; // SRDO TX or RX access.
+    }
+
+    string name = 1; // Name of the sub entry. If OdEntry is "VAR", this property is not relevant.
+    string alias = 2; // Additonal sub parameter name, for the actual device. If OdEntry is "VAR", this property is not relevant.
+    DataType dataType = 3; // CANopen data type
+    AccessSDO sdo = 4; // CANopen SDO access permissions
+    AccessPDO pdo = 5; // CANopen PDO access permissions
+    AccessSRDO srdo = 6; // CANopen SRDO access permissions.
+    string defaultValue = 7; // Default value of the sub object.
+    string actualValue = 8; // Actual value of the sub object, for the actual device.
+    string lowLimit = 9; // Low limit for the value.
+    string highLimit = 10; // High limit for the value.
+    uint32 stringLengthMin = 101; // CanOpenNode OD exporter V4: Minimum length of a string that can be stored.
+}
+
+/* Object Dictionary Entry on specific Index. Sorted dictionary of them is part of CanOpenDevice - CANopen Object Dictionary. */
+message OdObject
+{
+    /* Type of Object Dictionary entry, similar as Object Code from CiA 301. */
+    enum ObjectType
+    {
+        // Not defined, default
+        OBJECT_TYPE_UNSPECIFIED = 0;
+        // A single value such as an UNSIGNED8, BOOLEAN, FLOAT, INTEGER16, VISIBLE STRING etc.
+        OBJECT_TYPE_VAR = 7;
+        // A multiple data field object where each data field is a simple variable of the SAME basic data type e.g. array
+        // of UNSIGNED16 etc. Sub-index 0 is of UNSIGNED8.
+        OBJECT_TYPE_ARRAY = 8;
+        // A multiple data field object where the data fields may be any combination of
+        // simple variables. Sub-index 0 is of UNSIGNED8 and sub-index 255 is of UNSIGNED32.
+        OBJECT_TYPE_RECORD = 9;
+    }
+
+    // If true, object is completelly skipped by CANopenNode exporters, etc.
+    bool disabled = 1;
+    // Name of the entry.
+    string name = 2;
+    // Additonal parameter name, for the actual device.
+    string alias = 3;
+    // Description of the Entry.
+    string description = 4;
+    // CANopen Object Type.
+    ObjectType objectType = 5;
+    // CanOpenNode OD exporter V4: it will generate a macro for each different CO_countLabel. For example, if four
+    // OD objects have "CO_countLabel" set to "TPDO", then macro "#define ODxyz_CNT_TPDO 4" will be generated by the OD exporter.
+    string countLabel = 101;
+    // CanOpenNode OD exporter V4: storage group into which the C variable will belong. If not defined, it will default to "RAM".
+    string storageGroup = 102;
+    // CanOpenNode OD exporter V1.3: Flags for the PDO.
+    bool flagsPDO = 103;
+    // Sorted dictionary of sub entries
+    map<string, OdSubObject> subObjects = 200;
+}
+
+/* CANopen Device description object. */
+message CanOpenDevice
+{
+    CanOpen_FileInfo fileInfo = 1; // File information related properties.
+    CanOpen_DeviceInfo deviceInfo = 2; //CANopen device information related properties.
+    CanOpen_DeviceCommissioning deviceCommissioning = 3; // Parameters of the actual CANopen device.
+    map<string, OdObject> objects = 200; // CANopen Object Dictionary as sorted dictionary.
+}

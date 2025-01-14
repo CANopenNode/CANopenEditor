@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libEDSsharp", "libEDSsharp\libEDSsharp.csproj", "{CC0FA4B1-2BFC-43B3-8C56-B428DF2D24E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2A479BF3-7628-409B-8A29-9314C308445E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B7A7545-6257-44BF-8868-F429E1B72C77} = {8B7A7545-6257-44BF-8868-F429E1B72C77}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDSSharp", "EDSSharp\EDSSharp.csproj", "{8B7A7545-6257-44BF-8868-F429E1B72C77}"
 EndProject

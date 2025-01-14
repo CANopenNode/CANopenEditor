@@ -1,0 +1,42 @@
+name: make release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: microsoft/setup-msbuild@v2
+    - name: Add Packages
+      run: |
+        dotnet restore
+    - name: Build
+      run: |
+        msbuild /property:Configuration=Release
+    - name: Check for release tag
+      run: |
+        $release = "${{ github.ref_name }}" -match "v[\d]*[.][\d]*[.][\d]*$"
+        $prerelease = If ($release) {"false"} else {"true"}
+        echo "prerelease=$prerelease" >> $env:GITHUB_ENV
+    - name: Make release package
+      run: |
+        $tag = "${{ github.ref_name }}"
+        $filename = "CANopenEditor-$tag-binary.zip"
+        Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*","EDSSharp\bin\Release\*" -DestinationPath $filename
+        echo "binary_name=$filename" >> $env:GITHUB_ENV
+    - name: make release
+      uses: softprops/action-gh-release@v2
+      with:
+        prerelease: ${{ env.prerelease }}
+        files: |
+          ${{ env.binary_name }}

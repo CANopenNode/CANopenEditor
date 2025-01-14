@@ -21,142 +21,45 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace libEDSsharp
 {
-    public class DocumentationGen
+    /// <summary>
+    /// Documentation generator
+    /// </summary>
+    public class DocumentationGenMarkup : IFileExporter
     {
         StreamWriter file = null;
 
-        public void genhtmldoc(string filepath, EDSsharp eds)
+        /// <summary>
+        /// Fetches all the different fileexporter types the class supports
+        /// </summary>
+        /// <returns>List of the different exporters the class supports</returns>
+        public ExporterDescriptor[] GetExporters()
         {
-
-            file = new StreamWriter(filepath, false);
-            file.NewLine = "\n";
-
-           file.Write("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /></head><body>");
-
-           file.Write(string.Format("<h1> {0} Documentation </h1>",eds.di.ProductName));
-
-           file.Write("<h2>Device Information</h2>");
-
-           file.Write("<table id=\"deviceinfo\">");
-           write2linetableheader("Product name", eds.di.ProductName);
-           write2linetableheader("Product number", eds.di.ProductNumber);
-           write2linetableheader("Revision number", eds.di.RevisionNumber);
-           write2linetableheader("Vendor name", eds.di.VendorName);
-           file.Write("</table>");
-
-           file.Write("<h2>Mandatory objects</h2>");
-
-           foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
-           {
-                ODentry od = kvp.Value;
-                if (od.prop.CO_disabled == true)
-                    continue;
-
-                if (od.Index == 0x1000 || od.Index == 0x1001 || od.Index == 0x1018)
+            return new ExporterDescriptor[]
+            {
+                new ExporterDescriptor("Documentation Markup", new string[] { ".md" }, ExporterDescriptor.ExporterFlags.Documentation, delegate (string filepath, List<EDSsharp> edss)
                 {
-                    writeODentryhtml(od);
-                }
-            }
-
-            file.Write("<h2>Optional objects</h2>");
-
-            foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
-            {
-                ODentry od = kvp.Value;
-                if (od.prop.CO_disabled == true)
-                    continue;
-
-                if ((od.Index > 0x1001 && od.Index != 0x1018 && od.Index<0x2000) || od.Index>=0x6000)
-                {
-                    writeODentryhtml(od);
-                }
-            }
-
-            file.Write("<h2>Manufacturer specific objects</h2>");
-
-            foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
-            {
-                ODentry od = kvp.Value;
-                if (od.prop.CO_disabled == true)
-                    continue;
-
-                if (od.Index >= 0x2000 && od.Index<0x6000)
-                {
-                    writeODentryhtml(od);
-                }
-            }
-
-
-            file.Write("</body></html>");
-
-           file.Close();
-
-
+                    var e = new DocumentationGenMarkup();
+                    e.genmddoc(filepath, edss[0]);
+                })
+            };
         }
-
-        public void writeODentryhtml(ODentry od)
+        /// <summary>
+        /// Generate markup documentation
+        /// </summary>
+        /// <param name="filepath">where the documentation should be created</param>
+        /// <param name="eds">data to generate the documentation from</param>
+        public void genmddoc(string filepath, EDSsharp eds)
         {
-            if (od.parent == null)
-            {
-                file.Write("<hr/>");
-                file.Write(String.Format("<h3>0x{0:x4} - {1}</h3>", od.Index, od.parameter_name));
-            }
-            else
-            {
-                file.Write(String.Format("<h3>0x{0:x4} sub 0x{2:x2} - {1}</h3>", od.Index, od.parameter_name,od.Subindex));
-            }
+            var versionAttributes = Assembly
+                .GetExecutingAssembly()
+                .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
+                as AssemblyInformationalVersionAttribute[];
 
-            file.Write("<table id=\"odentry\">");
-            write2linetableheader("Parameter", "Value");
-
-            ObjectType ot = od.objecttype;
-            if (ot == ObjectType.UNKNOWN && od.parent != null)
-                ot = od.parent.objecttype;
-
-            write2linetablerow("Object Type", ot.ToString());
-
-            DataType dt = od.datatype;
-            if (dt == DataType.UNKNOWN && od.parent != null)
-                dt = od.parent.datatype;
-
-            write2linetablerow("Data Type", dt.ToString());
-            write2linetablerow("Default Value", od.defaultvalue);
-
-            write2linetablerow("Location", od.prop.CO_storageGroup);
-            write2linetablerow("Access type", od.accesstype.ToString());
-            write2linetablerow("PDO mapping", od.PDOMapping);
-            write2linetablerow("No Sub index", od.Nosubindexes);
-
-            file.Write("</table>");
-
-            string description = od.Description;
-            file.Write(string.Format("<pre>{0}</pre>", description));
-
-            foreach (KeyValuePair<UInt16,ODentry> sub in od.subobjects)
-            {
-                ODentry subod = sub.Value;
-                writeODentryhtml(subod);
-            }
-
-        }
-
-        public void write2linetablerow(string a,object b)
-        {
-            if (b == null)
-                b = "";
-            file.Write("<tr><td>{0}</td><td>{1}</td></tr>", a, b.ToString());
-        }
-
-        public void write2linetableheader(string a, object b)
-        {
-            file.Write("<tr><th>{0}</th><th>{1}</th></tr>",a,b.ToString());
-        }
-
-        public void genmddoc(string filepath, EDSsharp eds, string gitVersion)
-        {
+            string gitVersion = versionAttributes[0].InformationalVersion;
             file = new StreamWriter(filepath, false);
             file.NewLine = "\n";
 
@@ -199,11 +102,13 @@ Device Information
 | TPDO count   | {6,-30} |
 | LSS Slave    | {7,-30} |
 | LSS Master   | {8,-30} |
+| NG Slave     | {9,-30} |
+| NG Master    | {10,-30} |
 ",          eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
             eds.di.Granularity, eds.di.NrOfRXPDO.ToString(), eds.di.NrOfTXPDO.ToString(),
-            eds.di.LSS_Supported, eds.di.LSS_Master));
+            eds.di.LSS_Supported, eds.di.LSS_Master, eds.di.NG_Slave, eds.di.NG_Master));
 
-            file.WriteLine($"#### Supported Baud rates");
+            file.WriteLine($"### Supported Baud rates");
             file.WriteLine($"* [{(eds.di.BaudRate_10 ? "x" : " ")}] 10 kBit/s");
             file.WriteLine($"* [{(eds.di.BaudRate_20 ? "x" : " ")}] 20 kBit/s");
             file.WriteLine($"* [{(eds.di.BaudRate_50 ? "x" : " ")}] 50 kBit/s");
@@ -251,8 +156,12 @@ Device Information
 
             file.Close();
         }
-
-        private void PrintPdoMd(EDSsharp eds, bool skipDisabled = false)
+        /// <summary>
+        /// Write a all PDO information in markup
+        /// </summary>
+        /// <param name="eds">data containing the information</param>
+        /// <param name="skipDisabled">skip disabled PDOs</param>
+        void PrintPdoMd(EDSsharp eds, bool skipDisabled = false)
         {
             var parameters = new SortedDictionary<UInt16, ODentry>();
             var mappings = new SortedDictionary<UInt16, ODentry>();
@@ -359,8 +268,11 @@ Device Information
                 file.WriteLine();
             }
         }
-
-        private void PrintODentryMd(ODentry od)
+        /// <summary>
+        /// Write a object dictionary markup entry to file
+        /// </summary>
+        /// <param name="od">Object dictionary entry</param>
+        void PrintODentryMd(ODentry od)
         {
             var descriptions = new List<string>();
 
@@ -408,8 +320,12 @@ Device Information
                 file.WriteLine(string.Join("\n", descriptions));
             }
         }
-
-        private string PrintDataType(ODentry od)
+        /// <summary>
+        /// Returns the datatype of a object dictionary
+        /// </summary>
+        /// <param name="od">the object dictionary entry</param>
+        /// <returns>datatype of the OD entry</returns>
+        string PrintDataType(ODentry od)
         {
             string dt = od.datatype.ToString();
             if ((od.datatype == DataType.VISIBLE_STRING || od.datatype == DataType.UNICODE_STRING)

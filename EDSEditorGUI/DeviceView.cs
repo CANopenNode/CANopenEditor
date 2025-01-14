@@ -84,8 +84,8 @@ namespace ODEditor
             deviceInfoView.populatedeviceinfo();
 
 
-            //moduleInfo1.eds = eds;
-            //moduleInfo1.populatemoduleinfo();
+            moduleInfo1.eds = eds;
+            moduleInfo1.populatemoduleinfo();
         }
 
         public void dispatch_updatePDOinfo()

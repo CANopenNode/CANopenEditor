@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
+    /// <summary>
+    /// Provides string escape and unescape functions
+    /// </summary>
     public static class StringUnescape
     {
+        /// <summary>
+        /// Convert litteral special characters like null and tab etc. into there escape sequence '\0' '\t'
+        /// </summary>
+        /// <param name="c">the spesial character to convert into escape sequence</param>
+        /// <returns>a string containing the escape sequence or c if noe escape sequence was found</returns>
         public static string Escape(char c)
         {
             switch (c)

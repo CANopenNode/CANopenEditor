@@ -59,7 +59,7 @@ Section "OpenEdsEditor" Secopeneds ;No components page, name is not important
   ; Put file there
   File EDSEditorGUI\bin\Release\EDSEditor.exe
   File EDSEditorGUI\bin\Release\EDSEditor.exe.config
-  File EDSEditorGUI\bin\Release\libEDSsharp.dll
+  File EDSEditorGUI\bin\Release\*.dll
   File EDSEditorGUI\bin\Release\style.css
   File Index_8287_16x.ico
   File License-GPLv3.txt

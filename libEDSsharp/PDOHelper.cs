@@ -6,13 +6,21 @@ using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
-
+    /// <summary>
+    /// Represent a PDO slot (mapping + communication index)
+    /// </summary>
     public class PDOSlot
     {
 
         private UInt16 _MappingIndex;
         private UInt16 _ConfigurationIndex;
+        /// <summary>
+        /// Indicate that $NODEID is present and the COB-ID should added to the node id when deployed
+        /// </summary>
         public bool nodeidpresent;
+        /// <summary>
+        /// The OD index of the PDO configuration (aka. communication parameter)
+        /// </summary>
         public ushort ConfigurationIndex
         {
             get { return _ConfigurationIndex; }
@@ -37,30 +45,52 @@ namespace libEDSsharp
                    
             }
         }
-
+        /// <summary>
+        /// The OD index of the PDO mapping
+        /// </summary>
         public ushort MappingIndex
         {
             get { return _MappingIndex; }
         }
-        
+        /// <summary>
+        /// PDO Mapping access
+        /// </summary>
         public EDSsharp.AccessType mappingAccessType;
+        /// <summary>
+        /// PDO Configuration (aka. communication parameter) access
+        /// </summary>
         public EDSsharp.AccessType configAccessType;
+        /// <summary>
+        /// PDO mapping CanOpenNode storage group
+        /// </summary>
         public string mappingloc;
+        /// <summary>
+        /// PDO config CanOpenNode storage group
+        /// </summary>
         public string configloc;
-       
-
+        /// <summary>
+        /// PDO COB-ID
+        /// </summary>
         public uint COB;
-
+        /// <summary>
+        /// Returns if true the PDO is a TxPDO (aka TPDO)
+        /// </summary>
+        /// <returns>true if TXPDO</returns>
         public bool isTXPDO()
         {
             return ConfigurationIndex >= 0x1800;
         }
-
+        /// <summary>
+        /// Returns if true the PDO is a RxPDO (aka RPDO)
+        /// </summary>
+        /// <returns>true if RxPDO</returns>
         public bool isRXPDO()
         {
             return ConfigurationIndex < 0x1800;
         }
-
+        /// <summary>
+        /// PDO invalid bit value
+        /// </summary>
         public bool invalid
         {
             get
@@ -69,22 +99,44 @@ namespace libEDSsharp
             }
             set
             {
+        
                 if (value == true)
                     COB = COB | 0x80000000;
                 else
                     COB = COB & 0x7FFFFFFF;
             }
         }
- 
+        /// <summary>
+        /// PDO mapping
+        /// </summary>
         public List<ODentry> Mapping = new List<ODentry>();
-
+        /// <summary>
+        /// PDO inhibit time,multiple of 100us
+        /// </summary>
         public UInt16 inhibit;
+        /// <summary>
+        /// PDO event time,multiple of 1ms
+        /// </summary>
         public UInt16 eventtimer;
+        /// <summary>
+        /// PDO sync start value
+        /// </summary>
         public byte syncstart;
+        /// <summary>
+        /// PDO transmission type
+        /// </summary>
         public byte transmissiontype;
+        /// <summary>
+        /// Description of PDO communication index (aka configuration)
+        /// </summary>
         public string DescriptionComm;
+        /// <summary>
+        /// Description of PDO mapping index
+        /// </summary>
         public string DescriptionMap;
-
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public PDOSlot()
         {
             configloc = "PERSIST_COMM";
@@ -94,7 +146,11 @@ namespace libEDSsharp
             DescriptionComm = "";
             DescriptionMap = "";
         }
-
+        /// <summary>
+        /// Returns name of a OD entry (including dummy)
+        /// </summary>
+        /// <param name="od">object dictionary entry</param>
+        /// <returns>name of entry with index and subindex prefixed, or blank string if not found</returns>
         public string getTargetName(ODentry od)
         {
             string target = "";
@@ -133,7 +189,11 @@ namespace libEDSsharp
             return target;
 
         }
-
+        /// <summary>
+        /// Insert a OD entry into the mapping table
+        /// </summary>
+        /// <param name="ordinal">The zero-based index at which item should be inserted</param>
+        /// <param name="entry">OD entry to be mapped</param>
         public void insertMapping(int ordinal, ODentry entry)
         {
             int size = 0;
@@ -150,19 +210,28 @@ namespace libEDSsharp
 
     }
 
-
+    /// <summary>
+    /// PDO helper class, control all TPDO and RPDO in a node
+    /// </summary>
     public class PDOHelper
     {
 
         EDSsharp eds;
-
+        /// <summary>
+        /// Constructor 
+        /// </summary>
+        /// <param name="eds">eds data to interact with</param>
         public PDOHelper(EDSsharp eds)
         {
             this.eds = eds;
         }
-
+        /// <summary>
+        /// List of all T/R PDO
+        /// </summary>
         public List<PDOSlot> pdoslots = new List<PDOSlot>();
-
+        /// <summary>
+        /// Why is this not called from constructor?
+        /// </summary>
         public void build_PDOlists()
         {
             //List<ODentry> odl = new List<ODentry>();
@@ -170,8 +239,12 @@ namespace libEDSsharp
             build_PDOlist(0x1400,pdoslots);
 
         }
-
-        public void build_PDOlist(UInt16 startcob, List<PDOSlot> slots)
+        /// <summary>
+        /// Look through the OD and register PDO
+        /// </summary>
+        /// <param name="startcob">OD index to to start looking from, it will stop after 0x1ff indexes</param>
+        /// <param name="slots">list to add found pdo into</param>
+        void build_PDOlist(UInt16 startcob, List<PDOSlot> slots)
         {
             for (UInt16 idx = startcob; idx < startcob + 0x01ff; idx++)
             {
@@ -216,8 +289,10 @@ namespace libEDSsharp
                     //Look at mappings
 
                     ODentry mapping = eds.Getobject((ushort)(idx + 0x200));
-                    slot.DescriptionMap = mapping.Description;
-                    if(mapping==null)
+
+                    if (mapping != null) {
+                        slot.DescriptionMap = mapping.Description; 
+                    }else
                     {
                         Console.WriteLine(string.Format("No mapping for index 0x{0:X4} should be at 0x{1:X4}", idx, idx + 0x200));
                         continue;

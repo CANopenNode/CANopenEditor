@@ -1,72 +1,64 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="AssignInformationalVersion">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC0FA4B1-2BFC-43B3-8C56-B428DF2D24E7}</ProjectGuid>
+    <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
+    <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net481;net8.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>libEDSsharp</RootNamespace>
-    <AssemblyName>libEDSsharp</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+    <Company></Company>
+    <Configuration></Configuration>
+    <Description></Description>
+    <InformationalVersion></InformationalVersion>
+    <Product>libEDSsharp</Product>
+    <Copyright>Copyright ©  2016</Copyright>
+    <AssemblyTitle>libEDSsharp</AssemblyTitle>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <NeutralLanguage></NeutralLanguage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
+  <Target Name="AssignInformationalVersion" >
+    <Exec Command="git describe --tags --long --dirty" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="gitInfo" />
+    </Exec>
+    <PropertyGroup>
+      <InformationalVersion>$(gitInfo)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>docs\libEDSsharp.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bridge.cs" />
-    <Compile Include="CanOpenNodeExporter_V4.cs" />
-    <Compile Include="CanOpenXDD_1_1.cs" />
-    <Compile Include="ExporterFactory.cs" />
-    <Compile Include="IExporter.cs" />
-    <Compile Include="CanOpenNodeExporter.cs" />
-    <Compile Include="CanOpenXDD.cs" />
-    <Compile Include="CanOpenXML.cs" />
-    <Compile Include="DocumentationGen.cs" />
-    <Compile Include="eds.cs" />
-    <Compile Include="extensions.cs" />
-    <Compile Include="NetworkPDOreport.cs" />
-    <Compile Include="PDOHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringUnescape.cs" />
-    <Compile Include="Warnings.cs" />
-    <Compile Include="CanOpenXSD_1_1.cs" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <ItemGroup>
+    <PackageReference Include="System.CodeDom" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Google.Protobuf" Version="3.27.2" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.27.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="proto/CanOpen.proto" />
+  </ItemGroup>
+
+  <Target Name="protocolBufferGenerator" BeforeTargets="BeforeBuild" Inputs="@(Protobuf)" Outputs="bin\$(Configuration)\$(TargetFramework)\blazor_components.dll">
+    <Exec Command="$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/linux_x64/protoc --proto_path=$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/ --proto_path=%(Protobuf.RelativeDir) --csharp_out=./proto %(Protobuf.RelativeDir)%(Protobuf.Filename)%(Protobuf.Extension)" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <Exec Command="$(NugetPackageRoot)google.protobuf.tools\3.27.2\tools\windows_x64\protoc --proto_path=$(NugetPackageRoot)google.protobuf.tools\3.27.2\tools\ --proto_path=%(Protobuf.RelativeDir) --csharp_out=.\proto %(Protobuf.RelativeDir)%(Protobuf.Filename)%(Protobuf.Extension)" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <ItemGroup>
+      <Compile Include="proto/*.cs" KeepDuplicates="false" />
+    </ItemGroup>    
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

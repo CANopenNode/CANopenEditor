@@ -21,6 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using libEDSsharp;
 
@@ -84,23 +86,55 @@ namespace ODEditor
 
         private bool Verify(bool InitiallyDisableIfError = false)
         {
+            String pattern = @"(\d+)\s*([-])\s*(\d+)";
             /* get offests */
             offsets = new List<int>();
-            string[] str = textBox_offsets.Text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in str)
+
+            if (textBox_offsets.Text.Contains("-"))
             {
-                try
+                MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(textBox_offsets.Text, pattern);
+                if (matches.Count != 0)
                 {
-                    int value = (int)new System.ComponentModel.Int32Converter().ConvertFromString(s);
-                    offsets.Add(value);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Syntax error in Index Offset!\n\nValid value is single signed number or space separated list of multiple signed numbers.");
-                    return false;
+                    foreach (System.Text.RegularExpressions.Match m in matches)
+                    {
+                        int value1 = Int32.Parse(m.Groups[1].Value);
+                        int value2 = Int32.Parse(m.Groups[3].Value);
+
+                        if ((value2 > value1) && (m.Groups[2].Value == "-"))
+                        {
+                            for (int i = value1; i <= value2; i++)
+                            {
+                                try
+                                {
+                                    offsets.Add(i);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Syntax error in Index Offset!\n\nValid value is single signed number or space separated list of multiple signed numbers or a range seprated by '-'.");
+                                    return false;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
+            else
+            {
+                string[] str = textBox_offsets.Text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in str)
+                {
+                    try
+                    {
+                        int value = (int)new System.ComponentModel.Int32Converter().ConvertFromString(s);
+                        offsets.Add(value);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Syntax error in Index Offset!\n\nValid value is single signed number or space separated list of multiple signed numbers or a range seprated by '-'.");
+                        return false;
+                    }
+                }
+            }
             // write column headers
             int colIdx = dataGridView_InitialColumnCount;
             dataGridView.ColumnCount = colIdx + offsets.Count;
@@ -116,15 +150,33 @@ namespace ODEditor
             DataGridViewCellStyle styleErr = new DataGridViewCellStyle
             {
                 Font = new Font(dataGridView.Font, FontStyle.Bold),
-                ForeColor = Color.Red
+                ForeColor = Color.Tomato
             };
 
             dataGridView.Rows.Clear();
 
             int odIdx = 0;
+            int j = 1;
             foreach (ODentry od in srcObjects.Values)
             {
-                int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {od.parameter_name}");
+                String numpattern = @"(\w*\d+\Z)";
+                string newname;
+
+                string[] words = Regex.Split(od.parameter_name, numpattern);
+                // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
+                if (words.Length > 1)
+                {
+
+                    // value1 = Int32.Parse(m.Groups[1].Value);
+                    int nameidx = Int32.Parse(words[1]) + j++;
+
+                    newname = words[0] + nameidx;// nameidx.ToString  ;
+
+                }
+                else {
+                     newname = od.parameter_name;
+                }
+                    int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {newname}");
                 int cellIdx = dataGridView_InitialColumnCount;
 
                 foreach (int o in offsets)
@@ -139,6 +191,7 @@ namespace ODEditor
 
                     if (!err)
                     {
+                        
                         newIndexes.Add(newIndex);
                         err = eds.ods.ContainsKey((UInt16)newIndex);
                     }
@@ -172,6 +225,7 @@ namespace ODEditor
             {
                 // clone OD objects
                 int odIdx = 0;
+                int i = 1;
                 foreach (ODentry od in srcObjects.Values)
                 {
                     if (enabled[odIdx])
@@ -180,6 +234,18 @@ namespace ODEditor
                         {
                             UInt16 newIndex = (UInt16)(od.Index + o);
                             ODentry newObject = od.Clone();
+
+                            String pattern = @"(\w*\d+\Z)";
+
+                            string[] words = Regex.Split(od.parameter_name, pattern);
+                            // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
+                            if (words.Length > 1)
+                            {
+                                int nameidx = Int32.Parse(words[1]) + i++;
+                                newObject.parameter_name = words[0] + nameidx;// nameidx.ToString  ;
+
+                            }
+
                             newObject.Index = newIndex;
 
                             eds.ods.Add(newIndex, newObject);

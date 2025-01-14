@@ -12,7 +12,6 @@ namespace EDSSharp
     {
 
         static libEDSsharp.EDSsharp eds = new EDSsharp();
-        static string gitversion = "";
 
         static void Main(string[] args)
         {
@@ -44,28 +43,25 @@ namespace EDSSharp
                 }
 
 
-                if (argskvp.ContainsKey("--type") && argskvp.ContainsKey("--infile") && argskvp.ContainsKey("--outfile"))
+                if (argskvp.ContainsKey("--infile") && argskvp.ContainsKey("--outfile"))
                 {
                     string infile = argskvp["--infile"];
                     string outfile = argskvp["--outfile"];
+                    string outtype = "";
+                    if (argskvp.ContainsKey("--type"))
+                    {
+                        outtype = argskvp["--type"];
+                    }
 
-                    ExporterFactory.Exporter type = ExporterFactory.Exporter.CANOPENNODE_LEGACY; //sensible default
-
-                    if (argskvp["--type"].IndexOf("4") > 0)
-                        type = ExporterFactory.Exporter.CANOPENNODE_V4;
 
                     switch (Path.GetExtension(infile).ToLower())
                     {
                         case ".xdd":
-                            openXDDfile(infile, outfile,type);
-                            break;
-
-                        case ".xml":
-                            openXMLfile(infile,outfile,type);
+                            openXDDfile(infile);
                             break;
 
                         case ".eds":
-                            openEDSfile(infile, outfile,InfoSection.Filetype.File_EDS,type);
+                            openEDSfile(infile);
                             break;
 
 
@@ -73,66 +69,30 @@ namespace EDSSharp
                             return;
 
                     }
+                    if(eds != null)
+                    {
+                        Export(outfile, outtype);
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Usage EDSEditor --type [CanOpenNode|CanOpenNodeV4] --infile file.[xdd|eds|xml] --outfile [CO_OD.c|OD]");
+                    PrintHelpText();
                 }
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.ToString());
+                PrintHelpText();
             }
         }
 
-        private static void openEDSfile(string infile, string outfile, InfoSection.Filetype ft, ExporterFactory.Exporter exporttype)
+        private static void openEDSfile(string infile)
         {
           
             eds.Loadfile(infile);
-
-            exportCOOD(outfile,exporttype);
-
         }
 
-        private static void exportCOOD(string outpath,ExporterFactory.Exporter type)
-        {
-            string odname = outpath;
-
-            outpath = Path.GetFullPath(outpath);
-
-            string savePath = Path.GetDirectoryName(outpath);
-
-            eds.fi.exportFolder = savePath;
-
-            Warnings.warning_list.Clear();
-
-            IExporter exporter = ExporterFactory.getExporter(type);
-
-            exporter.export(savePath, Path.GetFileNameWithoutExtension(outpath), gitversion, eds, odname);
-
-            foreach(string warning in Warnings.warning_list)
-            {
-                Console.WriteLine("WARNING :" + warning);
-            }
-
-        }
-
-        private static void openXMLfile(string path,string outpath,ExporterFactory.Exporter exportertype)
-        {
-
-            CanOpenXML coxml = new CanOpenXML();
-            coxml.readXML(path);
-
-            Bridge b = new Bridge();
-
-            eds = b.convert(coxml.dev);
-
-            eds.projectFilename = path;
-            exportCOOD(outpath,exportertype);
-
-        }
-
-        private static void openXDDfile(string path, string outpath,ExporterFactory.Exporter exportertype)
+        private static void openXDDfile(string path)
         {
             CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
             eds = coxml_1_1.ReadXML(path);
@@ -147,7 +107,97 @@ namespace EDSSharp
             }
 
             eds.projectFilename = path;
-            exportCOOD(outpath,exportertype);
+        }
+
+        private static void Export(string outpath, string outType)
+        {
+            outpath = Path.GetFullPath(outpath);
+
+            string savePath = Path.GetDirectoryName(outpath);
+
+            eds.fi.exportFolder = savePath;
+
+            Warnings.warning_list.Clear();
+
+            var exporterDef = FindMatchingExporter(outpath, outType);
+
+            if(exporterDef == null)
+            {
+                throw new Exception("Unable to find matching exporter)");
+            }
+
+            var edss = new List<EDSsharp> { eds };
+            exporterDef.Func(outpath, edss);
+
+            foreach(string warning in Warnings.warning_list)
+            {
+                Console.WriteLine("WARNING :" + warning);
+            }
+
+        }
+
+        static ExporterDescriptor FindMatchingExporter(string outpath, string outType)
+        {
+            //Find exporter(s) matching the file extension
+            var exporters = Filetypes.GetExporters();
+
+            var outFiletype = Path.GetExtension(outpath);
+            var exporterMatchingFiletype = new List<ExporterDescriptor>();
+            foreach (var exporter in exporters)
+            {
+                foreach (var type in exporter.Filetypes)
+                {
+                    if (type == outFiletype)
+                    {
+                        exporterMatchingFiletype.Add(exporter);
+                        break;
+                    }
+                }
+            }
+
+            if (exporterMatchingFiletype.Count == 1)
+            {
+                //If only one match we use that one.
+                return exporterMatchingFiletype[0];
+            }
+
+            //If multiple or zero matches use type
+            foreach (var exporter in exporters)
+            {
+                if (exporter.Description.Replace(" ", null) == outType)
+                {
+                    return exporter;
+                }
+            }
+            return null;
+        }
+
+        static void PrintHelpText()
+        {
+            Console.WriteLine("Usage: EDSEditor --infile file.[xdd|eds] --outfile [valid output file] [OPTIONAL] --type [exporter type]");
+            Console.WriteLine("The output file format depends on --outfile extension and --type");
+            Console.WriteLine("If --outfile extension matcher one exporter then --type IS NOT needed");
+            Console.WriteLine("If --outfile extension matcher multiple exporter then --type IS needed");
+            Console.WriteLine("If --outfile has no extension --type IS needed");
+            Console.WriteLine("Exporter types:");
+
+            var exporters = Filetypes.GetExporters();
+            foreach (var exporter in exporters)
+            {
+                string filetypes = "";
+                for (int i = 0; i < exporter.Filetypes.Length; i++)
+                {
+                    filetypes += exporter.Filetypes[i];
+                    //add seperator char if multiple filetypes
+                    if(i +1 != exporter.Filetypes.Length)
+                    {
+                        filetypes += ',';
+                    }
+                }
+
+                string description = $"  {exporter.Description.Replace(" ",null)} [{filetypes}]";
+                Console.WriteLine(description);
+            }
         }
     }
 }

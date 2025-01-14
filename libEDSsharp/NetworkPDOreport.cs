@@ -23,11 +23,29 @@ using System.IO;
 
 namespace libEDSsharp
 {
-    public class NetworkPDOreport
+    /// <summary>
+    /// Generate a PDO network report
+    /// </summary>
+    public class NetworkPDOreport : IFileExporter
     {
 
+        public ExporterDescriptor[] GetExporters()
+        {
+            return new ExporterDescriptor[]
+            {
+                new ExporterDescriptor("Network PDO Report", new string[] { ".md" }, ExporterDescriptor.ExporterFlags.Documentation | ExporterDescriptor.ExporterFlags.MultipleNodeSupport, delegate (string filepath, List<EDSsharp> edss)
+                {
+                    var e = new NetworkPDOreport();
+                    e.gennetpdodoc(filepath, edss);
+                })
+            };
+        }
         StreamWriter file = null;
-
+        /// <summary>
+        /// Generate a PDO network report
+        /// </summary>
+        /// <param name="filepath">where the doc should be saved</param>
+        /// <param name="network">Data from the different nodes in the network</param>
         public void gennetpdodoc(string filepath, List<EDSsharp> network)
         {
 
@@ -320,15 +338,23 @@ namespace libEDSsharp
 
         }
 
-
+        /// <summary>
+        /// Write a html table row with 2 elements to file
+        /// </summary>
+        /// <param name="a">element a</param>
+        /// <param name="b">element b</param>
         public void write2linetablerow(string a, object b)
         {
             if (b == null)
                 b = "";
             file.Write("<tr><td>{0}</td><td>{1}</td></tr>", a, b.ToString());
         }
-
-        public void write2linetableheader(string a, object b)
+        /// <summary>
+        /// Write a html table header with 2 elements to file
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        void write2linetableheader(string a, object b)
         {
             file.Write("<tr><th>{0}</th><th>{1}</th></tr>", a, b.ToString());
         }

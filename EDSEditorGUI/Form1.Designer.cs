@@ -312,6 +312,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(1560, 750);
             this.Name = "ODEditor_MainForm";
             this.Text = "Object Dictionary Editor ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ODEditor_MainForm_FormClosing);

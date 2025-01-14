@@ -25,6 +25,8 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using libEDSsharp;
+
+
 namespace ODEditor
 {
 
@@ -129,11 +131,11 @@ namespace ODEditor
             return (type == ExporterFactory.Exporter.CANOPENNODE_V4);
         }
 
-        private bool Checkdirty()
+       private bool Checkdirty()
         {
             var result = false;
 
-            if (button_saveChanges.BackColor == Color.Red)
+            if (button_saveChanges.BackColor == Color.Tomato)
             {
 
                 var answer = checkBox_autosave.Checked 
@@ -157,7 +159,7 @@ namespace ODEditor
                         {
                             ObjectSave();
                             result = false;
-                }
+                        }
                         break;
                 }
 
@@ -433,7 +435,7 @@ namespace ODEditor
         private void DataDirty(object sender, EventArgs e)
         {
             if (!justUpdating)
-                button_saveChanges.BackColor = Color.Red;
+                button_saveChanges.BackColor = Color.Tomato;
         }
 
         private void Button_saveChanges_Click(object sender, EventArgs e)
@@ -530,7 +532,50 @@ namespace ODEditor
                     od.prop.CO_accessSRDO = AccessSRDO.no;
                 }
 
-                od.defaultvalue = textBox_defaultValue.Text;
+                // Default value
+                if (listView_subObjects.SelectedItems.Count > 1) {
+                    for (ushort i = 0; i < listView_subObjects.SelectedItems.Count; i++)
+                    {
+                        od.parent.subobjects[(ushort) Convert.ToInt32(listView_subObjects.SelectedItems[i].Text,16)].defaultvalue = textBox_defaultValue.Text;
+                    }
+                }
+
+
+                bool setDefaultValueToAll = false;
+                bool identicalDefaultValues = true;
+                string lastdefaultvalue;
+                if (od.parent != null && od.parent.Nosubindexes > 2)
+                {
+                    lastdefaultvalue = od.parent.subobjects[1].defaultvalue;
+                    foreach (ODentry subod in od.parent.subobjects.Values)
+                    {
+                        if (subod.Subindex > 0)
+                        {
+                           identicalDefaultValues &= (subod.defaultvalue ==  lastdefaultvalue)&& (subod.defaultvalue != textBox_defaultValue.Text);
+                           lastdefaultvalue = subod.defaultvalue;
+                        }
+                    }
+                        
+                    if (identicalDefaultValues) {
+                            DialogResult confirm = MessageBox.Show("Do you want to set all identical default values in subobjects to this default value?", "Set to all?", MessageBoxButtons.YesNo);
+                        if (confirm == DialogResult.Yes)
+                        {
+                            setDefaultValueToAll = true;
+                        }
+                    }
+                }
+                        if (setDefaultValueToAll)
+                {
+                    for (ushort i = 1; i < od.parent.Nosubindexes; i++)
+                    {
+                            od.parent.subobjects[i].defaultvalue = textBox_defaultValue.Text;
+                    }
+                }
+                else
+                {
+                    od.defaultvalue = textBox_defaultValue.Text;
+                }
+
                 od.actualvalue = textBox_actualValue.Text;
                 od.HighLimit = textBox_highLimit.Text;
                 od.LowLimit = textBox_lowLimit.Text;
@@ -588,7 +633,11 @@ namespace ODEditor
         private void ListView_objects_MouseClick(object sender, MouseEventArgs e)
         {
             ListView listview = (ListView)sender;
-            ODentry od = listview.SelectedItems.Count > 0 ? (ODentry)listview.SelectedItems[0].Tag : null;
+
+            if (listview.SelectedItems.Count <= 0)
+                return;
+
+            ODentry od = (ODentry)listview.SelectedItems[0].Tag;
 
             if ((od != selectedObject || e.Button == MouseButtons.Right) && !Checkdirty())
             {
@@ -603,6 +652,16 @@ namespace ODEditor
                 PopulateObject();
                 PopulateSubList();
             }
+            else {
+                //selectedObject = lastSelectedObject;
+                //od = selectedObject;
+                //selectedList.Select();
+                //string indesnew = "0x" + Convert.ToString(selectedObject.Index, 16);
+                //ListViewItem itemnew = selectedList.FindItemWithText(indesnew);
+                //listview.FocusedItem = itemnew;
+                //listView_subObjects.Focus();
+
+            }
             listView_communication_objects.HideSelection = true;
             listView_deviceProfile_objects.HideSelection = true;
             listView_manufacturer_objects.HideSelection = true;
@@ -610,12 +669,18 @@ namespace ODEditor
 
         private void ListView_objects_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             ListView_objects_MouseClick(sender, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0));
         }
 
         private void ListView_objects_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             ((ListView)sender).SelectedItems.Clear();
+
+            contextMenu_object.Show(Cursor.Position);
+            PopulateObject();
+            PopulateSubList();
+
             ListView_objects_MouseClick(sender, new MouseEventArgs(MouseButtons.Right, 0, 0, 0, 0));
         }
 

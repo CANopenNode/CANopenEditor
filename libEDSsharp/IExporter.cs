@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
+    /// <summary>
+    /// Interface for exporting CanOpenNode OD files
+    /// </summary>
     public interface IExporter
     {
-        void export(string folderpath, string filename, string gitVersion, EDSsharp eds , string odname="OD");
+        /// <summary>
+        /// Export file(s)
+        /// </summary>
+        /// <param name="filepath">filepath, .c and .h will be added to this to make the mulitiple files</param>
+        /// <param name="eds">The eds that will be exported</param>
+        void export(string filepath, EDSsharp eds);
     }
 }

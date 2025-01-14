@@ -26,17 +26,23 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using System.Reflection;
 
 
 
 namespace libEDSsharp
 {
-
-    public class CanOpenNodeExporter : IExporter
+    /// <summary>
+    /// Export .c and .h files for CanOpenNode v1-3
+    /// </summary>
+    public class CanOpenNodeExporter : IExporter, IFileExporter
     {
 
         private string folderpath;
         private string gitVersion;
+        /// <summary>
+        /// The eds file set when calling export
+        /// </summary>
         protected EDSsharp eds;
 
         private int enabledcount = 0;
@@ -53,7 +59,25 @@ namespace libEDSsharp
         ODentry maxRXmappingsOD=null;
         ODentry maxTXmappingsOD=null;
 
+        /// <summary>
+        /// Fetches all the different fileexporter types the class supports
+        /// </summary>
+        /// <returns>List of the different exporters the class supports</returns>
+        public ExporterDescriptor[] GetExporters()
+        {
+            return new ExporterDescriptor[]
+            {
+                new ExporterDescriptor("CanOpenNode", new string[] { ".h", ".c" }, ExporterDescriptor.ExporterFlags.CanOpenNode, delegate (string filepath, List<EDSsharp> edss)
+                {
+                    var e = new CanOpenNodeExporter();
+                    e.export(filepath, edss[0]);
+                })
+            };
+        }
 
+        /// <summary>
+        /// Register names of index and subindex that need to have standard names to be able to work with CanOpenNode
+        /// </summary>
         public void prepareCanOpenNames()
         {
             acceptable_canopen_names.Add(0x101800, "identity");
@@ -84,11 +108,21 @@ namespace libEDSsharp
 
         }
 
-
-        public void export(string folderpath, string filename, string gitVersion, EDSsharp eds,string odname)
+        /// <summary>
+        /// Export eds into CanOpenNode v1-3 source files (.h  and .c)
+        /// </summary>
+        /// <param name="filepath">filepath, .c and .h will be added to this to make the mulitiple files</param>
+        /// <param name="eds">the eds data to be exported</param>
+        public void export(string filepath, EDSsharp eds)
         {
-            this.folderpath = folderpath;
-            this.gitVersion = gitVersion;
+            this.folderpath = Path.GetDirectoryName(filepath);
+            string filename = Path.GetFileNameWithoutExtension(filepath);
+            var versionAttributes = Assembly
+                .GetExecutingAssembly()
+                .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
+                as AssemblyInformationalVersionAttribute[];
+
+            this.gitVersion = versionAttributes[0].InformationalVersion;
             this.eds = eds;
 
 
@@ -108,13 +142,14 @@ namespace libEDSsharp
 
         }
 
+        /// <summary>
+        /// Fixes TPDO compatibility subindex 
+        /// </summary>
+        /// Handle the TPDO communication parameters in a special way, because of
+        /// sizeof(OD_TPDOCommunicationParameter_t) != sizeof(CO_TPDOCommPar_t) in CANopen.c
+        /// the existing CO_TPDOCommPar_t has a compatibility entry so we must export one regardless of if its in the OD or not
         private void fixcompatentry()
         {
-            // Handle the TPDO communication parameters in a special way, because of
-            // sizeof(OD_TPDOCommunicationParameter_t) != sizeof(CO_TPDOCommPar_t) in CANopen.c
-            // the existing CO_TPDOCommPar_t has a compatibility entry so we must export one regardless
-            // of if its in the OD or not
-
             for (UInt16 idx = 0x1800; idx < 0x1900; idx++)
             {
                 if (ObjectActive(idx))
@@ -130,7 +165,11 @@ namespace libEDSsharp
             }
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
         private void specialarraysearch(UInt16 start, UInt16 end)
         {
             UInt16 lowest = 0xffff;
@@ -160,7 +199,11 @@ namespace libEDSsharp
                 Console.WriteLine(string.Format("New special array detected start 0x{0:X4} end 0x{1:X4}", lowest, highest));
             }
         }
-
+        /// <summary>
+        /// Returns true of object is not disabled
+        /// </summary>
+        /// <param name="index">index to check</param>
+        /// <returns>true if index object is not disabled</returns>
         public bool ObjectActive(UInt16 index)
         {
             if (eds.ods.ContainsKey(index))
@@ -298,7 +341,11 @@ namespace libEDSsharp
             return sb.ToString();
         }
 
-
+        /// <summary>
+        /// Return the header part of one object dictionary entry
+        /// </summary>
+        /// <param name="od">the OD entry</param>
+        /// <returns>part of the C header file that impliments the od entry</returns>
         protected string print_h_entry(ODentry od)
         {
             StringBuilder sb = new StringBuilder();
@@ -506,6 +553,15 @@ namespace libEDSsharp
             }
             file.WriteLine(string.Format("  #define CO_NO_LSS_CLIENT               {0}   //LSS Master", lssClient));
 
+            int ngSlave = 0;
+            if (eds.di.NG_Slave == true)
+            {
+                ngSlave = 1;
+            }
+            file.WriteLine(string.Format("  #define CO_NODE_GUARDING_SLAVE         {0}   //NG Slave", ngSlave));
+
+            file.WriteLine(string.Format("  #define CO_NODE_GUARDING_MASTER        {0}   //NG Master", eds.di.NrOfNG_MonitoredNodes));
+
             file.WriteLine(string.Format("  #define CO_NO_RPDO                     {0}   //Associated objects: 14xx, 16xx", noRXpdos));
             file.WriteLine(string.Format("  #define CO_NO_TPDO                     {0}   //Associated objects: 18xx, 1Axx", noTXpdos));
 
@@ -579,6 +635,9 @@ namespace libEDSsharp
                     //switch the OD entry to the largest
                     od = maxTXmappingsOD;
                 }
+
+                if (od == null)
+                    continue;
 
                 List<string> structmemberlist = new List<string>();
 
@@ -945,7 +1004,11 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
 
             return returndata.ToString();
         }
-
+        /// <summary>
+        /// Returns the c code related to a single object dictionary entry
+        /// </summary>
+        /// <param name="od">the OD entry</param>
+        /// <returns>string containing c code for the OD entry</returns>
         protected string write_od_line(ODentry od)
         {
             StringBuilder sb = new StringBuilder();
@@ -1119,6 +1182,14 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
               flags |=0x40;
             }
 
+            if(od.parent!=null && od.parent.prop.CO_flagsPDO)
+            {
+                //parent types are storing the prop in the ODeditor in the parent object but the child object is tested to set the flag
+                //this is breaking legacy export
+                flags |= 0x40;
+            }
+
+
             int datasize = (int)Math.Ceiling((double)od.Sizeofdatatype() / (double)8.0);
 
             if (datasize > 1)
@@ -1145,6 +1216,7 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
             {
                 int nobase = 10;
                 bool nodeidreplace = false;
+                
 
                 if (defaultvalue == null || defaultvalue == "")
                 {
@@ -1292,41 +1364,12 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
                 return "";
             }
         }
-
-        public static string ParseString(string input)
-        {
-            var provider = new Microsoft.CSharp.CSharpCodeProvider();
-            var parameters = new System.CodeDom.Compiler.CompilerParameters()
-            {
-                GenerateExecutable = false,
-                GenerateInMemory = true,
-            };
-
-            var code = @"
-        namespace Tmp
-        {
-            public class TmpClass
-            {
-                public static string GetValue()
-                {
-                    return """ + input + @""";
-                }
-            }
-        }";
-
-            var compileResult = provider.CompileAssemblyFromSource(parameters, code);
-
-            if (compileResult.Errors.HasErrors)
-            {
-                throw new ArgumentException(compileResult.Errors.Cast<System.CodeDom.Compiler.CompilerError>().First(e => !e.IsWarning).ErrorText);
-            }
-
-            var asmb = compileResult.CompiledAssembly;
-            var method = asmb.GetType("Tmp.TmpClass").GetMethod("GetValue");
-
-            return method.Invoke(null, null) as string;
-        }
-
+        /// <summary>
+        /// Generates a valid C language variable name using input
+        /// </summary>
+        /// <param name="name">base name that will be used to make a variable name</param>
+        /// <param name="entry">the OD entry for the variable</param>
+        /// <returns></returns>
        protected string make_cname(string name,ODentry entry)
        {
             if (name == null)

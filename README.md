@@ -12,18 +12,6 @@ CANopen is the internationally standardized (EN 50325-4) ([CiA301](http://can-ci
 
 [CANopenNode](https://github.com/CANopenNode/CANopenNode) is free and open source CANopen Stack
 
-This is the `main` branch with sources. For binaries see the `build` branch or download latest [CANopenEditor-build.zip](https://github.com/CANopenNode/CANopenEditor/archive/refs/heads/build.zip).
-
-----
-
-Join us on slack
---------
-
-https://join.slack.com/t/canopennode/shared_invite/zt-ghjhfg12-qGQNWvSEmhqcSedhFaLpuA
-(Invite expires 12th Sep 2020) if the link expires before i push this page please ping me (robin.cornelius@gmail.com)
-
-I'm hoping to build a community with canopennode and related tools at the above address. There are channels for this project already
-so if you use this tool, or just canopennode please join.
 
 EDSSharp
 --------
@@ -69,10 +57,6 @@ Library
 * Read EDS/DCF/XDC file and parse contents to approprate classes
 * Dump EDS/DCF classes via ToString()
 * Save EDS/DCF classes back to EDS file
-* Read CanOpenNode xml project file
-* Write CanOpenNode xmlproject file
-* Switch formats between EDS/DCF and CanOpenNode XML (note to EDS will result in
-  data loss as the format supports less information).
 * Export C and H files in CanOpenNode format CO_OD.c and CO_OD.h
 * EDS/DCF supports modules
 * EDS/DCF supports compactPDO (read only) 1*
@@ -88,8 +72,6 @@ GUI
 * Open multiple devices
 * Open EDS/DCF/XDC files
 * Save EDS/DCF/XDC files
-* Open CanOpenNode XML Project file
-* Save CanOpenNode XML File
 * View OD Entries and explore the Object Dictionary
 * Add new OD entries
 * Delete exisiting OD entries

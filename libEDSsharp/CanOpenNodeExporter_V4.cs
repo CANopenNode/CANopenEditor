@@ -24,13 +24,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace libEDSsharp
 {
     /// <summary>
     /// Exporter for CanOpenNode_V4
     /// </summary>
-    public class CanOpenNodeExporter_V4 : IExporter
+    public class CanOpenNodeExporter_V4 : IExporter, IFileExporter
     {
         private string odname;
 
@@ -47,19 +48,40 @@ namespace libEDSsharp
         private Dictionary<string, int> ODArrSize;
 
         /// <summary>
+        /// Fetches all the different fileexporter types the class supports
+        /// </summary>
+        /// <returns>List of the different exporters the class supports</returns>
+        public ExporterDescriptor[] GetExporters()
+        {
+            return new ExporterDescriptor[]
+            {
+                new ExporterDescriptor("CanOpenNodeV4", new string[] { ".h", ".c" }, ExporterDescriptor.ExporterFlags.CanOpenNode, delegate (string filepath, List<EDSsharp> edss)
+                {
+                    var e = new CanOpenNodeExporter_V4();
+                    e.export(filepath, edss[0]);
+                })
+            };
+        }
+
+        /// <summary>
         /// export the current data set in the CanOpen Node format V4
         /// </summary>
-        /// <param name="folderpath"></param>
-        /// <param name="filename"></param>
-        /// <param name="gitVersion"></param>
+        /// <param name="filepath">filepath, .c and .h will be added to this to make the mulitiple files</param>
         /// <param name="eds"></param>
-        /// <param name="odname"></param>
-        public void export(string folderpath, string filename, string gitVersion, EDSsharp eds, string odname)
+        public void export(string filepath, EDSsharp eds)
         {
-            this.odname = odname;
+            string filename = Path.GetFileNameWithoutExtension(filepath);
+            string folderpath = Path.GetDirectoryName(filepath);
+            this.odname = filename;
 
             Prepare(eds);
 
+            var versionAttributes = Assembly
+                .GetExecutingAssembly()
+                .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
+                as AssemblyInformationalVersionAttribute[];
+
+            string gitVersion = versionAttributes[0].InformationalVersion;
             Export_h(folderpath, filename, gitVersion, eds);
             Export_c(folderpath, filename, gitVersion, eds);
         }
@@ -68,7 +90,7 @@ namespace libEDSsharp
         /// <summary>
         /// Generate ODStorage, ODObjs, ODList, ODDefines and ODCnt entries
         /// </summary>
-        /// <param name="ods"></param>
+        /// <param name="eds">EDS object</param>
         private void Prepare(EDSsharp eds)
         {
             ODStorageGroups = new List<string>();
@@ -195,13 +217,13 @@ namespace libEDSsharp
 
             // data storage
             string dataPtr = "NULL";
-            ODStorage_t[group].Add($"{data.cType} x{varName}{data.cTypeArray};");
             if (data.cValue != null)
             {
+                ODStorage_t[group].Add($"{data.cType} x{varName}{data.cTypeArray};");
                 ODStorage[group].Add($".x{varName} = {data.cValue}");
+                dataPtr = $"&{odname}_{group}.x{varName}{data.cTypeArray0}";
             }
 
-            dataPtr = $"&{odname}_{group}.x{varName}{data.cTypeArray0}";
             // objects
             ODObjs_t.Add($"OD_obj_var_t o_{varName};");
             ODObjs.Add($"    .o_{varName} = {{");
@@ -268,7 +290,7 @@ namespace libEDSsharp
                         attrElem = attr;
                     }
                     else
-                    {
+                    {// Following checks are requirement of CANopenNode. Arrays must be C arrays.
                         if (data.cType != dataElem.cType || data.length != dataElem.length)
                             Warnings.AddWarning($"Error in 0x{indexH}: Data type of elements in ARRAY must be equal!", Warnings.warning_class.WARNING_BUILD);
                         if ((data.cValue == null && dataElem.cValue != null) || (data.cValue != null && dataElem.cValue == null))
@@ -346,12 +368,12 @@ namespace libEDSsharp
 
                 string subcName = Make_cname(sub.parameter_name);
                 string dataPtr = "NULL";
-                subODStorage_t.Add($"{data.cType} {subcName}{data.cTypeArray};");
                 if (data.cValue != null)
                 {
+                    subODStorage_t.Add($"{data.cType} {subcName}{data.cTypeArray};");
                     subODStorage.Add($".{subcName} = {data.cValue}");
-                }
                 dataPtr = $"&{odname}_{group}.x{varName}.{subcName}{data.cTypeArray0}";
+                }
                 ODObjs.Add($"        {{");
                 ODObjs.Add($"            .dataOrig = {dataPtr},");
                 ODObjs.Add($"            .subIndex = {sub.Subindex},");
@@ -380,11 +402,10 @@ namespace libEDSsharp
         /// <summary>
         /// Export the header file
         /// </summary>
-        /// <param name="folderpath"></param>
-        /// <param name="filename"></param>
-        /// <param name="gitVersion"></param>
-        /// <param name="fi"></param>
-        /// <param name="di"></param>
+        /// <param name="folderpath">path to folder that will contain the file</param>
+        /// <param name="filename">filename</param>
+        /// <param name="gitVersion">git version that will be added to file comment</param>
+        /// <param name="eds">data that contain the data that will be exported</param>
         private void Export_h(string folderpath, string filename, string gitVersion, EDSsharp eds)
         {
 
@@ -558,9 +579,10 @@ namespace libEDSsharp
         /// <summary>
         /// Export the c file
         /// </summary>
-        /// <param name="folderpath"></param>
-        /// <param name="filename"></param>
-        /// <param name="gitVersion"></param>
+        /// <param name="folderpath">path to folder that will contain the file</param>
+        /// <param name="filename">filename</param>
+        /// <param name="gitVersion">git version that will be added to file comment</param>
+        /// <param name="eds">data that contain the data that will be exported</param>
         private void Export_c(string folderpath, string filename, string gitVersion, EDSsharp eds)
             {
 
