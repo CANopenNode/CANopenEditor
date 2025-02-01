@@ -21,17 +21,17 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Command="{Binding AddNewDevice}"/>
                 <MenuItem Header="_Open"/>
-                <MenuItem Header="_Save Project"/>
-                <MenuItem Header="_Save Project AS..."/>
+                <MenuItem Header="_Save Project" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="_Save Project AS..." IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                 <Separator/>
                 <MenuItem Header="Open _Network XML"/>
-                <MenuItem Header="Save Networ_k XML"/>
+                <MenuItem Header="Save Networ_k XML" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                 <Separator/>
                 <MenuItem Header="_Recent Files"/>
                 <Separator/>
-                <MenuItem Header="_Export"/>
-                <MenuItem Header="_Export CanOpenNode..."/>
-                <MenuItem Header="Save _All"/>
+                <MenuItem Header="_Export" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="_Export CanOpenNode..." IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="Save _All" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                 <Separator/>
                 <MenuItem Header="_Quit"/>
             </MenuItem>
