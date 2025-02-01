@@ -16,10 +16,10 @@
       <view:DeviceODView DataContext="{Binding Objects}" />
     </TabItem>
     <TabItem Header="TX PDO Mapping">
-      <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      <view:DevicePDOView DataContext="{Binding Objects}" />
     </TabItem>
     <TabItem Header="RX PDO Mapping">
-      <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      <view:DevicePDOView DataContext="{Binding Objects}" />
     </TabItem>
     <TabItem Header="Modules">
       <TextBlock Margin="5">This is tab 3 content</TextBlock>
