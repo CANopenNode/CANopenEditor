@@ -27,11 +27,14 @@ public partial class ODIndexRangeView : UserControl
     /// <param name="e">event param</param>
     private void GridLoadingRow(object? sender, DataGridRowEventArgs e)
     {
-        var dc = (System.Collections.Generic.KeyValuePair<string, ViewModels.OdObject>)e.Row.DataContext;
-        int index = int.Parse(dc.Key, System.Globalization.NumberStyles.HexNumber);
-        int min = Convert.ToInt32(MinIndex, 16);
-        int max = Convert.ToInt32(MaxIndex, 16);
-        e.Row.IsVisible = (min <= index && index <= max);
+        if(e.Row.DataContext != null)
+        {
+            var dc = (System.Collections.Generic.KeyValuePair<string, ViewModels.OdObject>)e.Row.DataContext;
+            int index = int.Parse(dc.Key, System.Globalization.NumberStyles.HexNumber);
+            int min = Convert.ToInt32(MinIndex, 16);
+            int max = Convert.ToInt32(MaxIndex, 16);
+            e.Row.IsVisible = (min <= index && index <= max);
+        }
     }
 
     public static readonly StyledProperty<string> HeadingProperty =

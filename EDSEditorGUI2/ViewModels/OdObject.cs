@@ -61,7 +61,6 @@ namespace EDSEditorGUI2.ViewModels
             }
 
             var lastSubOd = SubObjects.Last();
-            OdObject? originalOd = null;
             UInt16 maxSubIndex = 1;
             UInt16 lastSubIndex = 1;
 
