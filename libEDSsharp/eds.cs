@@ -1133,7 +1133,6 @@ namespace libEDSsharp
         public ODentry(string parameter_name,UInt16 index, byte nosubindex)
         {
             this.parameter_name = parameter_name;
-            this.objecttype = ObjectType.ARRAY;
             this.Index = index;
             //this.nosubindexes = nosubindex;
             this.objecttype = ObjectType.VAR;     
