@@ -208,7 +208,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Disabled, opt => opt.MapFrom(src => src.prop.CO_disabled))
                 .ForMember(dest => dest.Alias, opt => opt.MapFrom(src => src.denotation))
                 .ForMember(dest => dest.StorageGroup, opt => opt.MapFrom(src => src.prop.CO_storageGroup))
-                .ForMember(dest => dest.FlagsPDO, opt => opt.Ignore())
+                .ForMember(dest => dest.FlagsPDO, opt => opt.MapFrom(src => src.prop.CO_flagsPDO))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.parameter_name))
                 .ForMember(dest => dest.ObjectType, opt => opt.MapFrom(src => src.objecttype))
                 .ForMember(dest => dest.CountLabel, opt => opt.MapFrom(src => src.prop.CO_countLabel));

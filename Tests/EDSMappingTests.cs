@@ -284,6 +284,7 @@ namespace Tests
             od.prop.CO_disabled = true;
             od.prop.CO_countLabel = "CO_countLabel";
             od.prop.CO_storageGroup = "CO_storageGroup";
+            od.prop.CO_flagsPDO = true;
 
             eds.ods.Add(od.Index, od);
             var tmp = MappingEDS.MapToProtobuffer(eds);
@@ -291,6 +292,7 @@ namespace Tests
             Assert.Equal(od.prop.CO_disabled, tmp.Objects[od.Index.ToString()].Disabled);
             Assert.Equal(od.prop.CO_countLabel, tmp.Objects[od.Index.ToString()].CountLabel);
             Assert.Equal(od.prop.CO_storageGroup, tmp.Objects[od.Index.ToString()].StorageGroup);
+            Assert.Equal(od.prop.CO_flagsPDO, tmp.Objects[od.Index.ToString()].FlagsPDO);
         }
         [Theory]
         [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no)]
@@ -582,7 +584,8 @@ namespace Tests
                 ObjectType = OdObject.Types.ObjectType.Record,
                 Disabled = true,
                 CountLabel = "CountLabel",
-                StorageGroup = "StorageGroup"
+                StorageGroup = "StorageGroup",
+                FlagsPDO = true,
             };
 
             d.Objects.Add(index.ToString(), od);
@@ -591,6 +594,7 @@ namespace Tests
             Assert.Equal(od.Disabled, tmp.ods[index].prop.CO_disabled);
             Assert.Equal(od.CountLabel, tmp.ods[index].prop.CO_countLabel);
             Assert.Equal(od.StorageGroup, tmp.ods[index].prop.CO_storageGroup);
+            Assert.Equal(od.FlagsPDO, tmp.ods[index].prop.CO_flagsPDO);
         }
         [Theory]
         [InlineData(OdSubObject.Types.AccessSRDO.No, AccessSRDO.no)]
