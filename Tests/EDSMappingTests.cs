@@ -1,4 +1,4 @@
-﻿using Google.Protobuf.WellKnownTypes;
+using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
 using libEDSsharp;
 using System;
@@ -147,11 +147,13 @@ namespace Tests
             {
                 objecttype = objTypeEDS,
                 parameter_name = "parameter name",
-                Index = 0x2000
+                Index = 0x2000,
+                denotation = "denotation",
             };
             eds.ods.Add(od.Index, od);
             var tmp = MappingEDS.MapToProtobuffer(eds);
             Assert.Equal(objTypeProto, tmp.Objects[od.Index.ToString()].ObjectType);
+            Assert.Equal(od.denotation, tmp.Objects[od.Index.ToString()].Alias);
         }
 
         [Theory]
@@ -446,13 +448,15 @@ namespace Tests
             var od = new OdObject
             {
                 ObjectType = objTypeProto,
-                Name = "Name"
+                Name = "Name",
+                Alias = "alias",
             };
             d.Objects.Add(index.ToString(), od);
             var tmp = MappingEDS.MapFromProtobuffer(d);
             Assert.Equal(index, tmp.ods[index].Index);
             Assert.Equal(objTypeEDS, tmp.ods[index].objecttype);
             Assert.Equal(od.Name, tmp.ods[index].parameter_name);
+            Assert.Equal(od.Alias, tmp.ods[index].denotation);
         }
 
         [Theory]
@@ -552,6 +556,7 @@ namespace Tests
                 HighLimit = "HighLimit",
                 LowLimit = "LowLimit",
                 DefaultValue = "defaultvalue",
+                Alias = "alias",
             };
 
             od.SubObjects.Add(subindex.ToString(), sub);
@@ -565,6 +570,7 @@ namespace Tests
             Assert.Equal(sub.DefaultValue, tmp.ods[index].subobjects[subindex].defaultvalue);
             Assert.Equal(index, tmp.ods[index].subobjects[subindex].Index);
             Assert.Equal(subindex, tmp.ods[index].subobjects[subindex].Subindex);
+            Assert.Equal(sub.Alias, tmp.ods[index].subobjects[subindex].denotation);
         }
         [Fact]
         public void Test_FromProtobufferODObject_CustomProperties()
