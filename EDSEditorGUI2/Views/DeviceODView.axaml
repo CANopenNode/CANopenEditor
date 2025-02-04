@@ -1,0 +1,132 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:vm="using:EDSEditorGUI2.ViewModels"
+             xmlns:view="using:EDSEditorGUI2.Views"
+             xmlns:converter="using:EDSEditorGUI2.Converter"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+             x:Class="EDSEditorGUI2.Views.DeviceODView"
+             x:DataType="vm:DeviceOD">
+
+  <dialogHost:DialogHost Identifier="NoAnimationDialogHost" >
+    <Grid ColumnDefinitions="200,4,*">
+      <Grid RowDefinitions="*,4,*,4,*" Grid.Column="0">
+        <view:ODIndexRangeView Grid.Row="0" DataContext="{Binding}"
+                               x:Name="ODView_Com"
+                               Heading="Communication Specific Parameters"
+                               MinIndex="0x1000"
+                               MaxIndex="0x1FFF"/>
+        <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
+        <view:ODIndexRangeView Grid.Row="2" DataContext="{Binding}"
+                               x:Name="ODView_Manufacture"
+                               Heading="Manufacturer Specific Parameters"
+                               MinIndex="0x2000"
+                               MaxIndex="0x5FFF"/>
+        <GridSplitter Grid.Row="3" Background="Black" ResizeDirection="Rows"/>
+        <view:ODIndexRangeView Grid.Row="4" DataContext="{Binding}"
+                               x:Name="ODView_Device"
+                               Heading="Device Profile Specific Parameters"
+                               MinIndex="0x6000"
+                               MaxIndex="0x9FFF"/>
+      </Grid>
+
+      <GridSplitter Grid.Column="1" Background="Black" ResizeDirection="Columns"/>
+      <Grid RowDefinitions="*,4,*" Grid.Column="2">
+        <DataGrid Margin="2" ItemsSource="{Binding SelectedObject.Value.SubObjects}"
+                  x:Name="subindexGrid"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="Gray">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Sub" Width="*" Binding="{Binding Key}"/>
+            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Value.Name}" />
+            <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Value.Type}" />
+            <DataGridTextColumn Header="SDO" Width="*" Binding="{Binding Value.Sdo}" />
+            <DataGridTextColumn Header="PDO" Width="*" Binding="{Binding Value.Pdo}" />
+            <DataGridTextColumn Header="SRDO" Width="*" Binding="{Binding Value.Srdo}" />
+            <DataGridTextColumn Header="Default Value" Width="*" Binding="{Binding Value.DefaultValue}" />
+          </DataGrid.Columns>
+          <DataGrid.ContextMenu>
+            <ContextMenu>
+              <MenuItem Header="Add" Click="ContextMenuSubObjectAddClick">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource add_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Remove (shift up)" Click="ContextMenuSubObjectRemoveClick" x:Name="contextMenu_subObject_removeSubItemToolStripMenuItem">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource remove_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Remove (leave gap)" Click="ContextMenuSubObjectRemoveClick">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource remove_regular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+            </ContextMenu>
+          </DataGrid.ContextMenu>
+        </DataGrid>
+        <GridSplitter Grid.Row="1" Background="Black" ResizeDirection="Rows"/>
+        <StackPanel Grid.Row="2">
+          <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="100,*" Grid.Column="2">
+            <TextBlock Text="Index" Grid.Row="0" Grid.Column="0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+              <TextBox Text="{Binding SelectedObject.Key}" IsEnabled="False"/>
+              <TextBlock Text="Sub Index" />
+              <TextBox Text="{Binding SelectedSubObject.Key}" IsEnabled="False"/>
+            </StackPanel>
+
+            <TextBlock Text="Name" Grid.Row="1" Grid.Column="0" />
+            <TextBox Background="Red" Text="{Binding SelectedSubObject.Value.Name}" Grid.Row="1" Grid.Column="1" />
+
+            <TextBlock Text="Denotation" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Background="Black" Text="" Grid.Row="2" Grid.Column="1" />
+
+            <TextBlock Text="Description" Grid.Row="3" Grid.Column="0"/>
+            <TextBox Background="Yellow" Text="{Binding SelectedObject.Value.Description}" Grid.Row="3" Grid.Column="1" Height="100" />
+          </Grid>
+          <TextBlock Text="Object settings" />
+          
+          <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="100,*,*,*,*,*" >
+            <TextBlock Text="Object Type" Grid.Row="0" Grid.Column="0"/>
+            <ComboBox Background="Black" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="1" />
+            <TextBlock Text="HighLimit" Grid.Row="0" Grid.Column="2"/>
+            <TextBox Background="Red" Text="{Binding SelectedSubObject.Value.HighLimit}" Grid.Row="0" Grid.Column="3" />
+            <TextBlock Text="Count Label" Grid.Row="0" Grid.Column="4"/>
+            <TextBox Background="Yellow" Text="{Binding SelectedObject.Value.CountLabel}" Grid.Row="0" Grid.Column="5" />
+
+            <TextBlock Text="Data Type" Grid.Row="1" Grid.Column="0"/>
+            <ComboBox Background="Red" x:Name="combo_datatype" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.Type}" Grid.Row="1" Grid.Column="1" />
+            <TextBlock Text="LowLimit" Grid.Row="1" Grid.Column="2"/>
+            <TextBox Background="Red" Text="{Binding SelectedSubObject.Value.LowLimit}" Grid.Row="1" Grid.Column="3" />
+            <TextBlock Text="Storage Group" Grid.Row="1" Grid.Column="4"/>
+            <TextBox Background="Yellow" Text="{Binding SelectedObject.Value.StorageGroup}" Grid.Row="1" Grid.Column="5" />
+
+            <TextBlock Text="Access SDO" Grid.Row="2" Grid.Column="0"/>
+            <ComboBox Background="Red" x:Name="combo_sdo" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.Sdo}" Grid.Row="2" Grid.Column="1" />
+            <TextBlock Text="Actual Value" Grid.Row="2" Grid.Column="2"/>
+            <TextBox Background="Black" Text="" Grid.Row="2" Grid.Column="3" />
+            <TextBlock Text="Disabled" Grid.Row="2" Grid.Column="4"/>
+            <CheckBox Background="Yellow" IsChecked="{Binding SelectedObject.Value.Disabled}" Grid.Row="2" Grid.Column="5"/>
+
+            <TextBlock Text="Access PDO" Grid.Row="3" Grid.Column="0"/>
+            <ComboBox Background="Red" x:Name="combo_pdo" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.Pdo}" Grid.Row="3" Grid.Column="1" />
+            <TextBlock Text="String Len Min" Grid.Row="3" Grid.Column="2"/>
+            <NumericUpDown Background="Red" Value="{Binding SelectedSubObject.Value.StringLengthMin}" Grid.Row="3" Grid.Column="3" />
+            <TextBlock Text="Count TPDO COS" Grid.Row="3" Grid.Column="4"/>
+            <CheckBox Background="Black" Grid.Row="3" Grid.Column="5"/>
+
+            <TextBlock Text="Access SRDO" Grid.Row="4" Grid.Column="0"/>
+            <ComboBox Background="Red" x:Name="combo_srdo" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.Srdo}" Grid.Row="4" Grid.Column="1" />
+
+            <TextBlock Text="Default value" Grid.Row="5" Grid.Column="0"/>
+            <TextBox Background="Red" Text="{Binding SelectedSubObject.Value.DefaultValue}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
+            <Button Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2">Save</Button>
+            <CheckBox Background="Green" Grid.Row="5" Grid.Column="5">Autosave</CheckBox>
+          </Grid>
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </dialogHost:DialogHost>
+</UserControl>

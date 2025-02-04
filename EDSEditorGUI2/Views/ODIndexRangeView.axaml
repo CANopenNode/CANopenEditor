@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:vm="using:EDSEditorGUI2.ViewModels"
+             xmlns:view="using:EDSEditorGUI2.Views"
+             xmlns:converter="using:EDSEditorGUI2.Converter"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EDSEditorGUI2.Views.ODIndexRangeView"
+             x:DataType="vm:DeviceOD">
+
+  <StackPanel Grid.Row="0" >
+    <TextBlock Text="Heading" x:Name="HeadingText"/>
+    <DataGrid Margin="2" ItemsSource="{Binding Data}"
+              x:Name="grid"
+              GridLinesVisibility="All"
+              BorderThickness="1" BorderBrush="Gray"
+              SelectionChanged="DataGrid_SelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Index" Width="*" Binding="{Binding Key}"/>
+        <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Value.Name}" />
+      </DataGrid.Columns>
+      <DataGrid.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Clone..."/>
+          <MenuItem Header="Add..." Click="AddIndex">
+            <MenuItem.Icon>
+              <PathIcon Data="{StaticResource add_regular}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Delete..." Click="RemoveIndex">
+            <MenuItem.Icon>
+              <PathIcon Data="{StaticResource remove_regular}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Toggle..."/>
+        </ContextMenu>
+      </DataGrid.ContextMenu>
+    </DataGrid>
+  </StackPanel>
+  <UserControl.Resources>
+    <converter:NewIndexMultiConvert x:Key="NewIndexMultiConvert" />
+    <!-- New index dialog -->
+    <StackPanel x:Key="NewIndexDialog">
+      <TextBlock Text="Index (hex):"/>
+      <!-- Need to be fixed to accept only hex -->
+      <TextBox Watermark="1000" x:Name="index"/>
+      <TextBlock Text="Name:" />
+      <TextBox Text="" x:Name="name"/>
+      <TextBlock Text="Object Type:" />
+      <ListBox SelectionMode="Single,AlwaysSelected" x:Name="type"/>
+      <StackPanel Orientation="Horizontal">
+        <Button IsDefault="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">
+          Create
+          <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource NewIndexMultiConvert}">
+              <Binding Path="Text" ElementName="index" />
+              <Binding Path="Text" ElementName="name" />
+              <Binding Path="SelectedIndex" ElementName="type" />
+            </MultiBinding>
+          </Button.CommandParameter>
+        </Button>
+        <Button IsCancel="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
+      </StackPanel>
+    </StackPanel>
+  </UserControl.Resources>
+  
+</UserControl>
