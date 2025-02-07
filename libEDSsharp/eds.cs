@@ -1133,7 +1133,6 @@ namespace libEDSsharp
         public ODentry(string parameter_name,UInt16 index, byte nosubindex)
         {
             this.parameter_name = parameter_name;
-            this.objecttype = ObjectType.ARRAY;
             this.Index = index;
             //this.nosubindexes = nosubindex;
             this.objecttype = ObjectType.VAR;     
@@ -1430,9 +1429,9 @@ namespace libEDSsharp
         }
 
         /// <summary>
-        /// Return the size in bytes for the given CANopen datatype of this object, eg the size of what ever the datatype field is set to 
+        /// Return the size in bits for the given CANopen datatype of this object, eg the size of what ever the datatype field is set to 
         /// </summary>
-        /// <returns>no of bytes</returns>
+        /// <returns>no of bits</returns>
         public int Sizeofdatatype()
         {
             DataType dt = datatype;
