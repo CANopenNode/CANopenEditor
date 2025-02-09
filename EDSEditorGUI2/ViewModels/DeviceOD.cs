@@ -40,7 +40,7 @@ public partial class DeviceOD : ObservableObject
         var newObj = new OdObject
         {
             Name = name,
-            Type = type
+            ObjectType = type
         };
 
         // create OD entry
