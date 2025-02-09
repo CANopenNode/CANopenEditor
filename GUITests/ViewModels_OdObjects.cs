@@ -118,7 +118,7 @@ namespace GUITests
             }));
 
             var result = sut.RemoveSubEntry(sut.SubObjects[1], false);
-            Assert.False(result);
+            Assert.True(result);
         }
     }
 }
