@@ -90,6 +90,15 @@ namespace libEDSsharp
                 .ForMember(dest => dest.ModificationDate, opt => opt.MapFrom(src => src.ModificationTime.ToDateTime().ToString("MM-dd-yyyy")))
                 .ForMember(dest => dest.ModificationTime, opt => opt.MapFrom(src => src.ModificationTime.ToDateTime().ToString("h:mmtt")));
                 cfg.CreateMap<CanOpen_DeviceInfo, DeviceInfo>()
+                .ForMember(dest => dest.BaudRate_10, opt => opt.MapFrom(src => src.BaudRate10))
+                .ForMember(dest => dest.BaudRate_20, opt => opt.MapFrom(src => src.BaudRate20))
+                .ForMember(dest => dest.BaudRate_50, opt => opt.MapFrom(src => src.BaudRate50))
+                .ForMember(dest => dest.BaudRate_125, opt => opt.MapFrom(src => src.BaudRate125))
+                .ForMember(dest => dest.BaudRate_250, opt => opt.MapFrom(src => src.BaudRate250))
+                .ForMember(dest => dest.BaudRate_500, opt => opt.MapFrom(src => src.BaudRate500))
+                .ForMember(dest => dest.BaudRate_800, opt => opt.MapFrom(src => src.BaudRate800))
+                .ForMember(dest => dest.BaudRate_1000, opt => opt.MapFrom(src => src.BaudRate1000))
+                .ForMember(dest => dest.BaudRate_auto, opt => opt.MapFrom(src => src.BaudRateAuto))
                 .ForMember(dest => dest.VendorNumber, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductNumber, opt => opt.Ignore())
                 .ForMember(dest => dest.RevisionNumber, opt => opt.Ignore())
@@ -113,7 +122,11 @@ namespace libEDSsharp
                 .ForMember(dest => dest.LSS_SerialNumber, opt => opt.Ignore());
                 cfg.CreateMap<OdObject, CustomProperties>()
                 .ForMember(dest => dest.CO_accessSRDO, opt => opt.Ignore())
-                .ForMember(dest => dest.CO_stringLengthMin, opt => opt.Ignore());
+                .ForMember(dest => dest.CO_stringLengthMin, opt => opt.Ignore())
+                .ForMember(dest => dest.CO_disabled, opt => opt.MapFrom(src => src.Disabled))
+                .ForMember(dest => dest.CO_countLabel, opt => opt.MapFrom(src => src.CountLabel))
+                .ForMember(dest => dest.CO_storageGroup, opt => opt.MapFrom(src => src.StorageGroup))
+                .ForMember(dest => dest.CO_flagsPDO, opt => opt.MapFrom(src => src.FlagsPDO));
                 cfg.CreateMap<OdObject.Types.ObjectType, ObjectType>().ConvertUsing<ODTypeResolver>();
                 cfg.CreateMap<OdObject, ODentry>()
                 .ForMember(dest => dest.Index, opt => opt.Ignore())
