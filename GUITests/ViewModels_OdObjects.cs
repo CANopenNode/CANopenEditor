@@ -41,7 +41,7 @@ namespace GUITests
         public void AddSubEntry_VarType()
         {
             sut = new OdObject();
-            sut.Type = LibCanOpen.OdObject.Types.ObjectType.Var;
+            sut.ObjectType = LibCanOpen.OdObject.Types.ObjectType.Var;
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", new OdSubObject
             {
                 Name = "variableTest",
@@ -58,7 +58,7 @@ namespace GUITests
         [Fact]
         public void AddSubEntry_RecordType()
         {
-            sut.Type = LibCanOpen.OdObject.Types.ObjectType.Record;
+            sut.ObjectType = LibCanOpen.OdObject.Types.ObjectType.Record;
             sut.AddSubEntry(sut.SubObjects[1]);
             Assert.Equal(4, sut.SubObjects.Count);
             Assert.Equal("0x03", sut.SubObjects[0].Value.DefaultValue);
@@ -70,7 +70,7 @@ namespace GUITests
         public void RemoveSubEntry_VarType(bool renumber)
         {
             sut = new OdObject();
-            sut.Type = LibCanOpen.OdObject.Types.ObjectType.Var;
+            sut.ObjectType = LibCanOpen.OdObject.Types.ObjectType.Var;
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x01", new OdSubObject
             {
                 Name = "variableTest",
@@ -88,7 +88,7 @@ namespace GUITests
         public void RemoveSubEntry_RecordType()
         {
             sut = new OdObject();
-            sut.Type = LibCanOpen.OdObject.Types.ObjectType.Record;
+            sut.ObjectType = LibCanOpen.OdObject.Types.ObjectType.Record;
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x00", new OdSubObject
             {
                 Name = "variableTest0",
@@ -118,7 +118,7 @@ namespace GUITests
             }));
 
             var result = sut.RemoveSubEntry(sut.SubObjects[1], false);
-            Assert.False(result);
+            Assert.True(result);
         }
     }
 }

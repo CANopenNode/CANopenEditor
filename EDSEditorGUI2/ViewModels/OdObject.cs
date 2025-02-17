@@ -22,7 +22,7 @@ namespace EDSEditorGUI2.ViewModels
         string _description = string.Empty;
 
         [ObservableProperty]
-        LibCanOpen.OdObject.Types.ObjectType _type;
+        LibCanOpen.OdObject.Types.ObjectType _objectType;
 
         [ObservableProperty]
         string _countLabel = string.Empty;
@@ -41,13 +41,13 @@ namespace EDSEditorGUI2.ViewModels
         /// </summary>
         public OdSubObject? AddSubEntry(KeyValuePair<string, OdSubObject> selected)
         {
-            if (Type == LibCanOpen.OdObject.Types.ObjectType.Var)
+            if (ObjectType == LibCanOpen.OdObject.Types.ObjectType.Var)
                 return null;
 
             OdSubObject newOd;
 
             //Do we need the type check??
-            if ((SubObjects.Count == 0) && ((Type == LibCanOpen.OdObject.Types.ObjectType.Array) || (Type == LibCanOpen.OdObject.Types.ObjectType.Record)))
+            if ((SubObjects.Count == 0) && ((ObjectType == LibCanOpen.OdObject.Types.ObjectType.Array) || (ObjectType == LibCanOpen.OdObject.Types.ObjectType.Record)))
             {
                 SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", new OdSubObject
                 {
@@ -125,7 +125,7 @@ namespace EDSEditorGUI2.ViewModels
         /// <returns>true on successfull removal</returns>
         public bool RemoveSubEntry(KeyValuePair<string, OdSubObject> subObjectToRemove, bool renumber)
         {
-            if (Type == LibCanOpen.OdObject.Types.ObjectType.Array || Type == LibCanOpen.OdObject.Types.ObjectType.Record)
+            if (ObjectType == LibCanOpen.OdObject.Types.ObjectType.Array || ObjectType == LibCanOpen.OdObject.Types.ObjectType.Record)
             {
                 UInt16 maxSubIndex = SubObjects[0].Value.DefaultValue.ToInteger();
                 UInt16 lastSubIndex = SubObjects.Last().Key.ToInteger();
