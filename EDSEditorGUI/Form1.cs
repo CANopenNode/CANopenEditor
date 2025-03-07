@@ -26,7 +26,9 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
 using libEDSsharp;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+//using SourceGrid.Cells.Controllers;
+//using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace ODEditor
 {
@@ -189,6 +191,12 @@ namespace ODEditor
             {
                 EDSsharp eds = new EDSsharp();
 
+                if (!File.Exists(path))
+                {
+                    MessageBox.Show("File " +path + "\ndoes not exist.");
+                    return;
+                }
+
                 eds.Loadfile(path);
 
                 DeviceView device = new DeviceView(eds, network);
@@ -327,6 +335,11 @@ namespace ODEditor
 
         private void openXDDfile(string path)
         {
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("File " + path + "\ndoes not exist.");
+                return;
+            }
             try
             {
                 EDSsharp eds;
@@ -449,13 +462,13 @@ namespace ODEditor
             {
                 foreach(Control c in page.Controls)
                 {
-                    if(c.GetType() == typeof(DeviceView))
+                    if (c.GetType() == typeof(DeviceView))
                     {
                         DeviceView d = (DeviceView)c;
                         if (d.eds.Dirty == true)
                         {
                             page.BackColor = Color.Tomato;
-                        }
+                         }
                         else
                         {
                             page.BackColor = default(Color);
@@ -1329,34 +1342,52 @@ namespace ODEditor
 
         private void tabControl1_MouseClick(object sender, MouseEventArgs e)
         {
-            TabPage tp;
             if (e.Button == MouseButtons.Right)
             {
                 for (int i = 0; i <= tabControl1.TabCount - 1; i++)
                 {
                     if (tabControl1.GetTabRect(i).Contains(e.Location))
                     {
-                        tp = tabControl1.TabPages[i];
-
                         DialogResult dialogResult = MessageBox.Show(tabControl1.TabPages[i].Text, "Close file?", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
-
-                                DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
-
-                                if (device.eds.Dirty == true)
-                                {
-                                    if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
-                                        return;
-                                }
-
-                                network.Remove(device.eds);
-
-                                tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
+                            DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
+                            if (device.eds.Dirty == true)
+                            {
+                                if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
+                                    return;
+                            }
+                            network.Remove(device.eds);
+                            tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
                         }                        
                     }
                 }
             }
         }
+        private void tabControl1_MouseHover(object sender, EventArgs e)
+        {
+
+            TabControl tabControl = sender as TabControl;
+            Point mousePosition = tabControl.PointToClient(Cursor.Position);
+            for (int i = 0; i < tabControl.TabCount; i++)
+            {
+                Rectangle tabRect = tabControl.GetTabRect(i);
+                if (tabRect.Contains(mousePosition))
+                {
+                    ToolTip toolTip = new ToolTip();
+                    // Set up the delays for the ToolTip.
+
+                    toolTip.AutoPopDelay = 5000;
+                    toolTip.InitialDelay = 1000;
+                    toolTip.ReshowDelay = 500;
+                    // Force the ToolTip text to be displayed whether or not the form is active.
+                    toolTip.ShowAlways = true;
+                    DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
+                    toolTip.SetToolTip(tabControl, device.eds.projectFilename);
+                    break;
+                }
+            }
+        }
+        
     }
 }
