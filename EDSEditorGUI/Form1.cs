@@ -462,7 +462,7 @@ namespace ODEditor
             {
                 foreach(Control c in page.Controls)
                 {
-                    if (c.GetType() == typeof(DeviceView))
+                    if(c.GetType() == typeof(DeviceView))
                     {
                         DeviceView d = (DeviceView)c;
                         if (d.eds.Dirty == true)
