@@ -26,9 +26,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
 using libEDSsharp;
-//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-//using SourceGrid.Cells.Controllers;
-//using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace ODEditor
 {
