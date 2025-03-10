@@ -468,7 +468,7 @@ namespace ODEditor
                         if (d.eds.Dirty == true)
                         {
                             page.BackColor = Color.Tomato;
-                         }
+                        }
                         else
                         {
                             page.BackColor = default(Color);
