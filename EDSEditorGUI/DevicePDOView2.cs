@@ -162,36 +162,38 @@ namespace ODEditor
 
         SourceGrid.Cells.ICellVirtual getItemAtGridPoint(Point P, out int foundrow, out int foundcol)
         {
-            int y = 0;
-            int y2 = 0;
             foundrow = 0;
+            foundcol = 0;
+
+            // Calculate the row index based on the Y position
+            int y = 0;
             foreach (GridRow row in grid1.Rows)
             {
-                y2 = y + row.Height;
+                int y2 = y + row.Height;
 
                 if (P.Y > y && P.Y < y2)
                 {
                     foundrow = row.Index + grid1.VScrollBar.Value;
+                    break;
                 }
                 y = y2;
             }
 
+            // Calculate the column based on the X position
             int x2 = 0;
-            foundcol = 0;
             int outofview = 0;
             for (int i = 0; i < grid1.HScrollBar.Value; i++)
             {
-                outofview += grid1.Columns.GetWidth(i);
+                x2 += grid1.Columns.GetWidth(i);
             }
-
             x2 = -outofview;
+
             foreach (GridColumn col in grid1.Columns)
             {
-
-
-                if (P.X > x2)
+                if (P.X > x2 && P.X <= x2 + col.Width)
                 {
                     foundcol = col.Index;
+                    break;
                 }
                 x2 += col.Width;
             }
