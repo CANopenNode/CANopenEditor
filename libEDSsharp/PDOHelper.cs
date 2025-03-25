@@ -242,11 +242,11 @@ namespace libEDSsharp
         /// <summary>
         /// Look through the OD and register PDO
         /// </summary>
-        /// <param name="startcob">OD index to to start looking from, it will stop after 0x1ff indexes</param>
+        /// <param name="startIdx">OD index to to start looking from, it will stop after 0x1ff indexes</param>
         /// <param name="slots">list to add found pdo into</param>
-        void build_PDOlist(UInt16 startcob, List<PDOSlot> slots)
+        void build_PDOlist(UInt16 startIdx, List<PDOSlot> slots)
         {
-            for (UInt16 idx = startcob; idx < startcob + 0x01ff; idx++)
+            for (UInt16 idx = startIdx; idx < startIdx + 0x01ff; idx++)
             {
                 if (eds.ods.ContainsKey(idx))
                 {
