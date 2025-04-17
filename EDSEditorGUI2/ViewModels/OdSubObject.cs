@@ -12,7 +12,7 @@ public partial class OdSubObject : ObservableObject
     private string _alias = string.Empty;
 
     [ObservableProperty]
-    private DataType _type;
+    private DataType _dataType;
 
     [ObservableProperty]
     private AccessSDO _sdo;

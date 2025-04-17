@@ -18,7 +18,7 @@ namespace EDSEditorGUI2.ViewModels
         private DeviceCommissioning _deviceCommissioning = new();
 
         [ObservableProperty]
-        private DeviceOD _objects = new();
+        private ObjectDictionary _objects = new();
 
         public void OnClickCommand()
         {

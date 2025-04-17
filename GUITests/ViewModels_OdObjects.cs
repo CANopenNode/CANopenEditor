@@ -11,7 +11,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", new OdSubObject
             {
                 Name = "Highest sub-index supported",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned8,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned8,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Ro,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -20,7 +20,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("1", new OdSubObject()
             {
                 Name = "Sub Object 1",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -29,7 +29,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("2", new OdSubObject()
             {
                 Name = "Sub Object 2",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -45,7 +45,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", new OdSubObject
             {
                 Name = "variableTest",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -74,7 +74,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x01", new OdSubObject
             {
                 Name = "variableTest",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -92,7 +92,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x00", new OdSubObject
             {
                 Name = "variableTest0",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -101,7 +101,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x01", new OdSubObject
             {
                 Name = "variableTest1",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -110,7 +110,7 @@ namespace GUITests
             sut.SubObjects.Add(new KeyValuePair<string, OdSubObject>("0x02", new OdSubObject
             {
                 Name = "variableTest2",
-                Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
+                DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32,
                 Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Rw,
                 Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                 Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,

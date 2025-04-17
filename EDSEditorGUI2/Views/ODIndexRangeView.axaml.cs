@@ -70,7 +70,7 @@ public partial class ODIndexRangeView : UserControl
     {
         if (e.Parameter != null)
         {
-            if (DataContext is ViewModels.DeviceOD dc && e.Parameter is NewIndexRequest param)
+            if (DataContext is ViewModels.ObjectDictionary dc && e.Parameter is NewIndexRequest param)
             {
                 dc.AddIndex(param.Index, param.Name, param.Type);
             }
