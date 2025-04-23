@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EDSEditorGUI2.ViewModels"
+        xmlns:view="using:EDSEditorGUI2.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="EDSEditorGUI2.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="EDSEditorGUI2">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding AddNewDevice}"/>
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Save Project" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="_Save Project AS..." IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <Separator/>
+                <MenuItem Header="Open _Network XML"/>
+                <MenuItem Header="Save Networ_k XML" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <Separator/>
+                <MenuItem Header="_Recent Files"/>
+                <Separator/>
+                <MenuItem Header="_Export" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="_Export CanOpenNode..." IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <MenuItem Header="Save _All" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                <Separator/>
+                <MenuItem Header="_Quit"/>
+            </MenuItem>
+            <MenuItem Header="_Insert Profile">
+            </MenuItem>
+            <MenuItem Header="_Reports">
+            </MenuItem>
+            <MenuItem Header="Tools">
+            </MenuItem>
+        </Menu>
+        <StackPanel DockPanel.Dock="Left" Margin="20" Width="300">
+          <ListBox ItemsSource="{Binding Network}" SelectedItem="{Binding SelectedDevice}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Border BorderBrush="Blue" BorderThickness="1"
+                        CornerRadius="4" Padding="4">
+                  <TextBlock Text="{Binding DeviceInfo.ProductName}"/>
+                </Border>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+      <view:DeviceView DataContext="{Binding SelectedDevice}" />
+  </DockPanel>
+
+
+</Window>

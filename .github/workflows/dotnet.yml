@@ -42,6 +42,10 @@ jobs:
     - name: Test
       run: |
           dotnet test --no-build --verbosity normal Tests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\tests.dll
+    - name: GUITest
+      if: matrix.dotnet == 'net8'
+      run: |
+          dotnet test --no-build --verbosity normal GUITests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\GUITests.dll
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:

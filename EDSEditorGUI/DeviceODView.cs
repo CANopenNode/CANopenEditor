@@ -225,7 +225,7 @@ namespace ODEditor
                 if (od.prop.CO_disabled == true)
                     lvi.ForeColor = Color.LightGray;
 
-                if (index <= 0x1000 || index < 0x2000)
+                if (index >= 0x1000 && index < 0x2000)
                     listView_communication_objects.Items.Add(lvi);
                 else if (index >= 0x2000 && index < 0x6000)
                     listView_manufacturer_objects.Items.Add(lvi);
