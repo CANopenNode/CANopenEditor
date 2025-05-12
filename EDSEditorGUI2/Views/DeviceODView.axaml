@@ -8,7 +8,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
              x:Class="EDSEditorGUI2.Views.DeviceODView"
-             x:DataType="vm:DeviceOD">
+             x:DataType="vm:ObjectDictionary">
 
   <dialogHost:DialogHost Identifier="NoAnimationDialogHost" >
     <Grid ColumnDefinitions="200,4,*">
@@ -41,7 +41,7 @@
           <DataGrid.Columns>
             <DataGridTextColumn Header="Sub" Width="*" Binding="{Binding Key}"/>
             <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Value.Name}" />
-            <DataGridTextColumn Header="Type" Width="*" Binding="{Binding Value.Type}" />
+            <DataGridTextColumn Header="DataType" Width="*" Binding="{Binding Value.DataType}" />
             <DataGridTextColumn Header="SDO" Width="*" Binding="{Binding Value.Sdo}" />
             <DataGridTextColumn Header="PDO" Width="*" Binding="{Binding Value.Pdo}" />
             <DataGridTextColumn Header="SRDO" Width="*" Binding="{Binding Value.Srdo}" />
@@ -97,7 +97,7 @@
             <TextBox Background="Yellow" Text="{Binding SelectedObject.Value.CountLabel}" Grid.Row="0" Grid.Column="5" />
 
             <TextBlock Text="Data Type" Grid.Row="1" Grid.Column="0"/>
-            <ComboBox Background="Red" x:Name="combo_datatype" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.Type}" Grid.Row="1" Grid.Column="1" />
+            <ComboBox Background="Red" x:Name="combo_datatype" HorizontalAlignment="Stretch" SelectedIndex="{Binding SelectedSubObject.Value.DataType}" Grid.Row="1" Grid.Column="1" />
             <TextBlock Text="LowLimit" Grid.Row="1" Grid.Column="2"/>
             <TextBox Background="Red" Text="{Binding SelectedSubObject.Value.LowLimit}" Grid.Row="1" Grid.Column="3" />
             <TextBlock Text="Storage Group" Grid.Row="1" Grid.Column="4"/>

@@ -47,7 +47,7 @@ public partial class DeviceODView : UserControl
 
     private void IndexGridSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is DataGrid s && DataContext is ViewModels.DeviceOD dc)
+        if (sender is DataGrid s && DataContext is ViewModels.ObjectDictionary dc)
         {
             if (s.SelectedItem is KeyValuePair<string, ViewModels.OdObject> selected)
             {
@@ -65,7 +65,7 @@ public partial class DeviceODView : UserControl
     }
     private void subindexGridSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is DataGrid s && DataContext is ViewModels.DeviceOD dc)
+        if (sender is DataGrid s && DataContext is ViewModels.ObjectDictionary dc)
         {
             if (s.SelectedItem is KeyValuePair<string, ViewModels.OdSubObject> selected)
             {
@@ -83,7 +83,7 @@ public partial class DeviceODView : UserControl
     }
     private void ContextMenuSubObjectAddClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is ViewModels.DeviceOD dc)
+        if (DataContext is ViewModels.ObjectDictionary dc)
         {
             var selectedObj = dc.SelectedObject.Value;
             ObservableCollection<KeyValuePair<string, ViewModels.OdSubObject>> selection = [];
@@ -98,7 +98,7 @@ public partial class DeviceODView : UserControl
     {
         bool renumber = sender == contextMenu_subObject_removeSubItemToolStripMenuItem;
 
-        if (DataContext is ViewModels.DeviceOD dc)
+        if (DataContext is ViewModels.ObjectDictionary dc)
         {
             var selectedObject = dc.SelectedObject.Value;
 

@@ -52,7 +52,7 @@ namespace EDSEditorGUI2.ViewModels
                 SubObjects.Add(new KeyValuePair<string, OdSubObject>("0", new OdSubObject
                 {
                     Name = "Highest sub-index supported",
-                    Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned8,
+                    DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned8,
                     Sdo = LibCanOpen.OdSubObject.Types.AccessSDO.Ro,
                     Pdo = LibCanOpen.OdSubObject.Types.AccessPDO.No,
                     Srdo = LibCanOpen.OdSubObject.Types.AccessSRDO.No,
@@ -70,7 +70,7 @@ namespace EDSEditorGUI2.ViewModels
                 newOd = new OdSubObject
                 {
                     Name = "item",
-                    Type = LibCanOpen.OdSubObject.Types.DataType.Unsigned32
+                    DataType = LibCanOpen.OdSubObject.Types.DataType.Unsigned32
                 };
             }
             else
@@ -80,7 +80,7 @@ namespace EDSEditorGUI2.ViewModels
                     //TODO: make a clone function with reflection to keep it up-to-date
                     Name = selected.Value.Name,
                     Alias = selected.Value.Alias,
-                    Type = selected.Value.Type,
+                    DataType = selected.Value.DataType,
                     Sdo = selected.Value.Sdo,
                     Pdo = selected.Value.Pdo,
                     Srdo = selected.Value.Srdo,
