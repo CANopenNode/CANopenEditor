@@ -57,6 +57,7 @@
 
   <Target Name="protocolBufferGenerator" BeforeTargets="BeforeBuild" Inputs="@(Protobuf)" Outputs="bin\$(Configuration)\$(TargetFramework)\blazor_components.dll">
     <Exec Command="$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/linux_x64/protoc --proto_path=$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/ --proto_path=%(Protobuf.RelativeDir) --csharp_out=./proto %(Protobuf.RelativeDir)%(Protobuf.Filename)%(Protobuf.Extension)" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <Exec Command="$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/macosx_x64/protoc --proto_path=$(NugetPackageRoot)google.protobuf.tools/3.27.2/tools/ --proto_path=%(Protobuf.RelativeDir) --csharp_out=./proto %(Protobuf.RelativeDir)%(Protobuf.Filename)%(Protobuf.Extension)" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
     <Exec Command="$(NugetPackageRoot)google.protobuf.tools\3.27.2\tools\windows_x64\protoc --proto_path=$(NugetPackageRoot)google.protobuf.tools\3.27.2\tools\ --proto_path=%(Protobuf.RelativeDir) --csharp_out=.\proto %(Protobuf.RelativeDir)%(Protobuf.Filename)%(Protobuf.Extension)" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
     <ItemGroup>
       <Compile Include="proto/*.cs" KeepDuplicates="false" />
