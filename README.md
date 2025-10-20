@@ -41,7 +41,7 @@ Please consider this code experimental and beta quality.
 It is a work in progress and is rapidly changing.
 
 Every attempt has been made to comply with the revelant DSP306 and other
-standards and esd files from multile sources have been tested for loading and
+standards and EDS files from multiple sources have been tested for loading and
 saving as been (at times) validated for errors using EDS conformance tools.
 
 With many thanks to the following contributors for spotting my mistakes and
@@ -59,12 +59,12 @@ Library
 * Save EDS/DCF classes back to EDS file
 * Export C and H files in CanOpenNode format CO_OD.c and CO_OD.h
 * EDS/DCF supports modules
-* EDS/DCF supports compactPDO (read only) 1*
-* EDS/DCF supports implict PDO (read only) 1*
-* EDS/DCF supports CompactSubOb (read only) 1*
+* EDS/DCF supports compactPDO (read only) *¹
+* EDS/DCF supports implict PDO (read only) *¹
+* EDS/DCF supports CompactSubOb (read only) *¹
 * Supports loading/saving of all EDS/DCF module information
 
-1* read only in this context means the EDS/DCF is fully expanded but the compact
+*¹ Read only, in this context, means the EDS/DCF is fully expanded but the compact
    forms is not written back, only the expanded form will be saved.
 
 GUI
@@ -80,15 +80,15 @@ GUI
 * Create profiles that can be added to any project (just save the device xml file to the profiles/
   directory, only include the minimum number of objects that you want to auto insert) This will auto add to insert menu
 * Edit Device and File Info sections
-* Set RX/TX PDO mappings easily from dropdown lists of avaiable objects
+* Set RX/TX PDO mappings easily from dropdown lists of available objects
 * Add and remove new PDO entries (communication paramaters and mapping) in a single button push
-* Save groups of EDS/XML files as a network objects with abality to set concrete node IDs
-* View report of all configured PDO across the network
+* Save groups of EDS/XML files as a network object with ability to set concrete node IDs
+* View report of all configured PDOs across the network
 * View modules and module details present within EDS files
 * View/edit actual object values for device configuring/DCF files
 * Support for loading XDD files (CanOpen offical XML)
 * Support for saving XDD files (CanOpen offical XML)
-* Some module info is displayed in GUI showing avaiable modules (eds) and
+* Some module info is displayed in GUI showing available modules (eds) and
   configured modules (dcf) and what OD entries they reference. Full details such
   as subobj extension and fixed subobj are not currently displayed and unless
   there is demand probably will not ever be.
