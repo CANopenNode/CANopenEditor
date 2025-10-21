@@ -66,29 +66,46 @@ namespace EDSSharp
 
 
                         default:
+                            Program.WriteError("Invalid INFILE extension.");
+                            PrintHelpText();
                             return;
 
                     }
                     if(eds != null)
                     {
                         Export(outfile, outtype);
+                        Console.WriteLine("Successful conversion");
+                    }
+                    else
+                    {
+                        Program.WriteError("Invalid XDD INFILE.");
+                        PrintHelpText();
                     }
                 }
                 else
                 {
+                    Program.WriteError("INFILE or OUTFILE missing.");
                     PrintHelpText();
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                Console.WriteLine(e.ToString());
+                Program.WriteError("Invalid EDS INFILE.");
+                // Console.WriteLine(e.ToString());
                 PrintHelpText();
             }
         }
 
+        private static void WriteError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(message);
+            Console.ResetColor();
+            Console.WriteLine("");
+        }
+
         private static void openEDSfile(string infile)
         {
-          
             eds.Loadfile(infile);
         }
 
