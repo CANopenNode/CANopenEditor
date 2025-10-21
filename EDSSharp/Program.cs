@@ -10,7 +10,6 @@ namespace EDSSharp
 {
     class Program
     {
-
         static libEDSsharp.EDSsharp eds = new EDSsharp();
 
         static void Main(string[] args)
@@ -175,11 +174,14 @@ namespace EDSSharp
         static void PrintHelpText()
         {
             string name = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
-            Console.WriteLine($"Usage: {name} --infile file.[xdd|eds] --outfile [valid output file] [OPTIONAL] --type [exporter type]");
-            Console.WriteLine("The output file format depends on --outfile extension and --type");
-            Console.WriteLine("If --outfile extension matcher one exporter then --type IS NOT needed");
-            Console.WriteLine("If --outfile extension matcher multiple exporter then --type IS needed");
-            Console.WriteLine("If --outfile has no extension --type IS needed");
+            Console.WriteLine($"Usage: {name} --infile FILE1 --outfile FILE2 [--type EXPORTER]");
+            Console.WriteLine("Converts a given XDD or EDS file to many other available types.");
+            Console.WriteLine($"Example (from repository root assuming repository structure): dotnet run {name}/Program.cs --project {name} --framework net481 --infile project.xdd --outfile map.md --type NetworkPDOReport");
+            Console.WriteLine("");
+            Console.WriteLine("FILE1 shall be a .xdd or .eds file.");
+            Console.WriteLine("FILE2 shall have the extension of one of the supported exporters below.");
+            Console.WriteLine("EXPORTER shall be one of the listed exporters below IF AND ONLY IF multiple of them support your output file extension.");
+            Console.WriteLine("");
             Console.WriteLine("Exporter types:");
 
             var exporters = Filetypes.GetExporters();
