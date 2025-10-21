@@ -26,13 +26,11 @@ namespace EDSSharp
                     {
                         argskvp.Add("--infile", args[++argv]);
                     }
-
-                    if (args[argv] == "--outfile")
+                    else if (args[argv] == "--outfile")
                     {
                         argskvp.Add("--outfile", args[++argv]);
                     }
-
-                    if (args[argv] == "--type")
+                    else if (args[argv] == "--type")
                     {
                         argskvp.Add("--type", args[++argv]);
                     }
@@ -84,7 +82,6 @@ namespace EDSSharp
 
         private static void openEDSfile(string infile)
         {
-          
             eds.Loadfile(infile);
         }
 
