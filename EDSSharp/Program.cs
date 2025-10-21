@@ -176,7 +176,7 @@ namespace EDSSharp
             string name = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
             Console.WriteLine($"Usage: {name} --infile FILE1 --outfile FILE2 [--type EXPORTER]");
             Console.WriteLine("Converts a given XDD or EDS file to many other available types.");
-            Console.WriteLine($"Example (from repository root assuming repository structure): dotnet run {name}/Program.cs --project {name} --framework net481 --infile project.xdd --outfile map.md --type NetworkPDOReport");
+            Console.WriteLine($"Example: {name} --infile project.xdd --outfile map.md --type NetworkPDOReport");
             Console.WriteLine("");
             Console.WriteLine("FILE1 shall be a .xdd or .eds file.");
             Console.WriteLine("FILE2 shall have the extension of one of the supported exporters below.");
