@@ -88,10 +88,11 @@ namespace EDSSharp
                     PrintHelpText();
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                Console.WriteLine(e.ToString());
+                Console.WriteLine("");
                 Program.WriteError("Invalid EDS INFILE.");
-                // Console.WriteLine(e.ToString());
                 PrintHelpText();
             }
         }
