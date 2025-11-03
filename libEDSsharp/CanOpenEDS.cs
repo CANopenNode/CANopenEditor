@@ -1025,6 +1025,17 @@ namespace libEDSsharp
                 }
             }
         }
+        public static UInt32 U32Parse(string str)
+        {
+            if (str.Trim().ToLower().StartsWith("0x"))
+            {
+                return System.Convert.ToUInt32(str, 16);
+            }
+            else
+            {
+                return System.Convert.ToUInt32(str);
+            }
+        }
 
         /// <summary>
         /// This function scans the PDO list and compares it to NrOfRXPDO and NrOfTXPDO
@@ -1064,7 +1075,15 @@ namespace libEDSsharp
             }
             UpdatePDOcount();
         }
-
+        private void GetEDSFileInfo()
+        {
+            string[] nums = fi.fileVersionString.Split('.');
+            if (nums.Length == 2)
+            {
+                byte.TryParse(nums[0], out fi.FileVersion);
+                byte.TryParse(nums[1], out fi.FileRevision);
+            }
+        }
         public void Savefile(string filename, InfoSection.Filetype ft)
         {
             if (ft == InfoSection.Filetype.File_EDS)
@@ -1091,6 +1110,8 @@ namespace libEDSsharp
             fi.EDSVersion = "4.0";
             fi.EDSVersionMajor = 4;
             fi.EDSVersionMinor = 0;
+
+            GetEDSFileInfo();
 
             StreamWriter writer = System.IO.File.CreateText(filename);
             writer.NewLine = "\n";

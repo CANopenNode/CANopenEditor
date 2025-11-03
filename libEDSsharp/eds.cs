@@ -654,6 +654,8 @@ namespace libEDSsharp
         {
             infoheader = "CAN OPEN FileInfo";
             edssection = "FileInfo";
+            FileVersion = 1;
+            FileRevision = 0;
         }
     }
 
@@ -1821,9 +1823,6 @@ namespace libEDSsharp
             //FIXME no way for the Major/Minor to make it to EDSVersion
             fi.EDSVersionMajor = 4;
             fi.EDSVersionMinor = 0;
-
-            fi.FileVersion = 1;
-            fi.FileRevision = 1;
 
             fi.CreationDateTime = DateTime.Now;
             fi.ModificationDateTime = DateTime.Now;

@@ -47,7 +47,7 @@ namespace ODEditor
             textBox_revisionnumber.Text = eds.di.RevisionNumber.ToHexString();
             textBox_ordercode.Text = eds.di.OrderCode;
 
-            textBox_fileversion.Text = eds.fi.FileVersion.ToString();
+            textBox_fileversion.Text = eds.fi.fileVersionString;
             textBox_di_description.Text = eds.fi.Description;
             textBox_create_datetime.Text = eds.fi.CreationDateTime.ToString();
             textBox_createdby.Text = eds.fi.CreatedBy;
@@ -139,13 +139,13 @@ namespace ODEditor
             try
             {
                 eds.di.ProductName = textBox_productname.Text;
-                eds.di.ProductNumber = UInt32.Parse(textBox_productnumber.Text);
+                eds.di.ProductNumber = EDSsharp.U32Parse(textBox_productnumber.Text);
                 eds.di.VendorName = textBox_vendorname.Text;
-                eds.di.VendorNumber = UInt32.Parse(textBox_vendornumber.Text);
-                eds.di.RevisionNumber = UInt32.Parse(textBox_revisionnumber.Text);
+                eds.di.VendorNumber = EDSsharp.U32Parse(textBox_vendornumber.Text);
+                eds.di.RevisionNumber = EDSsharp.U32Parse(textBox_revisionnumber.Text);
                 eds.di.OrderCode = textBox_ordercode.Text;
 
-                eds.fi.FileVersion = Byte.Parse(textBox_fileversion.Text);
+                eds.fi.fileVersionString = textBox_fileversion.Text;
                 eds.fi.Description = textBox_di_description.Text;
                 eds.fi.CreationDateTime = DateTime.Parse(textBox_create_datetime.Text);
                 eds.fi.CreatedBy = textBox_createdby.Text;
