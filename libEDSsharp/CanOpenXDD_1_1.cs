@@ -954,8 +954,8 @@ namespace libEDSsharp
                 body_device.DeviceIdentity = new DeviceIdentity();
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
             body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber.ToHexString() };
-            body_device.DeviceIdentity.revisionNumber = new revisionNumber { Value = eds.di.RevisionNumber };
-            body_device.DeviceIdentity.orderCode = new orderCode { Value = eds.di.OrderCode };
+            body_device.DeviceIdentity.specificationRevision = new specificationRevision { Value = eds.di.RevisionNumber.ToString() };
+            body_device.DeviceIdentity.orderNumber = new orderNumber[] { new orderNumber { Value = eds.di.OrderCode } };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
             body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber.ToHexString() };
             if (eds.fi.Description != null && eds.fi.Description != "")
@@ -1257,10 +1257,10 @@ namespace libEDSsharp
                         eds.di.VendorName = body_device.DeviceIdentity.vendorName.Value ?? "";
                     if (body_device.DeviceIdentity.vendorID != null)
                         eds.di.VendorNumber = EDSsharp.U32Parse(body_device.DeviceIdentity.vendorID.Value ?? "0");
-                    if (body_device.DeviceIdentity.revisionNumber != null)
-                        eds.di.RevisionNumber = body_device.DeviceIdentity.revisionNumber.Value;
-                    if (body_device.DeviceIdentity.orderCode != null)
-                        eds.di.OrderCode = body_device.DeviceIdentity.orderCode.Value ?? "";
+                    if (body_device.DeviceIdentity.specificationRevision != null)
+                        eds.di.RevisionNumber = EDSsharp.U32Parse(body_device.DeviceIdentity.specificationRevision.Value ?? "0") ;
+                    if (body_device.DeviceIdentity.orderNumber != null)
+                        eds.di.OrderCode = body_device.DeviceIdentity.orderNumber[0].Value ?? "";
                     if (body_device.DeviceIdentity.productName != null)
                         eds.di.ProductName = body_device.DeviceIdentity.productName.Value ?? "";
                     if (body_device.DeviceIdentity.productID != null)
