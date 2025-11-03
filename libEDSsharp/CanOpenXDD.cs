@@ -240,7 +240,7 @@ namespace libEDSsharp
             device.DeviceIdentity.vendorName.readOnly = true;
 
             device.DeviceIdentity.vendorID = new vendorID();
-            device.DeviceIdentity.vendorID.Value = eds.di.VendorNumber;
+            device.DeviceIdentity.vendorID.Value = eds.di.VendorNumber.ToHexString();
             device.DeviceIdentity.vendorID.readOnly = true;
 
             device.DeviceIdentity.deviceFamily = new deviceFamily();
@@ -263,7 +263,7 @@ namespace libEDSsharp
 
             device.supportedLanguages = "en";
 
-            device.fileVersion = eds.fi.FileVersion;
+            device.fileVersion = eds.fi.FileVersion.ToString();
 
             device.fileName = Path.GetFileName(eds.projectFilename);
             
@@ -277,7 +277,7 @@ namespace libEDSsharp
             device.DeviceIdentity.productName.readOnly = true;
 
             device.DeviceIdentity.productID = new productID();
-            device.DeviceIdentity.productID.Value = eds.di.ProductNumber;
+            device.DeviceIdentity.productID.Value = eds.di.ProductNumber.ToHexString();
             device.DeviceIdentity.productID.readOnly = true;
 
             device.DeviceIdentity.productText = new productText();
@@ -401,7 +401,7 @@ namespace libEDSsharp
             comnet.fileModificationTime = eds.fi.ModificationDateTime;
             comnet.fileModificationDateSpecified = true;
 
-            comnet.fileVersion = eds.fi.FileVersion;
+            comnet.fileVersion = eds.fi.FileVersion.ToString();
 
             comnet.supportedLanguages = "en";
 
@@ -1157,9 +1157,9 @@ namespace libEDSsharp
                 if (obj.DeviceIdentity != null)
                 {
                     eds.di.ProductName = obj.DeviceIdentity.productName.Value;
-                    eds.di.ProductNumber = obj.DeviceIdentity.productID.Value;
+                    eds.di.ProductNumber = UInt32.Parse(obj.DeviceIdentity.productID.Value);
                     eds.di.VendorName = obj.DeviceIdentity.vendorName.Value;
-                    eds.di.VendorNumber = obj.DeviceIdentity.vendorID.Value;
+                    eds.di.VendorNumber = UInt32.Parse(obj.DeviceIdentity.vendorID.Value);
 
                     foreach (object o in obj.DeviceIdentity.productText.Items)
                     {
@@ -1184,12 +1184,11 @@ namespace libEDSsharp
                                             eds.fi.EDSVersion = keyvalue[1];
                                             break;
                                         case "FileRevision":
-                                            eds.fi.FileVersion = keyvalue[1];
+                                            byte.TryParse(keyvalue[1], out eds.fi.FileVersion);
                                             break;
                                         case "RevisionNum":
-                                            byte.TryParse(keyvalue[1], out eds.fi.FileRevision);                                            break;
-
-                                                
+                                            byte.TryParse(keyvalue[1], out eds.fi.FileRevision);                                            
+                                            break;
                                     }
                                 }
                             }

@@ -582,7 +582,7 @@ namespace libEDSsharp
         /// indicate the actual file version (Unsigned8)
         /// </summary>
         [EdsExport]
-        public string FileVersion="";
+        public byte FileVersion;//=1;
         /// <summary>
         /// indicate the actual file revision (Unsigned8)
         /// </summary>
@@ -664,7 +664,7 @@ namespace libEDSsharp
         /// unique vendor ID according to identity object sub-index 01h (Unsigned32) 
         /// </summary>
         [EdsExport]
-        public string VendorNumber="";
+        public UInt32 VendorNumber;
         /// <summary>
         /// product name (max. 243 characters)
         /// </summary>
@@ -674,7 +674,7 @@ namespace libEDSsharp
         /// product code according to identity object sub-index 02h (Unsigned32)
         /// </summary>
         [EdsExport]
-        public string ProductNumber="";
+        public UInt32 ProductNumber;
         /// <summary>
         /// product revision number according to identity object sub-index 03h (Unsigned32) 
         /// </summary>
@@ -1815,7 +1815,7 @@ namespace libEDSsharp
             fi.EDSVersionMajor = 4;
             fi.EDSVersionMinor = 0;
 
-            fi.FileVersion = "1";
+            fi.FileVersion = 1;
             fi.FileRevision = 1;
 
             fi.CreationDateTime = DateTime.Now;

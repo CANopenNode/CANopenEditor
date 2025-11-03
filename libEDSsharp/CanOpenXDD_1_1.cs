@@ -941,7 +941,7 @@ namespace libEDSsharp
             body_device.fileCreationDate = eds.fi.CreationDateTime;
             body_device.fileCreationTime = eds.fi.CreationDateTime;
             body_device.fileCreationTimeSpecified = true;
-            body_device.fileVersion = eds.fi.FileVersion;
+            body_device.fileVersion = eds.fi.FileVersion.ToString();
             body_device.fileModifiedBy = eds.fi.ModifiedBy;
             body_device.fileModificationDate = eds.fi.ModificationDateTime;
             body_device.fileModificationTime = eds.fi.ModificationDateTime;
@@ -953,11 +953,11 @@ namespace libEDSsharp
             if (body_device.DeviceIdentity == null)
                 body_device.DeviceIdentity = new DeviceIdentity();
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
-            body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber };
+            body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber.ToHexString() };
             body_device.DeviceIdentity.revisionNumber = new revisionNumber { Value = eds.di.RevisionNumber };
             body_device.DeviceIdentity.orderCode = new orderCode { Value = eds.di.OrderCode };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
-            body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber };
+            body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber.ToHexString() };
             if (eds.fi.Description != null && eds.fi.Description != "")
             {
                 body_device.DeviceIdentity.productText = new productText
@@ -1052,7 +1052,7 @@ namespace libEDSsharp
             body_network.fileCreationDate = eds.fi.CreationDateTime;
             body_network.fileCreationTime = eds.fi.CreationDateTime;
             body_network.fileCreationTimeSpecified = true;
-            body_network.fileVersion = eds.fi.FileVersion;
+            body_network.fileVersion = eds.fi.FileVersion.ToString();
             body_network.fileModificationDate = eds.fi.ModificationDateTime;
             body_network.fileModificationTime = eds.fi.ModificationDateTime;
             body_network.fileModificationDateSpecified = true;
@@ -1234,7 +1234,7 @@ namespace libEDSsharp
             if (body_device != null)
             {
                 eds.fi.FileName = body_device.fileName ?? "";
-                eds.fi.FileVersion = body_device.fileVersion ?? "";
+                eds.fi.FileVersion = Byte.Parse(body_device.fileVersion ?? "0");
                 eds.fi.CreatedBy = body_device.fileCreator ?? "";
                 eds.fi.ModifiedBy = body_device.fileModifiedBy ?? "";
 
@@ -1257,7 +1257,7 @@ namespace libEDSsharp
                     if (body_device.DeviceIdentity.vendorName != null)
                         eds.di.VendorName = body_device.DeviceIdentity.vendorName.Value ?? "";
                     if (body_device.DeviceIdentity.vendorID != null)
-                        eds.di.VendorNumber = body_device.DeviceIdentity.vendorID.Value ?? "";
+                        eds.di.VendorNumber = UInt32.Parse(body_device.DeviceIdentity.vendorID.Value ?? "0");
                     if (body_device.DeviceIdentity.revisionNumber != null)
                         eds.di.RevisionNumber = body_device.DeviceIdentity.revisionNumber.Value;
                     if (body_device.DeviceIdentity.orderCode != null)
@@ -1265,7 +1265,7 @@ namespace libEDSsharp
                     if (body_device.DeviceIdentity.productName != null)
                         eds.di.ProductName = body_device.DeviceIdentity.productName.Value ?? "";
                     if (body_device.DeviceIdentity.productID != null)
-                        eds.di.ProductNumber = body_device.DeviceIdentity.productID.Value ?? "";
+                        eds.di.ProductNumber = UInt32.Parse(body_device.DeviceIdentity.productID.Value ?? "0");
                     if (body_device.DeviceIdentity.productText != null)
                         eds.fi.Description = G_label_getDescription(body_device.DeviceIdentity.productText.Items);
                 }

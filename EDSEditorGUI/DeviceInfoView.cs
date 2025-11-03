@@ -23,8 +23,8 @@ using libEDSsharp;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Drawing;
-
 namespace ODEditor
+
 {
     public partial class DeviceInfoView : MyTabUserControl
     {
@@ -41,13 +41,13 @@ namespace ODEditor
                 return;
 
             textBox_productname.Text = eds.di.ProductName;
-            textBox_productnumber.Text = eds.di.ProductNumber;
+            textBox_productnumber.Text = eds.di.ProductNumber.ToHexString();
             textBox_vendorname.Text = eds.di.VendorName;
-            textBox_vendornumber.Text = eds.di.VendorNumber;
-            textBox_revisionnumber.Text = string.Format("0x{0:x8}", eds.di.RevisionNumber);
+            textBox_vendornumber.Text = eds.di.VendorNumber.ToHexString();
+            textBox_revisionnumber.Text = eds.di.RevisionNumber.ToHexString();
             textBox_ordercode.Text = eds.di.OrderCode;
 
-            textBox_fileversion.Text = eds.fi.FileVersion;
+            textBox_fileversion.Text = eds.fi.FileVersion.ToString();
             textBox_di_description.Text = eds.fi.Description;
             textBox_create_datetime.Text = eds.fi.CreationDateTime.ToString();
             textBox_createdby.Text = eds.fi.CreatedBy;
@@ -139,13 +139,13 @@ namespace ODEditor
             try
             {
                 eds.di.ProductName = textBox_productname.Text;
-                eds.di.ProductNumber = textBox_productnumber.Text;
+                eds.di.ProductNumber = UInt32.Parse(textBox_productnumber.Text);
                 eds.di.VendorName = textBox_vendorname.Text;
-                eds.di.VendorNumber = textBox_vendornumber.Text;
-                eds.di.RevisionNumber = Convert.ToUInt32(textBox_revisionnumber.Text,16);
+                eds.di.VendorNumber = UInt32.Parse(textBox_vendornumber.Text);
+                eds.di.RevisionNumber = UInt32.Parse(textBox_revisionnumber.Text);
                 eds.di.OrderCode = textBox_ordercode.Text;
 
-                eds.fi.FileVersion = textBox_fileversion.Text;
+                eds.fi.FileVersion = Byte.Parse(textBox_fileversion.Text);
                 eds.fi.Description = textBox_di_description.Text;
                 eds.fi.CreationDateTime = DateTime.Parse(textBox_create_datetime.Text);
                 eds.fi.CreatedBy = textBox_createdby.Text;
