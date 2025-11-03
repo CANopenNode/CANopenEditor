@@ -1186,7 +1186,7 @@ namespace libEDSsharp
                                         case "FileRevision":
                                             byte.TryParse(keyvalue[1], out eds.fi.FileVersion);
                                             break;
-                                        case "RevisionNum":
+                                        case "RevisionNumber":
                                             byte.TryParse(keyvalue[1], out eds.fi.FileRevision);                                            
                                             break;
                                     }

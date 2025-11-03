@@ -589,6 +589,13 @@ namespace libEDSsharp
         [EdsExport]
         public byte FileRevision;//=1
 
+        /// <summary>
+        /// indicate the file version as a vendor-specific string
+        /// </summary>
+        [EdsExport(commentonly = true)]
+        public string fileVersionString = "";
+
+
         [DcfExport]
         public string LastEDS = "";
 
