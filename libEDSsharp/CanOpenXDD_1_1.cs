@@ -954,7 +954,7 @@ namespace libEDSsharp
                 body_device.DeviceIdentity = new DeviceIdentity();
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
             body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber.ToHexString() };
-            body_device.DeviceIdentity.specificationRevision = new specificationRevision { Value = eds.di.RevisionNumber.ToString() };
+            body_device.DeviceIdentity.specificationRevision = new specificationRevision { Value = eds.di.RevisionNumber.ToHexString() };
             body_device.DeviceIdentity.orderNumber = new orderNumber[] { new orderNumber { Value = eds.di.OrderCode } };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
             body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber.ToHexString() };
