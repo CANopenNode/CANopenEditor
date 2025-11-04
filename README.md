@@ -105,7 +105,7 @@ have created/opened etc.
 Pictures
 --------
 
-![alt tag](pic1.jpg)
-![alt tag](pic2.jpg)
-![alt tag](pic3.jpg)
-![alt tag](pic4.jpg)
+![Device info section of the GUI](Images/pic2.jpg)
+![OD section of the GUI](Images/pic1.jpg)
+![TX PDO Mapping section of the GUI](Images/pic3.jpg)
+![A specific PDO view in the GUI](Images/pic4.jpg)
