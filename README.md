@@ -39,7 +39,6 @@ Exhaustive list of the library's supported formats:<br>
 - DocumentationMarkup [.md]
 - NetworkPDOReport [.md]
 
-
 File structure
 --------
 The main files and directories you'll need to understand are:
@@ -62,3 +61,13 @@ You might want to check your EDS/XDD file with this free [EDSchecker](https://ww
 Contributing
 --------
 If you want to help us out by contributing to this project, first of all thank you ! And please read our [Contributing Guidelines](https://github.com/CANopenNode/CANopenEditor/blob/docs/CONTRIBUTING.md). We are very beginner friendly so, even if you are not extremely experienced with contributing to open source projects, fear not and try !
+
+Collaborators
+--------
+<!-- readme: collaborators -start -->
+<!-- readme: collaborators -end -->
+
+Contributors
+--------
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
