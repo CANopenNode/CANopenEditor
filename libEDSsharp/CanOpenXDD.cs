@@ -1161,6 +1161,7 @@ namespace libEDSsharp
                     eds.di.VendorName = obj.DeviceIdentity.vendorName.Value;
                     eds.di.VendorNumber = UInt32.Parse(obj.DeviceIdentity.vendorID.Value);
 
+
                     foreach (object o in obj.DeviceIdentity.productText.Items)
                     {
                         //this is another g_label affair
@@ -1190,11 +1191,11 @@ namespace libEDSsharp
                                                 Warnings.warning_list.Add("XDD FileRevision value \"" + keyvalue[1] + "\" cannot be parsed!");
                                             }
                                             break;
-                                        case "RevisionNumber":
+                                        case "RevisionNum":
                                             if (byte.TryParse(keyvalue[1], out eds.fi.FileRevision) == false)
                                             {
                                                 eds.fi.FileRevision = 0;
-                                                Warnings.warning_list.Add("XDD RevisionNumber value \"" + keyvalue[1] + "\" cannot be parsed!");
+                                                Warnings.warning_list.Add("XDD RevisionNum value \"" + keyvalue[1] + "\" cannot be parsed!");
                                             }
                                             break;
                                     }
