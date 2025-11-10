@@ -51,8 +51,9 @@ namespace Tests
                     CreationDate = "01-20-2000",
                     CreationTime = "12:20am",
                     Description = "Description",
+                    FileVersion = (byte)'X',
                     FileRevision = (byte)'A',
-                    FileVersion = "1.0.0",
+                    fileVersionString = "1.0.0",
                     ModificationDate = "02-10-1000",
                     ModificationTime = "12:20pm",
                     ModifiedBy = "ModifiedBy"
@@ -68,7 +69,7 @@ namespace Tests
             Assert.Equal(eds.fi.CreatedBy, tmp.FileInfo.CreatedBy);
             Assert.Equal(creationTimestamp, tmp.FileInfo.CreationTime);
             Assert.Equal(eds.fi.Description, tmp.FileInfo.Description);
-            Assert.Equal(eds.fi.FileVersion, tmp.FileInfo.FileVersion);
+            Assert.Equal(eds.fi.fileVersionString, tmp.FileInfo.FileVersion);
             Assert.Equal(eds.fi.ModifiedBy, tmp.FileInfo.ModifiedBy);
             Assert.Equal(modificationTimestamp, tmp.FileInfo.ModificationTime);
         }
@@ -371,7 +372,7 @@ namespace Tests
             Assert.Equal(d.FileInfo.CreationTime.ToDateTime().ToString("h:mmtt"), tmp.fi.CreationTime);
             Assert.Equal(d.FileInfo.CreationTime.ToDateTime().ToString("MM-dd-yyyy"), tmp.fi.CreationDate);
             Assert.Equal(d.FileInfo.Description, tmp.fi.Description);
-            Assert.Equal(d.FileInfo.FileVersion, tmp.fi.FileVersion);
+            Assert.Equal(d.FileInfo.FileVersion, tmp.fi.fileVersionString);
             Assert.Equal(d.FileInfo.ModifiedBy, tmp.fi.ModifiedBy);
             Assert.Equal(d.FileInfo.ModificationTime.ToDateTime().ToString("h:mmtt"), tmp.fi.ModificationTime);
             Assert.Equal(d.FileInfo.ModificationTime.ToDateTime().ToString("MM-dd-yyyy"), tmp.fi.ModificationDate);
