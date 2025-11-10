@@ -13,3 +13,5 @@ The library making it all work.
 * Supports loading/saving of all EDS/DCF module information
 
 \*¹ Read only, in this context, means the EDS/DCF is fully expanded but the compact forms is not written back, only the expanded form will be saved.
+<br>
+[Available exporters' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).

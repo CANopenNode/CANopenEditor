@@ -35,20 +35,4 @@ FILE1 shall be a .xdd or .eds file.<br>
 FILE2 shall have the extension of one of the supported exporters below.<br>
 EXPORTER shall be one of the listed exporters below IF AND ONLY IF multiple of them support your output file extension.<br>
 <br>
-Available exporters for now:<br>
-- ElectronicDataSheet [.eds]
-- DeviceConfigurationFile [.dcf]
-- CanOpenNode [.h,.c]
-- CanOpenNodeV4 [.h,.c]
-- CanOpenXDDv1.0 [.xdd]
-- CanOpenNetworkv1.0 [.nxdd]
-- CanOpenXDDv1.1 [.xdd]
-- CanOpenXDDv1.1stripped [.xdd]
-- CanOpenXDCv1.1 [.xdc]
-- CanOpenNetworkXDDv1.1 [.nxdd]
-- CanOpenNetworkXDCv1.1 [.nxdc]
-- CanOpenNodeProtobuf(json) [.json]
-- CanOpenNodeProtobuf(binary) [.binpb]
-- DocumentationHTML [.html]
-- DocumentationMarkup [.md]
-- NetworkPDOReport [.md]
+[Available exporters' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).

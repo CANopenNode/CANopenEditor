@@ -15,9 +15,30 @@ CANopen is the internationally standardized (EN 50325-4) ([CiA301](http://can-ci
 Repository structure
 --------
 This repository is home to three projects:
-- [LibEDSsharp](https://github.com/reza0310/CANopenEditor/blob/docs/libEDSsharp/README.md), a C# library for EDS files manipulation which went upstream and is now maintained in this repository.
-- [A CLI](https://github.com/reza0310/CANopenEditor/blob/docs/EDSSharp/README.md), used for simple conversions across all supported formats.
-- [A GUI](https://github.com/reza0310/CANopenEditor/blob/docs/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/reza0310/CANopenEditor/blob/docs/EDSEditorGUI2/README.md).
+- [LibEDSsharp](https://github.com/CANopenNode/CANopenEditor/blob/docs/libEDSsharp/README.md), a C# library for EDS files manipulation which went upstream and is now maintained in this repository.
+- [A CLI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSSharp/README.md), used for simple conversions across all supported formats.
+- [A GUI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI2/README.md).
+
+Available formats
+--------
+Exhaustive list of the library's supported formats:<br>
+- ElectronicDataSheet [.eds]
+- DeviceConfigurationFile [.dcf]
+- CanOpenNode [.h,.c]
+- CanOpenNodeV4 [.h,.c]
+- CanOpenXDDv1.0 [.xdd]
+- CanOpenNetworkv1.0 [.nxdd]
+- CanOpenXDDv1.1 [.xdd]
+- CanOpenXDDv1.1stripped [.xdd]
+- CanOpenXDCv1.1 [.xdc]
+- CanOpenNetworkXDDv1.1 [.nxdd]
+- CanOpenNetworkXDCv1.1 [.nxdc]
+- CanOpenNodeProtobuf(json) [.json]
+- CanOpenNodeProtobuf(binary) [.binpb]
+- DocumentationHTML [.html]
+- DocumentationMarkup [.md]
+- NetworkPDOReport [.md]
+
 
 File structure
 --------

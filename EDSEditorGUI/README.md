@@ -20,3 +20,5 @@ GUI
 * Support for saving XDD files (CanOpen offical XML)
 * Some module info is displayed in GUI showing available modules (eds) and configured modules (dcf) and what OD entries they reference.
   Full details such as subobj extension and fixed subobj are not currently displayed and unless there is demand probably will not ever be.
+<br>
+[Available formats' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).
