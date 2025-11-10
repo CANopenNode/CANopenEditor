@@ -23,7 +23,7 @@ The main files and directories you'll need to understand are:
 - [GUITests](https://github.com/CANopenNode/CANopenEditor/tree/main/GUITests) directory is the directory for all GUI unit tests. More tests, functional tests and tests for GUI2 may come here.
 - [Images](https://github.com/CANopenNode/CANopenEditor/tree/main/Images) directory is the directory containing any and all of the documentation's images.
 - [Tests](https://github.com/CANopenNode/CANopenEditor/tree/main/Tests) directory is the directory for all Lib unit tests. More tests, functional tests and tests for CLI may come here.
-- [libEDSsharp](https://github.com/CANopenNode/CANopenEditor/tree/main/libEDSsharp) directory contains the libe from Robin Cornelius making all of this work.
+- [libEDSsharp](https://github.com/CANopenNode/CANopenEditor/tree/main/libEDSsharp) directory contains the library from Robin Cornelius making all of this work.
 
 BUGS
 --------

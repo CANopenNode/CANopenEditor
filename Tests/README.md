@@ -1,3 +1,3 @@
 Tests
 =============
-This directory only contains unit tests for the lib for now. More tests, functional tests or tests for the CLI might be added later. All tests shall be written is C# and executable on Windows.
+This directory contains unit tests for the library and CLI. All tests shall be written in C# and run on all supported OS
