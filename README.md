@@ -12,6 +12,13 @@ CANopen is the internationally standardized (EN 50325-4) ([CiA301](http://can-ci
 
 [CANopenNode](https://github.com/CANopenNode/CANopenNode) is a free and open source CANopen Stack.
 
+Repository structure
+--------
+This repository is home to three projects:
+- [LibEDSsharp](https://github.com/reza0310/CANopenEditor/blob/docs/libEDSsharp/README.md), a C# library for EDS files manipulation which went upstream and is now maintained in this repository.
+- [A CLI](https://github.com/reza0310/CANopenEditor/blob/docs/EDSSharp/README.md), used for simple conversions across all supported formats.
+- [A GUI](https://github.com/reza0310/CANopenEditor/blob/docs/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/reza0310/CANopenEditor/blob/docs/EDSEditorGUI2/README.md).
+
 File structure
 --------
 The main files and directories you'll need to understand are:
@@ -27,7 +34,6 @@ The main files and directories you'll need to understand are:
 
 BUGS
 --------
-
 If you find any, please open a bug report on github and attach any files you have created/opened etc... We need any help we can have and the main maintainers are quite active and will answer you fast.
 
 You might want to check your EDS/XDD file with this free [EDSchecker](https://www.vector.com/de/de/support-downloads/download-center/#product=%5B%2274771%22%5D&tab=1&pageSize=15&sort=date&order=desc)
