@@ -1184,10 +1184,18 @@ namespace libEDSsharp
                                             eds.fi.EDSVersion = keyvalue[1];
                                             break;
                                         case "FileRevision":
-                                            byte.TryParse(keyvalue[1], out eds.fi.FileVersion);
+                                            if (byte.TryParse(keyvalue[1], out eds.fi.FileVersion) == false)
+                                            {
+                                                eds.fi.FileVersion = 0;
+                                                Warnings.warning_list.Add("XDD FileRevision value \"" + keyvalue[1] + "\" cannot be parsed!");
+                                            }
                                             break;
                                         case "RevisionNumber":
-                                            byte.TryParse(keyvalue[1], out eds.fi.FileRevision);                                            
+                                            if (byte.TryParse(keyvalue[1], out eds.fi.FileRevision) == false)
+                                            {
+                                                eds.fi.FileRevision = 0;
+                                                Warnings.warning_list.Add("XDD RevisionNumber value \"" + keyvalue[1] + "\" cannot be parsed!");
+                                            }
                                             break;
                                     }
                                 }

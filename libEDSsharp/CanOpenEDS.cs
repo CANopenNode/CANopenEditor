@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace libEDSsharp
@@ -1027,12 +1026,22 @@ namespace libEDSsharp
         }
         public static UInt32 U32Parse(string str)
         {
-            if (str.Trim().ToLower().StartsWith("0x"))
+            if (str[0] == '0')
             {
-                return System.Convert.ToUInt32(str, 16);
+                if (str[1] == 'x' || str[1] == 'X')
+                {
+                    // Hex format
+                    return System.Convert.ToUInt32(str, 16);
+                }
+                else
+                {
+                    // Octal format
+                    return System.Convert.ToUInt32(str, 8);
+                }
             }
             else
             {
+                // Decimal format
                 return System.Convert.ToUInt32(str);
             }
         }
