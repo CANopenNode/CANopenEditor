@@ -1089,8 +1089,31 @@ namespace libEDSsharp
             string[] nums = fi.fileVersionString.Split('.');
             if (nums.Length == 2)
             {
-                byte.TryParse(nums[0], out fi.FileVersion);
-                byte.TryParse(nums[1], out fi.FileRevision);
+                if (byte.TryParse(nums[0], out fi.FileVersion) == false)
+                {
+                    fi.FileVersion = 1;
+                    Warnings.warning_list.Add("EDS FileVersion cannot be extracted from string \"" + nums[0] +"\", set to 1");
+                }
+                 if (byte.TryParse(nums[1], out fi.FileRevision) == false)
+                {
+                    fi.FileRevision = 0;
+                    Warnings.warning_list.Add("EDS FileRevision cannot be extracted from string \"" + nums[1] + "\", set to 0");
+                }
+            }
+            else if (nums.Length == 1)
+            {
+                if (byte.TryParse(nums[0], out fi.FileVersion) == false)
+                {
+                    fi.FileVersion = 1;
+                    Warnings.warning_list.Add("EDS FileVersion cannot be extracted from string \"" + nums[0] + "\", set to 1");
+                }
+                fi.FileRevision = 0;
+            }
+            else
+            {
+                fi.FileVersion = 1;
+                fi.FileRevision = 0;
+                Warnings.warning_list.Add("EDS FileVersion and FileRevision cannot be extracted from string \"" + fi.fileVersionString + "\", set to 1.0");
             }
         }
         public void Savefile(string filename, InfoSection.Filetype ft)
