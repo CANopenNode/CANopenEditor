@@ -19,26 +19,20 @@ namespace EDSSharp
 
                 Dictionary<string, string> argskvp = new Dictionary<string, string>();
 
-                int argv = 0;
-
-                for (argv = 0; argv < (args.Length - 1); argv++)
+                for (int argv = 0; argv < (args.Length - 1); argv++)
                 {
                     if (args[argv] == "--infile")
                     {
-                        argskvp.Add("--infile", args[argv + 1]);
+                        argskvp.Add("--infile", args[++argv]);
                     }
-
-                    if (args[argv] == "--outfile")
+                    else if (args[argv] == "--outfile")
                     {
-                        argskvp.Add("--outfile", args[argv + 1]);
+                        argskvp.Add("--outfile", args[++argv]);
                     }
-
-                    if (args[argv] == "--type")
+                    else if (args[argv] == "--type")
                     {
-                        argskvp.Add("--type", args[argv + 1]);
+                        argskvp.Add("--type", args[++argv]);
                     }
-
-                    argv++;
                 }
 
 
