@@ -21,18 +21,4 @@ It is a work in progress and is rapidly changing.
 
 Every attempt has been made to comply with the relevant DSP306 and other standards and EDS files from multiple sources have been tested for loading/saving and as been (at times) validated for errors using EDS conformance tools.
 
-Usage
------
-- Using `dotnet run`, your {name} is `dotnet run EDSSharp/Program.cs --project EDSSharp --framework [net481/net8.0]`.
-- Using compiled version, your {name} is the name of your executable.
-- Depending on your environment, you may or may not need to use ./ at the beginning of your command
-
-`{name} --infile FILE1 --outfile FILE2 [--type EXPORTER]`<br>
-Converts a given XDD or EDS file to many other available types.<br>
-Example: {name} --infile project.xdd --outfile map.md --type NetworkPDOReport<br>
-<br>
-FILE1 shall be a .xdd or .eds file.<br>
-FILE2 shall have the extension of one of the supported exporters below.<br>
-EXPORTER shall be one of the listed exporters below IF AND ONLY IF multiple of them support your output file extension.<br>
-<br>
 [Available exporters' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).

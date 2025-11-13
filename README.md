@@ -19,9 +19,16 @@ This repository is home to three projects:
 - [A CLI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSSharp/README.md), used for simple conversions across all supported formats.
 - [A GUI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI2/README.md).
 
+How to use
+--------
+1. [Download the latest release's binary zip file](https://github.com/CANopenNode/CANopenEditor/releases). DO NOT DOWNLOAD SOURCE CODE.
+2. Unzip it.
+3. Go to net8.0-windows directory.
+4. Execute the .exe .
+
 Available formats
 --------
-Exhaustive list of the library's supported formats sorted by category:<br>
+Exhaustive list of the library's supported formats to date, sorted by category:<br>
 
 ### CAN in Automation official formats:
 | Description                           | Exporter                                                   | Format |
