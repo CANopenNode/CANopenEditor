@@ -21,23 +21,35 @@ This repository is home to three projects:
 
 Available formats
 --------
-Exhaustive list of the library's supported formats:<br>
-- ElectronicDataSheet [.eds]
-- DeviceConfigurationFile [.dcf]
-- CanOpenNode [.h,.c]
-- CanOpenNodeV4 [.h,.c]
-- CanOpenXDDv1.0 [.xdd]
-- CanOpenNetworkv1.0 [.nxdd]
-- CanOpenXDDv1.1 [.xdd]
-- CanOpenXDDv1.1stripped [.xdd]
-- CanOpenXDCv1.1 [.xdc]
-- CanOpenNetworkXDDv1.1 [.nxdd]
-- CanOpenNetworkXDCv1.1 [.nxdc]
-- CanOpenNodeProtobuf(json) [.json]
-- CanOpenNodeProtobuf(binary) [.binpb]
-- DocumentationHTML [.html]
-- DocumentationMarkup [.md]
-- NetworkPDOReport [.md]
+Exhaustive list of the library's supported formats sorted by category:<br>
+
+### CAN in Automation official formats:
+| Description                           | Exporter                                                   | Format |
+|---------------------------------------|------------------------------------------------------------|--------|
+| Electronic Data Sheet (CiA 306-1)     | ElectronicDataSheet                                        | .eds   |
+| Device Configuration File (CiA 306-1) | DeviceConfigurationFile                                    | .dcf   |
+| XML Device Description (CiA 311)      | CanOpenXDDv1.0<br>CanOpenXDDv1.1<br>CanOpenXDDv1.1stripped | .xdd   |
+| XML Device Configuration (CiA 311)    | CanOpenXDCv1.1                                             | .xdc   |
+
+### Extended formats:
+| Description                      | Exporter                                    | Format |
+|----------------------------------|---------------------------------------------|--------|
+| Network XML Device Description   | CanOpenNetworkv1.0<br>CanOpenNetworkXDDv1.1 | .nxdd  |
+| Network XML Device Configuration | CanOpenNetworkXDCv1.1                       | .nxdc  |
+| XML Profile Description          | None                                        | .xpd   |
+
+### CANopenNode specific formats:
+| Description                              | Exporter                                                 | Format          |
+|------------------------------------------|----------------------------------------------------------|-----------------|
+| CanOpenNode Object Dictionary file pairs | CanOpenNode<br>CanOpenNodeV4                             | .h,.c           |
+| PCanOpenNode Project file                | CanOpenNodeProtobuf(json)<br>CanOpenNodeProtobuf(binary) | .json<br>.binpb |
+
+### Documentation formats:
+| Exporter            | Format |
+|---------------------|--------|
+| DocumentationHTML   | .html  |
+| DocumentationMarkup | .md    |
+| NetworkPDOReport    | .md    |
 
 File structure
 --------
