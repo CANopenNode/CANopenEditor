@@ -22,3 +22,31 @@ GUI
   Full details such as subobj extension and fixed subobj are not currently displayed and unless there is demand probably will not ever be.
 <br>
 [Available formats' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).
+
+Pictures
+-------------
+For those pictures, the file shown is: https://www.hbm.com/fileadmin/mediapool/support/download/weighing/pad/PAD4000_P80_113_01_COS.EDS
+
+### General informations
+![General informations tab](Images/General infos.png)
+
+### OD manipulation
+![OD when you select an object](Images/OD selected object.png)
+![OD's communication specific parameters](Images/OD comm specific param.png)
+
+### PDO manipulation
+TPDO:<br>
+![TPDO tab](Images/TPDO.png)<br>
+RPDO:<br>
+![RPDO tab](Images/RPDO.png)<br>
+PDO editing:<br>
+![PDO edition](Images/Edit PDO.png)
+
+### Modules
+![Modules tab](Images/Modules.png)
+
+### Profiles
+Available profiles:<br>
+![Profiles option](Images/Profiles.png)<br>
+Applying a profile:<br>
+![Profiles application](Images/Applying profile.png)
