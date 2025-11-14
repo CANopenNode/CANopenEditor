@@ -20,7 +20,7 @@ GUI
 * Support for saving XDD files (CanOpen offical XML)
 * Some module info is displayed in GUI showing available modules (eds) and configured modules (dcf) and what OD entries they reference.
   Full details such as subobj extension and fixed subobj are not currently displayed and unless there is demand probably will not ever be.
-<br>
+
 [Available formats' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).
 
 Pictures
@@ -28,25 +28,25 @@ Pictures
 For those pictures, the file shown is: https://www.hbm.com/fileadmin/mediapool/support/download/weighing/pad/PAD4000_P80_113_01_COS.EDS
 
 ### General informations
-![General informations tab](Images/General infos.png)
+![General informations tab](../Images/General%20infos.png)
 
 ### OD manipulation
-![OD when you select an object](Images/OD selected object.png)
-![OD's communication specific parameters](Images/OD comm specific param.png)
+![OD when you select an object](../Images/OD%20selected%20object.png)
+![OD's communication specific parameters](../Images/OD%20comm%20specific%20param.png)
 
 ### PDO manipulation
 TPDO:<br>
-![TPDO tab](Images/TPDO.png)<br>
+![TPDO tab](../Images/TPDO.png)
 RPDO:<br>
-![RPDO tab](Images/RPDO.png)<br>
+![RPDO tab](../Images/RPDO.png)
 PDO editing:<br>
-![PDO edition](Images/Edit PDO.png)
+![PDO edition](../Images/Edit%20PDO.png)
 
 ### Modules
-![Modules tab](Images/Modules.png)
+![Modules tab](../Images/Modules.png)
 
 ### Profiles
 Available profiles:<br>
-![Profiles option](Images/Profiles.png)<br>
+![Profiles option](../Images/Profiles.png)
 Applying a profile:<br>
-![Profiles application](Images/Applying profile.png)
+![Profiles application](../Images/Applying%20profile.png)
