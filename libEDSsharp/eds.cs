@@ -679,7 +679,7 @@ namespace libEDSsharp
         /// product revision number according to identity object sub-index 03h (Unsigned32) 
         /// </summary>
         [EdsExport]
-        public UInt32 RevisionNumber;
+        public string RevisionNumber;
 
         /// <summary>
         /// indicate the supported baud rates (Boolean, 0 = not supported, 1=supported)
@@ -1282,6 +1282,30 @@ namespace libEDSsharp
             }
         }
 
+
+
+        public static string IncrementNumberAtEnd(string input, int increment)
+        {
+            // Regex to match the last token if it's a number
+            Regex regex = new Regex(@"(\d+)$");
+            Match match = regex.Match(input);
+
+            if (match.Success)
+            {
+                // Extract the number and increment it
+                int number = int.Parse(match.Value);
+                number+= increment;
+
+                // Replace the old number with the new number
+                string result = regex.Replace(input, number.ToString());
+                return result;
+            }
+
+            // Return the original string if no number is found at the end
+            return input;
+        }
+
+
         /// <summary>
         /// Duplicate current sub entry and add it to parent
         /// </summary>
@@ -1325,10 +1349,11 @@ namespace libEDSsharp
             }
             else
             {
-                originalOd = (parent != null && this.Subindex > 0) ? this : lastSubOd;
+                lastSubIndex = lastSubOd.Subindex;
+                originalOd = (parent != null && this.Subindex > 0 && this.Subindex+1 != lastSubIndex) ? this : lastSubOd;
                 newOd = originalOd.Clone(originalOd.parent);
                 maxSubIndex = EDSsharp.ConvertToUInt16(baseObject.subobjects[0].defaultvalue);
-                lastSubIndex = lastSubOd.Subindex;
+                
             }
 
             // insert new sub od
@@ -1342,7 +1367,12 @@ namespace libEDSsharp
                 newSubObjects.Add(newSubIndex++, subOd);
 
                 if (originalOd == subOd)
+                {
+                    if(subOd.Subindex == (newSubIndex-1))       // if new subindex is the last one and parmeter name ends with number: increment number 
+                        newOd.parameter_name = IncrementNumberAtEnd(newOd.parameter_name,1);
                     newSubObjects.Add(newSubIndex++, newOd);
+
+                }
             }
             if (originalOd == null)
                 newSubObjects.Add(newSubIndex++, newOd);

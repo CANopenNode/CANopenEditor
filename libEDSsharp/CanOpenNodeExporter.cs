@@ -475,6 +475,8 @@ namespace libEDSsharp
             file.WriteLine(string.Format("      VendorNumber:   {0}", eds.di.VendorNumber));
             file.WriteLine(string.Format("      ProductName:    {0}", eds.di.ProductName));
             file.WriteLine(string.Format("      ProductNumber:  {0}", eds.di.ProductNumber));
+            file.WriteLine(string.Format("      RevisionNumber: {0}", eds.di.RevisionNumber));
+ //           file.WriteLine(string.Format("      OrderCode: {0}", eds.di.));   FixMe: Missing OrderCode
             file.WriteLine("*******************************************************************************/");
             file.WriteLine("");
         }

@@ -962,6 +962,7 @@ namespace libEDSsharp
                 body_device.DeviceIdentity = new DeviceIdentity();
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
             body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber };
+            body_device.DeviceIdentity.specificationRevision = new specificationRevision { Value = eds.di.RevisionNumber };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
             body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber };
             if (eds.fi.Description != null && eds.fi.Description != "")
@@ -1264,6 +1265,8 @@ namespace libEDSsharp
                         eds.di.VendorName = body_device.DeviceIdentity.vendorName.Value ?? "";
                     if (body_device.DeviceIdentity.vendorID != null)
                         eds.di.VendorNumber = body_device.DeviceIdentity.vendorID.Value ?? "";
+                    if (body_device.DeviceIdentity.specificationRevision != null)
+                        eds.di.RevisionNumber = body_device.DeviceIdentity.specificationRevision.Value ?? "";
                     if (body_device.DeviceIdentity.productName != null)
                         eds.di.ProductName = body_device.DeviceIdentity.productName.Value ?? "";
                     if (body_device.DeviceIdentity.productID != null)
