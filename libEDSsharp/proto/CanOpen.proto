@@ -19,11 +19,11 @@ message CanOpen_FileInfo
 message CanOpen_DeviceInfo
 {
     string vendorName = 1; // Vendor name.
-	uint32 vendorID = 2; // Vendor ID
+    uint32 vendorID = 2; // Vendor ID.
     string productName = 3; // Product name.
-	uint32 productID = 4; // Product ID
-	uint32 revisionNumber = 5; // Revision number
-	string orderCode = 6; // Order code
+    uint32 productID = 4; // Product ID.
+    uint32 revisionNumber = 5; // Revision number.
+    string orderCode = 6; // Order code.
     bool baudRate10 = 100; // Support of the baud rate 10 kbit/s.
     bool baudRate20 = 101; // Support of the baud rate 20 kbit/s.
     bool baudRate50 = 102; // Support of the baud rate 50 kbit/s.
