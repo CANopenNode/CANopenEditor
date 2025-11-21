@@ -58,6 +58,7 @@
             this.contextMenuStrip_removeitem = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem_removeitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_insert = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_changewidth = new System.Windows.Forms.ToolStripMenuItem();
             this.grid1 = new SourceGrid.Grid();
             this.button_down = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -313,24 +314,32 @@
             this.contextMenuStrip_removeitem.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip_removeitem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_removeitem,
-            this.toolStripMenuItem_insert});
+            this.toolStripMenuItem_insert,
+            this.toolStripMenuItem_changewidth});
             this.contextMenuStrip_removeitem.Name = "contextMenuStrip_removeitem";
-            this.contextMenuStrip_removeitem.Size = new System.Drawing.Size(145, 48);
+            this.contextMenuStrip_removeitem.Size = new System.Drawing.Size(200, 70);
             this.contextMenuStrip_removeitem.Text = "Remove Item";
             // 
             // toolStripMenuItem_removeitem
             // 
             this.toolStripMenuItem_removeitem.Name = "toolStripMenuItem_removeitem";
-            this.toolStripMenuItem_removeitem.Size = new System.Drawing.Size(144, 22);
+            this.toolStripMenuItem_removeitem.Size = new System.Drawing.Size(199, 22);
             this.toolStripMenuItem_removeitem.Tag = "remove";
             this.toolStripMenuItem_removeitem.Text = "Remove Item";
             // 
             // toolStripMenuItem_insert
             // 
             this.toolStripMenuItem_insert.Name = "toolStripMenuItem_insert";
-            this.toolStripMenuItem_insert.Size = new System.Drawing.Size(144, 22);
+            this.toolStripMenuItem_insert.Size = new System.Drawing.Size(199, 22);
             this.toolStripMenuItem_insert.Tag = "insert";
             this.toolStripMenuItem_insert.Text = "Insert Item";
+            // 
+            // toolStripMenuItem_changewidth
+            // 
+            this.toolStripMenuItem_changewidth.Name = "toolStripMenuItem_changewidth";
+            this.toolStripMenuItem_changewidth.Size = new System.Drawing.Size(199, 22);
+            this.toolStripMenuItem_changewidth.Tag = "changewidth";
+            this.toolStripMenuItem_changewidth.Text = "Change mapping width";
             // 
             // grid1
             // 
@@ -395,7 +404,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button_addPDO);            
+            this.Controls.Add(this.button_addPDO);
             this.Controls.Add(this.button_savepdochanges);
             this.Controls.Add(this.button_deletePDO);
             this.Controls.Add(this.groupBox2);
@@ -449,5 +458,6 @@
         private System.Windows.Forms.Button button_down;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_changewidth;
     }
 }

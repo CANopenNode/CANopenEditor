@@ -30,6 +30,9 @@ namespace ODEditor
 
         Point RightClickPoint = new Point(0, 0);
 
+        // Info columns: ID, COB, Index
+        const int INFO_COLS_COUNT = 3;
+
         public DevicePDOView2()
         {
             InitializeComponent();
@@ -54,15 +57,15 @@ namespace ODEditor
 
             for (int x = 0; x < 64; x++)
             {
-                grid1[0, 3 + x] = new MyHeader(string.Format("{0}", x));
+                grid1[0, INFO_COLS_COUNT + x] = new MyHeader(string.Format("{0}", x));
             }
 
             for (int x = 0; x < 8; x++)
             {
-                grid1[1, 3 + x * 8] = new MyHeader(string.Format("Byte {0}", x));
-                grid1[1, 3 + x * 8].ColumnSpan = 8;
+                grid1[1, INFO_COLS_COUNT + x * 8] = new MyHeader(string.Format("Byte {0}", x));
+                grid1[1, INFO_COLS_COUNT + x * 8].ColumnSpan = 8;
 
-                grid1[1, 3 + x * 8].View.BackColor = Color.Tomato;
+                grid1[1, INFO_COLS_COUNT + x * 8].View.BackColor = Color.Tomato;
 
             }
 
@@ -85,6 +88,7 @@ namespace ODEditor
             int foundrow, foundcol;
             SourceGrid.Cells.ICellVirtual v = getItemAtGridPoint(RightClickPoint, out foundrow, out foundcol);
             SourceGrid.Cells.Cell c = (SourceGrid.Cells.Cell)v;
+            var width_limit = 64 + INFO_COLS_COUNT - foundcol;
 
             if (c == null)
                 return;
@@ -98,15 +102,29 @@ namespace ODEditor
             switch (e.ClickedItem.Tag)
             {
                 case "remove":
-                    location.slot.Mapping.Remove(location.entry);
+                    location.slot.Mapping.Remove(location.mappingentry);
 
                     break;
 
                 case "insert":
-                    ODentry od = new ODentry();
-                    location.slot.Mapping.Insert(location.ordinal, eds.dummy_ods[0x002]);
+                    PDOMappingEntry od = new PDOMappingEntry();
+                    od.entry = eds.dummy_ods[0x002];
+                    od.width = Math.Min(od.entry.Sizeofdatatype(), width_limit);
+                    location.slot.Mapping.Insert(location.ordinal, od);
                     break;
 
+                case "changewidth":
+                    var mapping = location.slot.Mapping[location.ordinal];
+                    width_limit = Math.Min(mapping.entry.Sizeofdatatype(), width_limit);
+                    if (mapping.width > width_limit)
+                        mapping.width = width_limit;
+                    var temp = new ChangeMappingWidth(mapping.width, width_limit);
+                    if (temp.ShowDialog() == DialogResult.OK)
+                    {
+                        mapping.width = temp.selected_width;
+                        location.slot.Mapping[location.ordinal] = mapping;
+                    }
+                    break;
             }
 
             helper.buildmappingsfromlists((ExporterFactory.Exporter)Properties.Settings.Default.ExporterType == ExporterFactory.Exporter.CANOPENNODE_V4);
@@ -133,25 +151,39 @@ namespace ODEditor
             PDOlocator location = (PDOlocator)((SourceGrid.Cells.Cell)cell.Cell).Tag;
             PDOSlot slot = location.slot;
 
-            ODentry newentry = null;
+            var newmapping = new PDOMappingEntry();
 
-            if (eds.tryGetODEntry(newindex, out newentry))
+            if (eds.tryGetODEntry(newindex, out newmapping.entry))
             {
                 if (newsubindex != 0)
-                    newentry = newentry.subobjects[newsubindex];
+                {
+                    newmapping.entry = newmapping.entry.subobjects[newsubindex];
+                    newmapping.width = newmapping.entry.Sizeofdatatype();
+                }
             }
             else
             {
                 return;
             }
 
-            if (location.entry == null)
+            int current_width = newmapping.entry.Sizeofdatatype();
+            int width_limit = 64 + INFO_COLS_COUNT - cell.Position.Column;
+            width_limit = Math.Min(width_limit, newmapping.entry.Sizeofdatatype());
+            current_width = Math.Min(width_limit, current_width);
+            newmapping.width = current_width;
+            var change_pdo_entry_width = new ChangeMappingWidth(current_width, width_limit);
+            if (change_pdo_entry_width.ShowDialog() == DialogResult.OK)
             {
-                slot.Mapping.Add(newentry);
+                newmapping.width = change_pdo_entry_width.selected_width;
+            }
+
+            if (location.mappingentry.entry == null)
+            {
+                slot.Mapping.Add(newmapping);
             }
             else
             {
-                slot.Mapping[location.ordinal] = newentry;
+                slot.Mapping[location.ordinal] = newmapping;
             }
 
             helper.buildmappingsfromlists((ExporterFactory.Exporter)Properties.Settings.Default.ExporterType == ExporterFactory.Exporter.CANOPENNODE_V4);
@@ -427,7 +459,6 @@ namespace ODEditor
             #if !NETCOREAPP
             comboStandard.Control.DropDownWidth = 0x100;
             #endif
-            comboStandard.Changed += ComboStandard_Changed;
 
             //tableLayoutPanel1.SuspendLayout();
 
@@ -444,8 +475,8 @@ namespace ODEditor
             {
                 if (isTXPDO != slot.isTXPDO())
                     continue;
-                if (grid1.ColumnsCount > 64+3)
-                    grid1.ColumnsCount = 64+3;
+                if (grid1.ColumnsCount > 64+INFO_COLS_COUNT)
+                    grid1.ColumnsCount = 64+INFO_COLS_COUNT;
                 grid1.Redim(grid1.RowsCount + 1, grid1.ColumnsCount);
                 grid1.Rows[grid1.RowsCount - 1].Tag = slot;
                 grid1.Rows[row + 2].Height = 30;
@@ -460,33 +491,34 @@ namespace ODEditor
 
                 int bitoff = 0;
                 int ordinal = 0;
-                foreach (ODentry entry in slot.Mapping)
+                foreach (PDOMappingEntry mappingentry in slot.Mapping)
                 {
-                    if ((bitoff + entry.Sizeofdatatype()) > 64)
+                    if ((bitoff + mappingentry.width) > 64)
                     {
                        string toDisplay = string.Join(Environment.NewLine, slot.Mapping);
                        MessageBox.Show(string.Format("Invalid TXPDO mapping parameters in 0x{0:X}!\r\nTrying to map more than the maximum lenght of a CAN message (8 bytes).\r\n\r\nMembers are:\r\n{1}", slot.ConfigurationIndex,toDisplay));
                         break;
                     }
-                        string target = slot.getTargetName(entry);
-                        grid1[row + 2, bitoff + 3] = new SourceGrid.Cells.Cell(target, comboStandard);
-                        grid1[row + 2, bitoff + 3].ColumnSpan = entry.Sizeofdatatype();
-                        grid1[row + 2, bitoff + 3].View = viewNormal;
+                    string target = slot.getTargetName(mappingentry.entry);
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT] = new SourceGrid.Cells.Cell(target, comboStandard);
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].ColumnSpan = mappingentry.width;
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].View = viewNormal;
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].ToolTipText = grid1[row + 2, bitoff + INFO_COLS_COUNT].DisplayText;
 
-                        PDOlocator location = new PDOlocator();
-                        location.slot = slot;
-                        location.ordinal = ordinal;
-                        location.entry = entry;
+                    PDOlocator location = new PDOlocator();
+                    location.slot = slot;
+                    location.ordinal = ordinal;
+                    location.mappingentry = mappingentry;
 
-                        Console.WriteLine(string.Format("New location at Row {0} Col {1} Loc {2}", row, bitoff, location.ToString()));
-                        grid1[row + 2, bitoff + 3].Tag = location;
+                    Console.WriteLine(string.Format("New location at Row {0} Col {1} Loc {2}", row, bitoff, location.ToString()));
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].Tag = location;
 
-                        ValueChangedController vcc = new ValueChangedController();
-                        vcc.ValueChangedEvent += Vcc_ValueChangedEvent;
+                    ValueChangedController vcc = new ValueChangedController();
+                    vcc.ValueChangedEvent += Vcc_ValueChangedEvent;
 
 
-                        grid1[row + 2, bitoff + 3].AddController(vcc);
-                        bitoff += entry.Sizeofdatatype();
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].AddController(vcc);
+                    bitoff += mappingentry.width;
 
 
                     ordinal++;
@@ -496,23 +528,24 @@ namespace ODEditor
                 //Pad out with an empty combo
                 if (bitoff < 64)
                 {
-                    grid1[row + 2, bitoff + 3] = new SourceGrid.Cells.Cell("Empty", comboStandard);
-                    int colspan = 64 - bitoff;
-                    if (colspan > 8)
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT] = new SourceGrid.Cells.Cell("Empty", comboStandard);
+                    // Align "Empty" cell to byte end
+                    int colspan = (64 - bitoff) % 8;
+                    if ((colspan == 0) && ((64 - bitoff) > 8))
                         colspan = 8;
-                    grid1[row + 2, bitoff + 3].ColumnSpan = colspan;
-                    grid1[row + 2, bitoff + 3].View = viewEmpty;
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].ColumnSpan = colspan;
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].View = viewEmpty;
                     ValueChangedController vcc = new ValueChangedController();
                     vcc.ValueChangedEvent += Vcc_ValueChangedEvent;
-                    grid1[row + 2, bitoff + 3].AddController(vcc);
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].AddController(vcc);
 
                     PDOlocator location = new PDOlocator();
                     location.slot = slot;
                     location.ordinal = ordinal;
-                    location.entry = null;
+                    location.mappingentry.entry = null;
 
                     Console.WriteLine(string.Format("New location at Row {0} Col {1} Loc {2}", row, bitoff, location.ToString()));
-                    grid1[row + 2, bitoff + 3].Tag = location;
+                    grid1[row + 2, bitoff + INFO_COLS_COUNT].Tag = location;
 
 
                 }
@@ -521,12 +554,6 @@ namespace ODEditor
 
             if (!updatechoices)
                 grid1.VScrollBar.Value = savVScrollValue;
-        }
-
-        private void ComboStandard_Changed(object sender, EventArgs e)
-        {
-
-
         }
 
         public void redrawtable()
@@ -561,12 +588,12 @@ namespace ODEditor
         {
             public PDOSlot slot;
             public int ordinal;
-            public ODentry entry;
+            public PDOMappingEntry mappingentry;
 
             public override string ToString()
             {
                 string msg;
-                msg = String.Format("Ordinal {0} , slot {1} entry {2}", ordinal, slot.ToString(), entry == null ? "NULL" : entry.ToString());
+                msg = String.Format("Ordinal {0} , slot {1} entry {2}", ordinal, slot.ToString(), mappingentry.entry == null ? "NULL" : mappingentry.ToString());
 
                 return msg;
             }
@@ -581,7 +608,7 @@ namespace ODEditor
 
         private void button_down_Click(object sender, EventArgs e)
         {
-            int newwidth = grid1.Columns[3].Width - 10;
+            int newwidth = grid1.Columns[INFO_COLS_COUNT].Width - 10;
             if (newwidth < 18)
                 newwidth = 18;
 
@@ -589,19 +616,19 @@ namespace ODEditor
 
             for (int x = 0; x < 64; x++)
             {
-                grid1.Columns[x + 3].Width = newwidth;
+                grid1.Columns[x + INFO_COLS_COUNT].Width = newwidth;
             }
 
         }
 
         private void button_up_Click(object sender, EventArgs e)
         {
-            int newwidth = grid1.Columns[3].Width + 10;
+            int newwidth = grid1.Columns[INFO_COLS_COUNT].Width + 10;
             Console.WriteLine("New Width " + newwidth.ToString());
 
             for (int x = 0; x < 64; x++)
             {
-                grid1.Columns[x + 3].Width = newwidth;
+                grid1.Columns[x + INFO_COLS_COUNT].Width = newwidth;
             }
 
         }
@@ -696,7 +723,7 @@ namespace ODEditor
 
             foreach (ODentry entry in entries)
             {
-                location.slot.insertMapping(location.ordinal, entry);
+                location.slot.insertMapping(location.ordinal, new PDOMappingEntry(entry, entry.Sizeofdatatype()));
             }
 
             helper.buildmappingsfromlists((ExporterFactory.Exporter)Properties.Settings.Default.ExporterType == ExporterFactory.Exporter.CANOPENNODE_V4);
