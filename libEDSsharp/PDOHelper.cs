@@ -6,6 +6,27 @@ using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
+
+    /// <summary>
+    /// Represents a single PDO mapping entry
+    /// Holds a reference to ODentry and a mapped width
+    /// </summary>
+    public struct PDOMappingEntry
+    {
+        public ODentry entry;
+        public int width;
+
+        public PDOMappingEntry(ODentry entry = null, int width = 0)
+        {
+            if ((entry != null) && (width == 0))
+                this.width = entry.Sizeofdatatype();
+            else
+                this.width = width;
+
+            this.entry = entry;
+        }
+    }
+
     /// <summary>
     /// Represent a PDO slot (mapping + communication index)
     /// </summary>
@@ -109,7 +130,7 @@ namespace libEDSsharp
         /// <summary>
         /// PDO mapping
         /// </summary>
-        public List<ODentry> Mapping = new List<ODentry>();
+        public List<PDOMappingEntry> Mapping = new List<PDOMappingEntry>();
         /// <summary>
         /// PDO inhibit time,multiple of 100us
         /// </summary>
@@ -142,7 +163,7 @@ namespace libEDSsharp
             configloc = "PERSIST_COMM";
             mappingloc = "PERSIST_COMM";
             transmissiontype = 254;
-            Mapping = new List<ODentry>();
+            Mapping = new List<PDOMappingEntry>();
             DescriptionComm = "";
             DescriptionMap = "";
         }
@@ -194,15 +215,15 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="ordinal">The zero-based index at which item should be inserted</param>
         /// <param name="entry">OD entry to be mapped</param>
-        public void insertMapping(int ordinal, ODentry entry)
+        public void insertMapping(int ordinal, PDOMappingEntry entry)
         {
             int size = 0;
-            foreach(ODentry e in Mapping)
+            foreach(PDOMappingEntry e in Mapping)
             {
-                size += e.Sizeofdatatype();
+                size += e.width;
             }
 
-            if (size + entry.Sizeofdatatype() > 64)
+            if (size + entry.width > 64)
                 return;
 
             Mapping.Insert(ordinal,entry);
@@ -333,10 +354,10 @@ namespace libEDSsharp
                         //validate this against what is in the actual object mapped
                         try
                         {
-                            ODentry maptarget;
+                            var maptarget = new PDOMappingEntry(null, datasize);
                             if (pdosub == 0)
                             {
-                                if (eds.tryGetODEntry(pdoindex, out maptarget) == false)
+                                if (eds.tryGetODEntry(pdoindex, out maptarget.entry) == false)
                                 {
                                     Console.WriteLine("MAPPING FAILED");
                                     //Critical PDO error
@@ -344,15 +365,17 @@ namespace libEDSsharp
                                 }
                             }
                             else
-                                maptarget = eds.ods[pdoindex].Getsubobject(pdosub);
+                                maptarget.entry = eds.ods[pdoindex].Getsubobject(pdosub);
 
-                            if (maptarget.prop.CO_disabled == false && datasize == (maptarget.Sizeofdatatype()))
+                            if ((maptarget.entry.prop.CO_disabled == false) &&
+                                (datasize <= maptarget.entry.Sizeofdatatype()) && 
+                                (datasize > 0))
                             {
                                 //mappingfail = false;
                             }
                             else
                             {
-                                Console.WriteLine(String.Format("MAPPING FAILED {0} != {1}", datasize, maptarget.Sizeofdatatype()));
+                                Console.WriteLine(String.Format("MAPPING FAILED {0} != {1}", datasize, maptarget.entry.Sizeofdatatype()));
                             }
 
                             slot.Mapping.Add(maptarget);
@@ -504,11 +527,11 @@ namespace libEDSsharp
                 mapping.addsubobject(0x00, sub);
 
                 byte mappingcount = 1;
-                foreach (ODentry mapslot in slot.Mapping)
+                foreach (PDOMappingEntry mapslot in slot.Mapping)
                 {
                     sub = new ODentry(String.Format("Application object {0:X}", mappingcount), (ushort)slot.MappingIndex, mappingcount);
                     sub.datatype = DataType.UNSIGNED32;
-                    sub.defaultvalue = string.Format("0x{0:X4}{1:X2}{2:X2}", mapslot.Index, mapslot.Subindex, mapslot.Sizeofdatatype());
+                    sub.defaultvalue = string.Format("0x{0:X4}{1:X2}{2:X2}", mapslot.entry.Index, mapslot.entry.Subindex, mapslot.width);
                     sub.accesstype = EDSsharp.AccessType.rw;
                     mapping.addsubobject(mappingcount, sub);
 

@@ -47,7 +47,7 @@ jobs:
       run: |
           dotnet test --no-build --verbosity normal GUITests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\GUITests.dll
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: EDSEditor_${{ matrix.dotnet }}
         path: |

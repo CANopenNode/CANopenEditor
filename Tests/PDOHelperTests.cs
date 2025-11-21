@@ -26,14 +26,14 @@ namespace Tests
 
 
             //fill it with some dummy entries
-            ODentry od;
-            tryGetODEntry(0x0002, out od);
+            var od = new PDOMappingEntry();
+            tryGetODEntry(0x0002, out od.entry);
             slot.Mapping.Add(od);
 
-            tryGetODEntry(0x0003, out od);
+            tryGetODEntry(0x0003, out od.entry);
             slot.Mapping.Add(od);
 
-            tryGetODEntry(0x0004, out od);
+            tryGetODEntry(0x0004, out od.entry);
             slot.Mapping.Add(od);
 
             pdo.buildmappingsfromlists(true);
@@ -103,14 +103,14 @@ namespace Tests
 
 
             //fill it with some dummy entries
-            ODentry od;
-            tryGetODEntry(0x0002, out od);
+            var od = new PDOMappingEntry();
+            tryGetODEntry(0x0002, out od.entry);
             slot.Mapping.Add(od);
 
-            tryGetODEntry(0x0003, out od);
+            tryGetODEntry(0x0003, out od.entry);
             slot.Mapping.Add(od);
 
-            tryGetODEntry(0x0004, out od);
+            tryGetODEntry(0x0004, out od.entry);
             slot.Mapping.Add(od);
 
             pdo.buildmappingsfromlists(true);

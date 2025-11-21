@@ -10,7 +10,6 @@ namespace EDSSharp
 {
     class Program
     {
-
         static libEDSsharp.EDSsharp eds = new EDSsharp();
 
         static void Main(string[] args)
@@ -20,26 +19,20 @@ namespace EDSSharp
 
                 Dictionary<string, string> argskvp = new Dictionary<string, string>();
 
-                int argv = 0;
-
-                for (argv = 0; argv < (args.Length - 1); argv++)
+                for (int argv = 0; argv < (args.Length - 1); argv++)
                 {
                     if (args[argv] == "--infile")
                     {
-                        argskvp.Add("--infile", args[argv + 1]);
+                        argskvp.Add("--infile", args[++argv]);
                     }
-
-                    if (args[argv] == "--outfile")
+                    else if (args[argv] == "--outfile")
                     {
-                        argskvp.Add("--outfile", args[argv + 1]);
+                        argskvp.Add("--outfile", args[++argv]);
                     }
-
-                    if (args[argv] == "--type")
+                    else if (args[argv] == "--type")
                     {
-                        argskvp.Add("--type", args[argv + 1]);
+                        argskvp.Add("--type", args[++argv]);
                     }
-
-                    argv++;
                 }
 
 
@@ -66,29 +59,47 @@ namespace EDSSharp
 
 
                         default:
+                            Program.WriteError("Invalid INFILE extension.");
+                            PrintHelpText();
                             return;
 
                     }
                     if(eds != null)
                     {
                         Export(outfile, outtype);
+                        Console.WriteLine("Successful conversion");
+                    }
+                    else
+                    {
+                        Program.WriteError("Invalid XDD INFILE.");
+                        PrintHelpText();
                     }
                 }
                 else
                 {
+                    Program.WriteError("INFILE or OUTFILE missing.");
                     PrintHelpText();
                 }
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.ToString());
+                Console.WriteLine("");
+                Program.WriteError("Invalid EDS INFILE.");
                 PrintHelpText();
             }
         }
 
+        private static void WriteError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(message);
+            Console.ResetColor();
+            Console.WriteLine("");
+        }
+
         private static void openEDSfile(string infile)
         {
-          
             eds.Loadfile(infile);
         }
 
@@ -175,11 +186,14 @@ namespace EDSSharp
         static void PrintHelpText()
         {
             string name = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
-            Console.WriteLine($"Usage: {name} --infile file.[xdd|eds] --outfile [valid output file] [OPTIONAL] --type [exporter type]");
-            Console.WriteLine("The output file format depends on --outfile extension and --type");
-            Console.WriteLine("If --outfile extension matcher one exporter then --type IS NOT needed");
-            Console.WriteLine("If --outfile extension matcher multiple exporter then --type IS needed");
-            Console.WriteLine("If --outfile has no extension --type IS needed");
+            Console.WriteLine($"Usage: {name} --infile FILE1 --outfile FILE2 [--type EXPORTER]");
+            Console.WriteLine("Converts a given XDD or EDS file to many other available types.");
+            Console.WriteLine($"Example: {name} --infile project.xdd --outfile map.md --type NetworkPDOReport");
+            Console.WriteLine("");
+            Console.WriteLine("FILE1 shall be a .xdd or .eds file.");
+            Console.WriteLine("FILE2 shall have the extension of one of the supported exporters below.");
+            Console.WriteLine("EXPORTER shall be one of the listed exporters below IF AND ONLY IF multiple of them support your output file extension.");
+            Console.WriteLine("");
             Console.WriteLine("Exporter types:");
 
             var exporters = Filetypes.GetExporters();
