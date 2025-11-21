@@ -23,6 +23,7 @@ using libEDSsharp;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Drawing;
+using System.Linq;
 
 namespace ODEditor
 {
@@ -44,6 +45,7 @@ namespace ODEditor
             textBox_productnumber.Text = eds.di.ProductNumber;
             textBox_vendorname.Text = eds.di.VendorName;
             textBox_vendornumber.Text = eds.di.VendorNumber;
+            textBox_revisionnumber.Text = eds.di.RevisionNumber;
 
             textBox_fileversion.Text = eds.fi.FileVersion;
             textBox_di_description.Text = eds.fi.Description;
@@ -140,6 +142,7 @@ namespace ODEditor
                 eds.di.ProductNumber = textBox_productnumber.Text;
                 eds.di.VendorName = textBox_vendorname.Text;
                 eds.di.VendorNumber = textBox_vendornumber.Text;
+                eds.di.RevisionNumber = textBox_revisionnumber.Text;
 
                 eds.fi.FileVersion = textBox_fileversion.Text;
                 eds.fi.Description = textBox_di_description.Text;

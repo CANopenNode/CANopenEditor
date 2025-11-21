@@ -100,8 +100,16 @@ namespace libEDSsharp
                 dev = (ISO15745ProfileContainer)serializer.Deserialize(reader);
                 reader.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                if (e is System.InvalidOperationException)
+                {
+                    Warnings.warning_list.Add(String.Format("{0} {1} Action aborted!", e.Message, e.InnerException.Message));
+                }
+                else
+                {
+                    Warnings.warning_list.Add(String.Format("{0} Action aborted!", e.ToString()));
+                }
                 return null;
             }
 
@@ -954,6 +962,7 @@ namespace libEDSsharp
                 body_device.DeviceIdentity = new DeviceIdentity();
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
             body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber };
+            body_device.DeviceIdentity.specificationRevision = new specificationRevision { Value = eds.di.RevisionNumber };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
             body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber };
             if (eds.fi.Description != null && eds.fi.Description != "")
@@ -1256,6 +1265,8 @@ namespace libEDSsharp
                         eds.di.VendorName = body_device.DeviceIdentity.vendorName.Value ?? "";
                     if (body_device.DeviceIdentity.vendorID != null)
                         eds.di.VendorNumber = body_device.DeviceIdentity.vendorID.Value ?? "";
+                    if (body_device.DeviceIdentity.specificationRevision != null)
+                        eds.di.RevisionNumber = body_device.DeviceIdentity.specificationRevision.Value ?? "";
                     if (body_device.DeviceIdentity.productName != null)
                         eds.di.ProductName = body_device.DeviceIdentity.productName.Value ?? "";
                     if (body_device.DeviceIdentity.productID != null)

@@ -290,17 +290,20 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.ShowToolTips = true;
             this.tabControl1.Size = new System.Drawing.Size(1599, 909);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 2;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             this.tabControl1.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.tabControl1_ControlsChanged);
-            this.tabControl1.ControlRemoved += new System.Windows.Forms.ControlEventHandler(this.tabControl1_Controlsremoved);
+            this.tabControl1.ControlRemoved += new System.Windows.Forms.ControlEventHandler(this.tabControl1_ControlsChanged);
             this.tabControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.ODEditor_MainForm_DragDrop);
             this.tabControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.ODEditor_MainForm_DragEnter);
             this.tabControl1.DragOver += new System.Windows.Forms.DragEventHandler(this.ODEditor_MainForm_DragOver);
             this.tabControl1.DragLeave += new System.EventHandler(this.ODEditor_MainForm_DragLeave);
             this.tabControl1.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.ODEditor_MainForm_QueryContinueDrag);
+            this.tabControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseClick);
+            this.tabControl1.MouseHover += new System.EventHandler(this.tabControl1_MouseHover);
             // 
             // ODEditor_MainForm
             // 

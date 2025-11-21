@@ -310,6 +310,7 @@ namespace libEDSsharp
 
             //device.DeviceIdentity.specificationRevision.value = 
             device.DeviceIdentity.specificationRevision = new specificationRevision();
+            device.DeviceIdentity.specificationRevision.Value = eds.di.RevisionNumber;
             device.DeviceIdentity.specificationRevision.readOnly = true;
 
             device.DeviceIdentity.instanceName = new instanceName();
@@ -1160,6 +1161,7 @@ namespace libEDSsharp
                     eds.di.ProductNumber = obj.DeviceIdentity.productID.Value;
                     eds.di.VendorName = obj.DeviceIdentity.vendorName.Value;
                     eds.di.VendorNumber = obj.DeviceIdentity.vendorID.Value;
+                    eds.di.RevisionNumber = obj.DeviceIdentity.specificationRevision.Value;
 
                     foreach (object o in obj.DeviceIdentity.productText.Items)
                     {

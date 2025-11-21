@@ -159,24 +159,29 @@ namespace ODEditor
             int j = 1;
             foreach (ODentry od in srcObjects.Values)
             {
-                String numpattern = @"(\w*\d+\Z)";
                 string newname;
+                string numpattern = @"^(.*?)(\d+)$";
+                Regex regex = new Regex(numpattern);
+                Match match = regex.Match(od.parameter_name);
 
-                string[] words = Regex.Split(od.parameter_name, numpattern);
-                // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
-                if (words.Length > 1)
+                if (match.Success)
                 {
+                    // Extract the string part and the number part
+                    string stringPart = match.Groups[1].Value;
+                    int numberPart = int.Parse(match.Groups[2].Value);
 
-                    // value1 = Int32.Parse(m.Groups[1].Value);
-                    int nameidx = Int32.Parse(words[1]) + j++;
+                    // Increment the number by 1
+                    numberPart++;
 
-                    newname = words[0] + nameidx;// nameidx.ToString  ;
-
+                    // Reassemble the string with the incremented number
+                    newname = stringPart + numberPart.ToString();
                 }
-                else {
-                     newname = od.parameter_name;
+                else
+                {
+                    newname = od.parameter_name;
                 }
-                    int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {newname}");
+
+                int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {newname}");
                 int cellIdx = dataGridView_InitialColumnCount;
 
                 foreach (int o in offsets)
@@ -235,17 +240,23 @@ namespace ODEditor
                             UInt16 newIndex = (UInt16)(od.Index + o);
                             ODentry newObject = od.Clone();
 
-                            String pattern = @"(\w*\d+\Z)";
+                            string pattern = @"^(.*?)(\d+)$";
 
-                            string[] words = Regex.Split(od.parameter_name, pattern);
-                            // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
-                            if (words.Length > 1)
+                            Regex regex = new Regex(pattern);
+                            Match match = regex.Match(od.parameter_name);
+
+                            if (match.Success)
                             {
-                                int nameidx = Int32.Parse(words[1]) + i++;
-                                newObject.parameter_name = words[0] + nameidx;// nameidx.ToString  ;
+                                // Extract the string part and the number part
+                                string stringPart = match.Groups[1].Value;
+                                int numberPart = int.Parse(match.Groups[2].Value);
 
+                                // Increment the number by 1
+                                numberPart++;
+
+                                // Reassemble the string with the incremented number
+                                newObject.parameter_name = stringPart + numberPart.ToString();
                             }
-
                             newObject.Index = newIndex;
 
                             eds.ods.Add(newIndex, newObject);

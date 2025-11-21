@@ -168,6 +168,7 @@ namespace libEDSsharp
 
                 // Verify objects, if they have set correct "CO_countLabel", according to Object Dictionary Requirements By CANopenNode V4.
                 // https://github.com/CANopenNode/CANopenNode/blob/master/doc/objectDictionary.md
+
                 VerifyCountLabel(od, 0x1000, 0x1000, "NMT");
                 VerifyCountLabel(od, 0x1001, 0x1001, "EM");
                 VerifyCountLabel(od, 0x1005, 0x1005, "SYNC");
@@ -198,7 +199,10 @@ namespace libEDSsharp
         {
             if (od.Index >= indexL && od.Index <= indexH && od.prop.CO_countLabel != countLabel)
             {
-                Warnings.AddWarning($"Error in 0x{od.Index:X4}: 'Count Label' must be '{countLabel}'", Warnings.warning_class.WARNING_BUILD);
+                Warnings.AddWarning($"Error in 0x{od.Index:X4}: missing 'Count Label' '{countLabel}', was added", Warnings.warning_class.WARNING_BUILD);
+                od.prop.CO_countLabel = countLabel;
+            
+                // ToDo Add "dirty" to indicate unsaved changes              
             }
         }
 
@@ -448,7 +452,7 @@ namespace libEDSsharp
             gitVersion, odname,
             Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
             eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
-            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
+            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber, eds.di.RevisionNumber,
             eds.fi.Description));
 
             file.WriteLine(string.Format(@"
@@ -602,8 +606,33 @@ namespace libEDSsharp
     https://github.com/CANopenNode/CANopenEditor
 
     DON'T EDIT THIS FILE MANUALLY, UNLESS YOU KNOW WHAT YOU ARE DOING !!!!
-*******************************************************************************/
+*******************************************************************************
 
+    File info:
+        File Names:   {1}.h; {1}.c
+        Project File: {2}
+        File Version: {3}
+
+        Created:      {4}
+        Created By:   {5}
+        Modified:     {6}
+        Modified By:  {7}
+
+    Device Info:
+        Vendor Name:  {8}
+        Vendor ID:    {9}
+        Product Name: {10}
+        Product ID:   {11}
+
+        Description:  {12}
+*******************************************************************************/",
+            gitVersion, odname,
+            Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
+            eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
+            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber, eds.di.RevisionNumber,
+            eds.fi.Description));
+
+            file.WriteLine(string.Format(@"
 #define OD_DEFINITION
 #include ""301/CO_ODinterface.h""
 #include ""{1}.h""
