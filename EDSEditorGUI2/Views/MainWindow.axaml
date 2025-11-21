@@ -1,7 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         xmlns:vm="using:EDSEditorGUI2.ViewModels"
         xmlns:view="using:EDSEditorGUI2.Views"
+        xmlns:converter="using:EDSEditorGUI2.Converter"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -15,10 +17,10 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
+    <dialogHost:DialogHost Identifier="RootDialogHost" >
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
+        <Menu DockPanel.Dock="Top" x:Name="menu">
+            <MenuItem Header="_File" x:Name="fileMenu" >
                 <MenuItem Header="_New" Command="{Binding AddNewDevice}"/>
                 <MenuItem Header="_Open"/>
                 <MenuItem Header="_Save Project" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
@@ -35,8 +37,7 @@
                 <Separator/>
                 <MenuItem Header="_Quit"/>
             </MenuItem>
-            <MenuItem Header="_Insert Profile">
-            </MenuItem>
+            <MenuItem Header="_Insert Profile" x:Name="profileMenu" IsEnabled="{Binding SelectedDevice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
             <MenuItem Header="_Reports">
             </MenuItem>
             <MenuItem Header="Tools">
@@ -55,7 +56,36 @@
           </ListBox>
         </StackPanel>
       <view:DeviceView DataContext="{Binding SelectedDevice}" />
-  </DockPanel>
+    </DockPanel>
+  </dialogHost:DialogHost>
 
+  <Window.Resources>
+    <!-- Insert Objects dialog -->
+    <StackPanel x:Key="InsertObjectsDialog" MaxWidth="900">
+      <TextBlock Text="Target:" />
+      <ComboBox x:Name="InsertObjects_target" ItemsSource="{Binding Network}" SelectedItem="{Binding SelectedDevice}" MaxDropDownHeight="100"  />
+      <TextBlock Text="Index Offset (single or space separated list for multiple insert)" />
+	  <TextBox x:Name="InsertObjects_Offsets" Watermark="1 100 500" Text="0" TextChanged="OnOffsetTextChanged"/>
 
+      <ScrollViewer>
+        <DataGrid Margin="20" ItemsSource="{Binding MergeStatus}"
+            GridLinesVisibility="All"
+            BorderThickness="1" BorderBrush="Gray"
+                  MaxHeight="500"
+                  x:Name="grid">
+
+          <DataGrid.Columns>
+            <DataGridCheckBoxColumn  Header="Insert" Width="*"
+                    Binding="{Binding Insert}"/>
+            <DataGridTextColumn Header="Original Object" Width="*" IsReadOnly="True"
+                    Binding="{Binding OriginalObject}" />
+		      </DataGrid.Columns>
+        </DataGrid>
+      </ScrollViewer>
+      <StackPanel Orientation="Horizontal">
+		    <Button x:Name="InsertObjects_Insert" IsDefault="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}" CommandParameter="insert">Insert</Button>
+        <Button x:Name="InsertObjects_Cancel" IsCancel="True" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
+      </StackPanel>
+    </StackPanel>
+  </Window.Resources>
 </Window>
