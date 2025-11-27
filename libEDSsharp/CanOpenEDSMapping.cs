@@ -406,7 +406,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">EDS accesstype</param>
         /// <param name="destination">protobuffer pdo access type</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public OdSubObject.Types.AccessPDO Convert(EDSsharp.AccessType source, OdSubObject.Types.AccessPDO destination, ResolutionContext context)
