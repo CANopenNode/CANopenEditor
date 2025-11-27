@@ -17,7 +17,7 @@ jobs:
 #    runs-on: ubuntu-latest # Error: setup-msbuild can only be run on Windows runners
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
     - name: Setup .NET
@@ -47,7 +47,7 @@ jobs:
       run: |
           dotnet test --no-build --verbosity normal GUITests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\GUITests.dll
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: EDSEditor_${{ matrix.dotnet }}
         path: |

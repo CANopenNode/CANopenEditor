@@ -110,6 +110,8 @@ BUGS
 If you find any, please open a bug report on github and attach any files you
 have created/opened etc.
 
+You might want to check your EDS/XDD file with this free [EDSchecker](https://www.vector.com/de/de/support-downloads/download-center/#product=%5B%2274771%22%5D&tab=1&pageSize=15&sort=date&order=desc)
+
 Pictures
 --------
 
