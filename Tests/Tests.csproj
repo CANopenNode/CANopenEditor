@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
     <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0</TargetFrameworks>
@@ -11,7 +11,7 @@
   </ItemGroup>
   <Target Name="CopyEDSSharpToTestOutDir" AfterTargets="Build">
     <ItemGroup>
-      <EDSSharpFiles Include="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\*"/>
+      <EDSSharpFiles Include="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\*" />
     </ItemGroup>
     <Copy SourceFiles="@(EDSSharpFiles)" DestinationFolder="$(OutDir)" />
   </Target>
@@ -21,15 +21,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="xunit" Version="2.7.0" />
-    <PackageReference Include="xunit.analyzers" Version="1.11.0" />
-    <PackageReference Include="xunit.assert" Version="2.7.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.7.0">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.analyzers" Version="1.25.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+    <PackageReference Include="xunit.assert" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.console" Version="2.9.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -220,6 +220,10 @@ namespace ODEditor
                 });
 
                 lvi.Tag = od;
+                if ((index == 0x100C) || (index == 0x100D))
+                {
+                    od.prop.CO_disabled = !eds.di.NG_Slave;
+                }
                 if (selectedObject != null && index == selectedObject.Index)
                     lvi.Selected = true;
                 if (od.prop.CO_disabled == true)

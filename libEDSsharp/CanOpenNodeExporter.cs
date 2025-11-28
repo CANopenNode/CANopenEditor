@@ -461,7 +461,24 @@ namespace libEDSsharp
     https://github.com/CANopenNode/CANopenEditor
 
     DON'T EDIT THIS FILE MANUALLY !!!!
-*******************************************************************************/", this.gitVersion));
+*******************************************************************************", this.gitVersion));
+            file.WriteLine("   FILE INFO:");
+            file.WriteLine(string.Format("      FileName:     {0}", Path.GetFileName(eds.projectFilename)));
+            file.WriteLine(string.Format("      FileVersion:  {0}", eds.fi.FileVersion));
+            file.WriteLine(string.Format("      CreationTime: {0}", eds.fi.CreationTime));
+            file.WriteLine(string.Format("      CreationDate: {0}", eds.fi.CreationDate));
+            file.WriteLine(string.Format("      CreatedBy:    {0}", eds.fi.CreatedBy));
+
+            file.WriteLine("");
+            file.WriteLine("   DEVICE INFO:");
+            file.WriteLine(string.Format("      VendorName:     {0}", eds.di.VendorName));
+            file.WriteLine(string.Format("      VendorNumber:   {0}", eds.di.VendorNumber));
+            file.WriteLine(string.Format("      ProductName:    {0}", eds.di.ProductName));
+            file.WriteLine(string.Format("      ProductNumber:  {0}", eds.di.ProductNumber));
+            file.WriteLine(string.Format("      RevisionNumber: {0}", eds.di.RevisionNumber));
+ //           file.WriteLine(string.Format("      OrderCode: {0}", eds.di.));   FixMe: Missing OrderCode
+            file.WriteLine("*******************************************************************************/");
+            file.WriteLine("");
         }
 
         private void export_h(string filename)
@@ -503,28 +520,9 @@ namespace libEDSsharp
 
 ");
 
-            file.WriteLine("/*******************************************************************************");
-            file.WriteLine("   FILE INFO:");
-            file.WriteLine(string.Format("      FileName:     {0}", Path.GetFileName(eds.projectFilename)));
-            file.WriteLine(string.Format("      FileVersion:  {0}", eds.fi.FileVersion));
-            file.WriteLine(string.Format("      CreationTime: {0}", eds.fi.CreationTime));
-            file.WriteLine(string.Format("      CreationDate: {0}", eds.fi.CreationDate));
-            file.WriteLine(string.Format("      CreatedBy:    {0}", eds.fi.CreatedBy));
-            file.WriteLine("*******************************************************************************/");
-            file.WriteLine("");
-            file.WriteLine("");
 
-            file.WriteLine("/*******************************************************************************");
-            file.WriteLine("   DEVICE INFO:");
-            file.WriteLine(string.Format("      VendorName:     {0}", eds.di.VendorName));
-            file.WriteLine(string.Format("      VendorNumber:   {0}", eds.di.VendorNumber));
-            file.WriteLine(string.Format("      ProductName:    {0}", eds.di.ProductName));
-            file.WriteLine(string.Format("      ProductNumber:  {0}", eds.di.ProductNumber));
-            file.WriteLine("*******************************************************************************/");
-            file.WriteLine("");
-            file.WriteLine("");
 
-            file.WriteLine(@"/*******************************************************************************
+file.WriteLine(@"/*******************************************************************************
    FEATURES
 *******************************************************************************/");
 
