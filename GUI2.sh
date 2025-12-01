@@ -1,3 +1,3 @@
 #!/bin/sh
 
-dotnet run --project EDSEditorGUI2 --framework net8.0 --property WarningLevel=0 "$@"
+dotnet run --project EDSEditorGUI2 --property WarningLevel=0 "$@"
