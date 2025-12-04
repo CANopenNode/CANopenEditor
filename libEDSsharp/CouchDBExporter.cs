@@ -126,6 +126,28 @@ namespace libEDSsharp
 
                 // Prepare HTTP PUT request
                 string documentUrl = $"{couchDbUrl.TrimEnd('/')}/{couchDoc["_id"]}";
+
+                // First, try to get the existing document to get its revision
+                try
+                {
+                    HttpResponseMessage getResponse = await httpClient.GetAsync(documentUrl);
+                    if (getResponse.IsSuccessStatusCode)
+                    {
+                        string existingDoc = await getResponse.Content.ReadAsStringAsync();
+                        JObject existingJson = JObject.Parse(existingDoc);
+                        
+                        // Add the revision from the existing document
+                        if (existingJson.ContainsKey("_rev"))
+                        {
+                            couchDoc["_rev"] = existingJson["_rev"];
+                        }
+                    }
+                }
+                catch
+                {
+                    // Document doesn't exist yet, proceed with new document
+                }
+
                 var content = new StringContent(couchDoc.ToString(), Encoding.UTF8, "application/json");
 
                 // Send PUT request
