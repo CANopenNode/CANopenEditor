@@ -34,7 +34,7 @@ namespace ODEditor
             if ((mask & 0x10) == 0x10)
                 checkBox_structwarning.Checked = true;
 
-
+            textBox_couchdburl.Text = Properties.Settings.Default.CouchDBUrl ?? "http://localhost:5984/canopen";
         }
 
         private void button_close_Click(object sender, EventArgs e)
@@ -66,6 +66,7 @@ namespace ODEditor
 
             Warnings.warning_mask = mask;
 
+            Properties.Settings.Default.CouchDBUrl = textBox_couchdburl.Text;
 
             Properties.Settings.Default.Save();
             this.Close();

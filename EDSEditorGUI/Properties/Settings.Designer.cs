@@ -46,5 +46,17 @@ namespace ODEditor.Properties {
                 this["WarningMask"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:5984/canopen")]
+        public string CouchDBUrl {
+            get {
+                return ((string)(this["CouchDBUrl"]));
+            }
+            set {
+                this["CouchDBUrl"] = value;
+            }
+        }
     }
 }

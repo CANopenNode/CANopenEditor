@@ -8,5 +8,8 @@
     <Setting Name="WarningMask" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">65535</Value>
     </Setting>
+    <Setting Name="CouchDBUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:5984/canopen</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

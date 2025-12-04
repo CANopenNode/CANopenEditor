@@ -49,6 +49,8 @@
     <PackageReference Include="Google.Protobuf.Tools" Version="3.27.2" />
     <PackageReference Include="AutoMapper" Version="10.0.0" Condition="'$(TargetFramework)' == 'net481'" />
     <PackageReference Include="AutoMapper" Version="13.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" Condition="'$(TargetFramework)' == 'net481'" />
   </ItemGroup>
 
   <ItemGroup>
