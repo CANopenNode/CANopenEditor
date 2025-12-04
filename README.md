@@ -86,36 +86,6 @@ Collaborators
 <!-- readme: collaborators -start -->
 <table>
 	<tbody>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/robincornelius">
-                    <img src="https://avatars.githubusercontent.com/u/159000?v=4" width="100;" alt="robincornelius"/>
-                    <br />
-                    <sub><b>robincornelius</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/nimrof">
-                    <img src="https://avatars.githubusercontent.com/u/9848846?v=4" width="100;" alt="nimrof"/>
-                    <br />
-                    <sub><b>nimrof</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/CANopenNode">
-                    <img src="https://avatars.githubusercontent.com/u/13575344?v=4" width="100;" alt="CANopenNode"/>
-                    <br />
-                    <sub><b>CANopenNode</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/trojanobelix">
-                    <img src="https://avatars.githubusercontent.com/u/15106425?v=4" width="100;" alt="trojanobelix"/>
-                    <br />
-                    <sub><b>trojanobelix</b></sub>
-                </a>
-            </td>
-		</tr>
 	<tbody>
 </table>
 <!-- readme: collaborators -end -->
@@ -206,14 +176,21 @@ Contributors
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/KMK0815">
+                    <img src="https://avatars.githubusercontent.com/u/42606060?v=4" width="100;" alt="KMK0815"/>
+                    <br />
+                    <sub><b>KMK0815</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
                 <a href="https://github.com/gotocoffee1">
                     <img src="https://avatars.githubusercontent.com/u/26260677?v=4" width="100;" alt="gotocoffee1"/>
                     <br />
                     <sub><b>gotocoffee1</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/wilkinsw">
                     <img src="https://avatars.githubusercontent.com/u/10655771?v=4" width="100;" alt="wilkinsw"/>
@@ -258,8 +235,6 @@ Contributors
                     <sub><b>DylanRobertBennett</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/rgruening">
                     <img src="https://avatars.githubusercontent.com/u/72022918?v=4" width="100;" alt="rgruening"/>
@@ -304,8 +279,6 @@ Contributors
                     <sub><b>DaMutz</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/StormOli">
                     <img src="https://avatars.githubusercontent.com/u/4819887?v=4" width="100;" alt="StormOli"/>
