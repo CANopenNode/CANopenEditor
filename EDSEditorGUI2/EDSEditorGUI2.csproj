@@ -14,6 +14,17 @@
     <ProjectReference Include="..\libEDSsharp\libEDSsharp.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyProfilesDirectory" AfterTargets="Build">
+    <ItemGroup>
+      <ResourceFiles Include="../EDSEditorGUI/Profiles/**/*.*" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(ResourceFiles)"
+      DestinationFolder="$(OutDir)Profiles\%(RecursiveDir)"
+      SkipUnchangedFiles="true" />
+  </Target>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.1.5" />

@@ -13,11 +13,24 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.5" />
+    <PackageReference Include="Avalonia.Headless.XUnit" Version="11.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EDSEditorGUI2\EDSEditorGUI2.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyProfilesDirectory" AfterTargets="Build">
+    <ItemGroup>
+      <ResourceFiles Include="../EDSEditorGUI/Profiles/**/*.*" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(ResourceFiles)"
+      DestinationFolder="$(OutDir)Profiles\%(RecursiveDir)"
+      SkipUnchangedFiles="true" />
+  </Target>
 
   <ItemGroup>
     <Using Include="Xunit" />

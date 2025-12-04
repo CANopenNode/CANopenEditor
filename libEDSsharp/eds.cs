@@ -1281,7 +1281,32 @@ namespace libEDSsharp
                     break;
             }
         }
+        /// <summary>
+        /// Incremement number at end of string by given increment
+        /// </summary>
+        /// <param input>SubObject name as string to increment</param>
+        /// <param increment>increment for next SubObject</param>
+        /// <returns>incremented name or the original string if no number is found at the end</returns>
+        public static string IncrementNumberAtEnd(string input, int increment)
+        {
+            // Regex to match the last token if it's a number
+            Regex regex = new Regex(@"(\d+)$");
+            Match match = regex.Match(input);
 
+            if (match.Success)
+            {
+                // Extract the number and increment it
+                int number = int.Parse(match.Value);
+                number += increment;
+
+                // Replace the old number with the new number
+                string result = regex.Replace(input, number.ToString());
+                return result;
+            }
+
+            // Return the original string if no number is found at the end
+            return input;
+        }
         /// <summary>
         /// Duplicate current sub entry and add it to parent
         /// </summary>
@@ -1341,8 +1366,11 @@ namespace libEDSsharp
 
                 newSubObjects.Add(newSubIndex++, subOd);
 
-                if (originalOd == subOd)
-                    newSubObjects.Add(newSubIndex++, newOd);
+                if (lastSubOd == subOd) {
+                    newSubObjects.Add(newSubIndex, newOd);
+                    // Auto increment if the parameter name has a number at the end
+                    newSubObjects[newSubIndex].parameter_name = IncrementNumberAtEnd(newSubObjects[(ushort)(newSubIndex-1)].parameter_name, 1);
+                }
             }
             if (originalOd == null)
                 newSubObjects.Add(newSubIndex++, newOd);
