@@ -366,8 +366,13 @@ namespace libEDSsharp
                             }
                             else
                                 maptarget.entry = eds.ods[pdoindex].Getsubobject(pdosub);
-
-                            if ((maptarget.entry.prop.CO_disabled == false) &&
+                            // Check if mapped sub index was found in OD 
+                            if (maptarget.entry == null)         
+                            {
+                                Console.WriteLine("MAPPING FAILED, OBJEKT NOT FOUND");
+                                continue;
+                            }
+                            else if ((maptarget.entry.prop.CO_disabled == false) &&
                                 (datasize <= maptarget.entry.Sizeofdatatype()) && 
                                 (datasize > 0))
                             {
