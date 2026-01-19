@@ -8,16 +8,16 @@ CANopen Object Dictionary Editor:
  - Exports: CANopen electronic data sheets in EDS or XDD format, documentation, CANopenNode C source files and more.
  - Interfaces: GUI editor for CANopen Object Dictionary, Device information, etc. CLI client for simple conversions.
 
-CANopen is the internationally standardized (EN 50325-4) ([CiA301](http://can-cia.org/standardization/technical-documents)) higher-layer protocol for embedded control system built on top of CAN. For more information on CANopen see http://www.can-cia.org/ .
+CANopen is the internationally standardized (EN 50325-4) ([CiA301](https://can-cia.org/cia-groups/technical-documents)) higher-layer protocol for embedded control system built on top of CAN. For more information on CANopen see http://www.can-cia.org/.
 
 [CANopenNode](https://github.com/CANopenNode/CANopenNode) is a free and open source CANopen Stack.
 
 Repository structure
 --------
 This repository is home to three projects:
-- [LibEDSsharp](https://github.com/CANopenNode/CANopenEditor/blob/docs/libEDSsharp/README.md), a C# library for EDS files manipulation which went upstream and is now maintained in this repository.
-- [A CLI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSSharp/README.md), used for simple conversions across all supported formats.
-- [A GUI](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/CANopenNode/CANopenEditor/blob/docs/EDSEditorGUI2/README.md).
+- [LibEDSsharp](https://github.com/CANopenNode/CANopenEditor/blob/main/libEDSsharp/README.md), a C# library for EDS files manipulation which went upstream and is now maintained in this repository.
+- [A CLI](https://github.com/CANopenNode/CANopenEditor/blob/main/EDSSharp/README.md), used for simple conversions across all supported formats.
+- [A GUI](https://github.com/CANopenNode/CANopenEditor/blob/main/EDSEditorGUI/README.md) for full manipulation of your CANopen files [which is being rewritten to be more multi platform](https://github.com/CANopenNode/CANopenEditor/blob/main/EDSEditorGUI2/README.md).
 
 How to use
 --------
