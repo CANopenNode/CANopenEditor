@@ -155,17 +155,17 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/Bartimaeus-">
-                    <img src="https://avatars.githubusercontent.com/u/2954254?v=4" width="100;" alt="Bartimaeus-"/>
-                    <br />
-                    <sub><b>Bartimaeus-</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/KMK0815">
                     <img src="https://avatars.githubusercontent.com/u/42606060?v=4" width="100;" alt="KMK0815"/>
                     <br />
                     <sub><b>KMK0815</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/Bartimaeus-">
+                    <img src="https://avatars.githubusercontent.com/u/2954254?v=4" width="100;" alt="Bartimaeus-"/>
+                    <br />
+                    <sub><b>Bartimaeus-</b></sub>
                 </a>
             </td>
             <td align="center">
