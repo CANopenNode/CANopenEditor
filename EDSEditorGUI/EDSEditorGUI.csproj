@@ -114,4 +114,15 @@
   <PropertyGroup>
     <PreBuildEvent>git describe --tags --long --dirty &gt; "$(MSBuildProjectDirectory)$([System.IO.Path]::DirectorySeparatorChar)version.txt" || exit 0</PreBuildEvent>
   </PropertyGroup>
+  
+  <!-- Create deployment ZIP for Release builds -->
+  <Target Name="CreateReleaseZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ZipOutputPath>$(OutDir)$(TargetFramework).zip</ZipOutputPath>
+    </PropertyGroup>
+    <Message Text="Creating deployment package: $(ZipOutputPath)" Importance="high" />
+    <Delete Files="$(ZipOutputPath)" Condition="Exists('$(ZipOutputPath)')" />
+    <ZipDirectory SourceDirectory="$(OutDir)" DestinationFile="$(ZipOutputPath)" Overwrite="true" />
+    <Message Text="✓ Deployment package created successfully" Importance="high" />
+  </Target>
 </Project>
