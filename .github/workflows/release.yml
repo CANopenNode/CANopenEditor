@@ -35,7 +35,7 @@ jobs:
         Compress-Archive -CompressionLevel Optimal -Path "EDSEditorGUI\bin\Release\*","EDSSharp\bin\Release\*" -DestinationPath $filename
         echo "binary_name=$filename" >> $env:GITHUB_ENV
     - name: make release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         prerelease: ${{ env.prerelease }}
         files: |
