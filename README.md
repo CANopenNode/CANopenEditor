@@ -148,17 +148,17 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/heliochronix">
-                    <img src="https://avatars.githubusercontent.com/u/1733202?v=4" width="100;" alt="heliochronix"/>
-                    <br />
-                    <sub><b>heliochronix</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/KMK0815">
                     <img src="https://avatars.githubusercontent.com/u/42606060?v=4" width="100;" alt="KMK0815"/>
                     <br />
                     <sub><b>KMK0815</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/heliochronix">
+                    <img src="https://avatars.githubusercontent.com/u/1733202?v=4" width="100;" alt="heliochronix"/>
+                    <br />
+                    <sub><b>heliochronix</b></sub>
                 </a>
             </td>
             <td align="center">
