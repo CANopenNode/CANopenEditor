@@ -192,10 +192,10 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/cfr-mir">
-                    <img src="https://avatars.githubusercontent.com/u/44053860?v=4" width="100;" alt="cfr-mir"/>
+                <a href="https://github.com/cfrank-mir">
+                    <img src="https://avatars.githubusercontent.com/u/284268463?v=4" width="100;" alt="cfrank-mir"/>
                     <br />
-                    <sub><b>cfr-mir</b></sub>
+                    <sub><b>cfrank-mir</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -250,21 +250,14 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/DylanRobertBennett">
-                    <img src="https://avatars.githubusercontent.com/u/87715493?v=4" width="100;" alt="DylanRobertBennett"/>
-                    <br />
-                    <sub><b>DylanRobertBennett</b></sub>
-                </a>
-            </td>
-		</tr>
-		<tr>
-            <td align="center">
                 <a href="https://github.com/rgruening">
                     <img src="https://avatars.githubusercontent.com/u/72022918?v=4" width="100;" alt="rgruening"/>
                     <br />
                     <sub><b>rgruening</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/Barzello">
                     <img src="https://avatars.githubusercontent.com/u/52344726?v=4" width="100;" alt="Barzello"/>
@@ -300,8 +293,6 @@ Contributors
                     <sub><b>DaMutz</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/StormOli">
                     <img src="https://avatars.githubusercontent.com/u/4819887?v=4" width="100;" alt="StormOli"/>
@@ -309,6 +300,8 @@ Contributors
                     <sub><b>StormOli</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/possibly-not">
                     <img src="https://avatars.githubusercontent.com/u/12588174?v=4" width="100;" alt="possibly-not"/>
