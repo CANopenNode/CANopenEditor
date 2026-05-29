@@ -531,7 +531,7 @@ namespace ODEditor
                     grid1[row + 2, bitoff + INFO_COLS_COUNT] = new SourceGrid.Cells.Cell("Empty", comboStandard);
                     // Align "Empty" cell to byte end
                     int colspan = (64 - bitoff) % 8;
-                    if ((colspan == 0) && ((64 - bitoff) > 8))
+                    if ((colspan == 0) && ((64 - bitoff) >= 8))
                         colspan = 8;
                     grid1[row + 2, bitoff + INFO_COLS_COUNT].ColumnSpan = colspan;
                     grid1[row + 2, bitoff + INFO_COLS_COUNT].View = viewEmpty;
