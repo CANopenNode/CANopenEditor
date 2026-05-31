@@ -499,6 +499,12 @@ namespace ODEditor
                        MessageBox.Show(string.Format("Invalid TXPDO mapping parameters in 0x{0:X}!\r\nTrying to map more than the maximum lenght of a CAN message (8 bytes).\r\n\r\nMembers are:\r\n{1}", slot.ConfigurationIndex,toDisplay));
                         break;
                     }
+                    if ((bitoff + mappingentry.width) <= 0)
+                    {
+                        string toDisplay = string.Join(Environment.NewLine, slot.Mapping);
+                        MessageBox.Show(string.Format("Invalid TXPDO mapping parameters in 0x{0:X}!\r\nTrying to map less than the minimum lenght of a CAN message (0 bytes).\r\n\r\nMembers are:\r\n{1}", slot.ConfigurationIndex, toDisplay));
+                        break;
+                    }
                     string target = slot.getTargetName(mappingentry.entry);
                     grid1[row + 2, bitoff + INFO_COLS_COUNT] = new SourceGrid.Cells.Cell(target, comboStandard);
                     grid1[row + 2, bitoff + INFO_COLS_COUNT].ColumnSpan = mappingentry.width;
