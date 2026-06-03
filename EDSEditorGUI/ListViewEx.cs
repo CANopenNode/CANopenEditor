@@ -336,9 +336,10 @@ namespace CustomListView
         }
 
         /// <summary>
-        /// 
+        /// Handles mouse button release and displays the appropriate editor
+        /// (textbox or combobox) for the clicked subitem when conditions are met.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Mouse event arguments</param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             try
@@ -410,7 +411,8 @@ namespace CustomListView
         }
 
         /// <summary>
-        /// 
+        /// Ensures that the current item has subitems up to the number of columns
+        /// when AddSubItem is enabled.
         /// </summary>
         private void ValidateAndAddSubItems()
         {

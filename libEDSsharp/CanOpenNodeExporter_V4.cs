@@ -158,7 +158,7 @@ namespace libEDSsharp
                 ODList.Add($"{{0x{indexH}, 0x{subEntriesCount:X2}, ODT_{odObjectType}, &{odname}Objs.o_{varName}, NULL}}");
 
                 // count labels
-                if (od.prop.CO_countLabel != null && od.prop.CO_countLabel != "")
+                if (!string.IsNullOrEmpty(od.prop.CO_countLabel))
                 {
                     if (ODCnt.ContainsKey(od.prop.CO_countLabel))
                         ODCnt[od.prop.CO_countLabel]++;
@@ -757,7 +757,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                 valueDefined = false;
             else if (dataType != DataType.VISIBLE_STRING && dataType != DataType.UNICODE_STRING && dataType != DataType.OCTET_STRING)
             {
-                defaultvalue = defaultvalue.Trim();       
+                defaultvalue = defaultvalue.Trim();      
 
                 if (defaultvalue.Contains("$NODEID",StringComparison.OrdinalIgnoreCase)) // fetch different case of "NODeID" (allowed according DS301)
                 {
@@ -799,7 +799,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                         data.cType = "bool_t";
                         if (valueDefined)
                         {
-                            data.cValue = (defaultvalue.ToLower() == "false" || defaultvalue == "0") ? "false" : "true";
+                            data.cValue = (defaultvalue.Equals("false", StringComparison.OrdinalIgnoreCase) || defaultvalue.Equals("0", StringComparison.OrdinalIgnoreCase)) ? "false" : "true";
                         }
                         break;
                     case DataType.INTEGER8:
@@ -940,7 +940,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
 
                     case DataType.OCTET_STRING:
                         defaultvalue = defaultvalue.Trim();
-                        if (defaultvalue == "")
+                        if (string.IsNullOrEmpty(defaultvalue))
                             valueDefined = false;
                         if (valueDefined || stringLength > 0)
                         {

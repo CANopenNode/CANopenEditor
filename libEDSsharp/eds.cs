@@ -27,6 +27,7 @@ using System.Reflection;
 using CanOpenXSD_1_1;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
+using System.Runtime.Serialization;
 
 namespace libEDSsharp
 {
@@ -2212,15 +2213,28 @@ namespace libEDSsharp
 
     }
 
-        public class ParameterException : Exception
+    [Serializable]
+    public class ParameterException : Exception
+    {
+        public ParameterException()
         {
-            public ParameterException(String message)
-                : base(message)
-            {
-        
-            }
         }
 
-      
+        public ParameterException(string message)
+            : base(message)
+        {
+        }
 
+        public ParameterException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        protected ParameterException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
+
+      
  }

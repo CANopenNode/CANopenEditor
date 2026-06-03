@@ -18,7 +18,7 @@
     <NeutralLanguage></NeutralLanguage>
   </PropertyGroup>
 
-  <Target Name="AssignInformationalVersion" >
+  <Target Name="AssignInformationalVersion">
     <Exec Command="git describe --tags --long --dirty" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="gitInfo" />
     </Exec>
@@ -44,10 +44,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.CodeDom" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Google.Protobuf" Version="3.27.2" />
-    <PackageReference Include="Google.Protobuf.Tools" Version="3.27.2" />
-    <PackageReference Include="AutoMapper" Version="10.0.0" Condition="'$(TargetFramework)' == 'net481'" />
+    <PackageReference Include="System.CodeDom" Version="10.0.8" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Google.Protobuf" Version="3.35.0" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.35.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" Condition="'$(TargetFramework)' == 'net481'" />
     <PackageReference Include="AutoMapper" Version="13.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
   </ItemGroup>
 
