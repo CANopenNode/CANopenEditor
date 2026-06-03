@@ -70,7 +70,7 @@ namespace libEDSsharp
 
                 bool comment = ex.IsReadOnly();
 
-                if (f.FieldType.Name == "Boolean")
+                if (f.FieldType == typeof(bool))
                 {
                     writer.WriteLine(string.Format("{2}{0}={1}", f.Name, ((bool)f.GetValue(this)) == true ? 1 : 0, comment == true ? ";" : ""));
                 }
@@ -126,10 +126,10 @@ namespace libEDSsharp
             objectlist = new Dictionary<int, int>();
             foreach (KeyValuePair<string, string> kvp in section)
             {
-                if (kvp.Key.ToLower() == "supportedobjects")
+                if (string.Equals(kvp.Key, "supportedobjects", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                if (kvp.Key.ToLower() == "nrofentries")
+                if (string.Equals(kvp.Key, "nrofentries", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 int count = Convert.ToInt16(kvp.Key, EDSsharp.Getbase(kvp.Key));
@@ -165,7 +165,7 @@ namespace libEDSsharp
             comments = new List<string>();
             foreach (KeyValuePair<string, string> kvp in section)
             {
-                if (kvp.Key == "Lines")
+                if (string.Equals(kvp.Key, "Lines", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 comments.Add(kvp.Value);
@@ -461,7 +461,7 @@ namespace libEDSsharp
             string line = linex.TrimStart(';');
             bool custom_extension = false;
 
-            if (linex == null || linex == "")
+            if (string.IsNullOrEmpty(linex))
                 return;
 
             if (linex[0] == ';')
@@ -523,7 +523,7 @@ namespace libEDSsharp
                     else
                     //Only allow our own extensions to populate the key/value pair
                     {
-                        if (key == "StorageLocation" || key == "TPDODetectCos")
+                        if (string.Equals(key, "StorageLocation", StringComparison.OrdinalIgnoreCase) || string.Equals(key, "TPDODetectCos", StringComparison.OrdinalIgnoreCase))
                         {
                             try
                             {
@@ -571,7 +571,7 @@ namespace libEDSsharp
                     if (!modules.ContainsKey(modindex))
                         modules.Add(modindex, new Module(modindex));
 
-                    if (m2.Groups[2].ToString() == "SubExt")
+                    if (string.Equals(m2.Groups[2].ToString(), "SubExt", StringComparison.OrdinalIgnoreCase))
                     {
                         target = modules[modindex].modulesubext;
                     }
@@ -625,8 +625,8 @@ namespace libEDSsharp
 
                 if (kvp.Value.ContainsKey("TPDODetectCos"))
                 {
-                    string test = kvp.Value["TPDODetectCos"].ToLower();
-                    if (test == "1" || test == "true")
+                    string test = kvp.Value["TPDODetectCos"];
+                    if (string.Equals(test, "1", StringComparison.OrdinalIgnoreCase) || string.Equals(test, "true", StringComparison.OrdinalIgnoreCase))
                     {
                         od.prop.CO_flagsPDO = true;
                     }
@@ -812,12 +812,12 @@ namespace libEDSsharp
         {
             projectFilename = filename;
 
-            if (Path.GetExtension(filename).ToLower() == ".eds")
+            if (string.Equals(Path.GetExtension(filename), ".eds", StringComparison.OrdinalIgnoreCase))
             {
                 edsfilename = filename;
             }
 
-            if (Path.GetExtension(filename).ToLower() == ".dcf")
+            if (string.Equals(Path.GetExtension(filename), ".dcf", StringComparison.OrdinalIgnoreCase))
             {
                 dcffilename = filename;
             }

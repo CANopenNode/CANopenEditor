@@ -385,7 +385,10 @@ namespace libEDSsharp
 
                             slot.Mapping.Add(maptarget);
                         }
-                        catch (Exception) { }
+                        catch (Exception ex) {
+                            // Log the exception instead of silently swallowing it so failures are visible
+                            Console.WriteLine($"Mapping exception at PDO index 0x{idx:X4}: {ex}");
+                        }
                     }
 
                     Console.WriteLine(String.Format("Total PDO Size {0}\n", totalsize));

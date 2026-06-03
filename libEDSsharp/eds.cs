@@ -1284,8 +1284,8 @@ namespace libEDSsharp
         /// <summary>
         /// Incremement number at end of string by given increment
         /// </summary>
-        /// <param input>SubObject name as string to increment</param>
-        /// <param increment>increment for next SubObject</param>
+        /// <param name="input">SubObject name as string to increment</param>
+        /// <param name="increment">increment for next SubObject</param>
         /// <returns>incremented name or the original string if no number is found at the end</returns>
         public static string IncrementNumberAtEnd(string input, int increment)
         {

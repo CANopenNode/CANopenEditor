@@ -13,7 +13,7 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="filepath">path path that should indicate where and what name the outputed file(s) should have</param>
         /// <param name="eds">list of eds(s) not all support multiple edss, in that case use the first</param>
-        public delegate void ExportFunc(string filepath, List<EDSsharp> edss);
+        public delegate void ExportFunc(string filepath, List<EDSsharp> eds);
         [Flags]
         public enum ExporterFlags
         {

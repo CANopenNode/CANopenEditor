@@ -9,7 +9,7 @@ namespace libEDSsharp
     /// <summary>
     /// Helper functions to convert integral values into hexadecimal string
     /// </summary>
-    public static class extensions
+    public static class Extensions
     {
         /// <summary>
         /// returns a string containing the value as hexadecimal
