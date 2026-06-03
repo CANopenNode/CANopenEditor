@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
@@ -27,7 +23,7 @@ namespace libEDSsharp
         /// <returns>hexadecimal string representing the value</returns>
         public static string ToHexString(this UInt16 val)
         {
-            return String.Format("0x{0:x}",val);
+            return String.Format("0x{0:x}", val);
         }
         /// <summary>
         /// returns a string containing the value as hexadecimal

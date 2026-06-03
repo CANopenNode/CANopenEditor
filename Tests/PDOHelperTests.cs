@@ -1,6 +1,6 @@
+using libEDSsharp;
 using System;
 using Xunit;
-using libEDSsharp;
 
 namespace Tests
 {
@@ -56,7 +56,7 @@ namespace Tests
             if (comparamOD.subobjects.Count != 6)
                 throw new Exception("Wrong number of sub objects generated");
 
-            if(comparamOD.Nosubindexes!=6)
+            if (comparamOD.Nosubindexes != 6)
                 throw new Exception("Wrong number of sub objects generated");
 
             if (comparamOD.subobjects[1].datatype != DataType.UNSIGNED32)
@@ -95,7 +95,7 @@ namespace Tests
 
             slot.COB = 0x401;
             slot.ConfigurationIndex = 0x1400;
-            
+
             slot.transmissiontype = 254;
             slot.inhibit = 10;
             slot.eventtimer = 20;
@@ -142,7 +142,7 @@ namespace Tests
                 throw new Exception("Wrong data type for Transmission type");
             if (comparamOD.subobjects[5].datatype != DataType.UNSIGNED16)
                 throw new Exception("Wrong data type for Transmission type");
-     
+
             if (comparamOD.subobjects[1].defaultvalue != "0x401") //481 hex
                 throw new Exception("TPDO COB wrong");
             if (comparamOD.subobjects[2].defaultvalue != "254")
@@ -152,7 +152,7 @@ namespace Tests
         }
 
 
-      
+
 
     }
 }

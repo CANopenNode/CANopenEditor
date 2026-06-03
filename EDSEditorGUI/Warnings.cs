@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using libEDSsharp;
+using System;
 using System.Windows.Forms;
-using libEDSsharp;
 
 namespace ODEditor
 {
@@ -17,9 +10,9 @@ namespace ODEditor
         {
             InitializeComponent();
 
-            foreach(string s in Warnings.warning_list)
+            foreach (string s in Warnings.warning_list)
             {
-                textBox1.AppendText(s+"\r\n");
+                textBox1.AppendText(s + "\r\n");
             }
         }
 

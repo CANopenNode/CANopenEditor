@@ -18,13 +18,13 @@
     Copyright(c) 2020 Janez Paternoster
 */
 
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using libEDSsharp;
+using System.Windows.Forms;
 
 
 namespace ODEditor
@@ -41,9 +41,9 @@ namespace ODEditor
         bool justUpdating = false;
         bool ExporterOld = false;
         bool ExporterV4 = false;
-       
+
         public event EventHandler<UpdateODViewEventArgs> UpdateODViewForEDS;
-       
+
         public DeviceODView()
         {
 
@@ -126,20 +126,21 @@ namespace ODEditor
 
 
         }
-        private bool ExporterTypeV4() { 
+        private bool ExporterTypeV4()
+        {
             ExporterFactory.Exporter type = (ExporterFactory.Exporter)Properties.Settings.Default.ExporterType;
             return (type == ExporterFactory.Exporter.CANOPENNODE_V4);
         }
 
-       private bool Checkdirty()
+        private bool Checkdirty()
         {
             var result = false;
 
             if (button_saveChanges.BackColor == Color.Tomato)
             {
 
-                var answer = checkBox_autosave.Checked 
-                           ? DialogResult.No 
+                var answer = checkBox_autosave.Checked
+                           ? DialogResult.No
                            : MessageBox.Show(String.Format("Unsaved changes on Index 0x{0:X4}/{1:X2}.\nDo you wish to switch object and loose your changes?\n\nYes = Lose changes\nNo = Save\nCancel = Go back and stay on the object", lastSelectedObject.Index, lastSelectedObject.Subindex), "Unsaved changes", MessageBoxButtons.YesNoCancel); ;
 
 
@@ -462,7 +463,7 @@ namespace ODEditor
             od.parameter_name = textBox_name.Text;
             od.denotation = textBox_denotation.Text;
             od.Description = textBox_description.Text.Replace("\r\n", "\n");
-            od.ObjectTypeString(od.parent == null ? comboBox_objectType.SelectedItem.ToString() : "VAR"); 
+            od.ObjectTypeString(od.parent == null ? comboBox_objectType.SelectedItem.ToString() : "VAR");
 
             if (od.objecttype == ObjectType.VAR)
             {
@@ -471,7 +472,8 @@ namespace ODEditor
                 {
                     od.datatype = (DataType)Enum.Parse(typeof(DataType), comboBox_dataType.SelectedItem.ToString());
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     od.datatype = DataType.UNKNOWN;
                 }
 
@@ -524,8 +526,8 @@ namespace ODEditor
                 // CO_accessSRDO
                 try
                 {
-                    if(comboBox_accessSRDO.SelectedItem != null) 
-                    od.prop.CO_accessSRDO = (AccessSRDO)Enum.Parse(typeof(AccessSRDO), comboBox_accessSRDO.SelectedItem.ToString());
+                    if (comboBox_accessSRDO.SelectedItem != null)
+                        od.prop.CO_accessSRDO = (AccessSRDO)Enum.Parse(typeof(AccessSRDO), comboBox_accessSRDO.SelectedItem.ToString());
                 }
                 catch (Exception)
                 {
@@ -533,10 +535,11 @@ namespace ODEditor
                 }
 
                 // Default value
-                if (listView_subObjects.SelectedItems.Count > 1) {
+                if (listView_subObjects.SelectedItems.Count > 1)
+                {
                     for (ushort i = 0; i < listView_subObjects.SelectedItems.Count; i++)
                     {
-                        od.parent.subobjects[(ushort) Convert.ToInt32(listView_subObjects.SelectedItems[i].Text,16)].defaultvalue = textBox_defaultValue.Text;
+                        od.parent.subobjects[(ushort)Convert.ToInt32(listView_subObjects.SelectedItems[i].Text, 16)].defaultvalue = textBox_defaultValue.Text;
                     }
                 }
 
@@ -551,24 +554,25 @@ namespace ODEditor
                     {
                         if (subod.Subindex > 0)
                         {
-                           identicalDefaultValues &= (subod.defaultvalue ==  lastdefaultvalue)&& (subod.defaultvalue != textBox_defaultValue.Text);
-                           lastdefaultvalue = subod.defaultvalue;
+                            identicalDefaultValues &= (subod.defaultvalue == lastdefaultvalue) && (subod.defaultvalue != textBox_defaultValue.Text);
+                            lastdefaultvalue = subod.defaultvalue;
                         }
                     }
-                        
-                    if (identicalDefaultValues) {
-                            DialogResult confirm = MessageBox.Show("Do you want to set all identical default values in subobjects to this default value?", "Set to all?", MessageBoxButtons.YesNo);
+
+                    if (identicalDefaultValues)
+                    {
+                        DialogResult confirm = MessageBox.Show("Do you want to set all identical default values in subobjects to this default value?", "Set to all?", MessageBoxButtons.YesNo);
                         if (confirm == DialogResult.Yes)
                         {
                             setDefaultValueToAll = true;
                         }
                     }
                 }
-                        if (setDefaultValueToAll)
+                if (setDefaultValueToAll)
                 {
                     for (ushort i = 1; i < od.parent.Nosubindexes; i++)
                     {
-                            od.parent.subobjects[i].defaultvalue = textBox_defaultValue.Text;
+                        od.parent.subobjects[i].defaultvalue = textBox_defaultValue.Text;
                     }
                 }
                 else
@@ -652,7 +656,8 @@ namespace ODEditor
                 PopulateObject();
                 PopulateSubList();
             }
-            else {
+            else
+            {
                 //selectedObject = lastSelectedObject;
                 //od = selectedObject;
                 //selectedList.Select();
@@ -755,7 +760,7 @@ namespace ODEditor
         {
             ComboBox comboBox = (ComboBox)sender;
 
-            if (comboBox.SelectedItem!=null && comboBox.SelectedItem.ToString() == "Add...")
+            if (comboBox.SelectedItem != null && comboBox.SelectedItem.ToString() == "Add...")
             {
                 NewItem dialog = new NewItem("Add Storage Group");
                 if (dialog.ShowDialog() == DialogResult.OK && comboBox.FindStringExact(dialog.name) == -1)
@@ -786,11 +791,11 @@ namespace ODEditor
                     selectedObject = null;
                     EDSsharp modifiedEds = insObjForm.GetModifiedEDS();
                     modifiedEds.Dirty = true;
-                    if(modifiedEds == this.eds)
+                    if (modifiedEds == this.eds)
                     {
-                    PopulateObjectLists(eds);
-                    PopulateSubList();
-                    PopulateObject();
+                        PopulateObjectLists(eds);
+                        PopulateSubList();
+                        PopulateObject();
                     }
                     else
                     {

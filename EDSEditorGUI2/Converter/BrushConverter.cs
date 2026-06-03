@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using System;
+using System.Globalization;
 
 namespace EDSEditorGUI2.Converter;
 

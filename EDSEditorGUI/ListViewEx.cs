@@ -8,12 +8,11 @@
 
 #region Namespaces
 using System;
-using System.Drawing;
 using System.Collections;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 #endregion
 
 namespace CustomListView
@@ -26,7 +25,7 @@ namespace CustomListView
     {
 
 
-        public delegate void ComboBoxIndexChanged(int row, int col,String Text);
+        public delegate void ComboBoxIndexChanged(int row, int col, String Text);
         public event ComboBoxIndexChanged onComboBoxIndexChanged;
 
         #region SubItem Class
@@ -173,7 +172,7 @@ namespace CustomListView
                 {
 
                     subItemRect = item.SubItems[index].Bounds;
- 
+
                     this.row = item.Index;
                     // Add 1 because of the presence of above condition
                     this.col = index + 1;
@@ -193,9 +192,9 @@ namespace CustomListView
                             // Add 1 because of the presence of above condition
                             this.col = index + 0;
                             break;
-                        }    
+                        }
                     }
-                    
+
                 }
             }
 
@@ -375,7 +374,7 @@ namespace CustomListView
                 if (this.row != -1 && this.col != -1)
                 {
 
- 
+
                     // Check whether combobox or text box is set for the current cell
                     SubItem cell = GetKey(new SubItem(this.row, this.col));
 
@@ -405,7 +404,7 @@ namespace CustomListView
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION !!"+ex.ToString());
+                Console.WriteLine("EXCEPTION !!" + ex.ToString());
                 Trace.WriteLine(ex.ToString());
             }
         }
@@ -565,7 +564,7 @@ namespace CustomListView
                     this.Items[row].SubItems[col].Text = this.combo.Text;
                     this.combo.Visible = !this.hideComboAfterSelChange;
 
-                    if (noevent==false && onComboBoxIndexChanged != null)
+                    if (noevent == false && onComboBoxIndexChanged != null)
                         onComboBoxIndexChanged(row, col, combo.Text);
                 }
             }

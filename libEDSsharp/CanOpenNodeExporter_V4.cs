@@ -20,11 +20,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace libEDSsharp
 {
@@ -372,7 +372,7 @@ namespace libEDSsharp
                 {
                     subODStorage_t.Add($"{data.cType} {subcName}{data.cTypeArray};");
                     subODStorage.Add($".{subcName} = {data.cValue}");
-                dataPtr = $"&{odname}_{group}.x{varName}.{subcName}{data.cTypeArray0}";
+                    dataPtr = $"&{odname}_{group}.x{varName}.{subcName}{data.cTypeArray0}";
                 }
                 ODObjs.Add($"        {{");
                 ODObjs.Add($"            .dataOrig = {dataPtr},");
@@ -584,7 +584,7 @@ namespace libEDSsharp
         /// <param name="gitVersion">git version that will be added to file comment</param>
         /// <param name="eds">data that contain the data that will be exported</param>
         private void Export_c(string folderpath, string filename, string gitVersion, EDSsharp eds)
-            {
+        {
 
             if (filename == "")
                 filename = "OD";
@@ -612,7 +612,7 @@ namespace libEDSsharp
 #error This Object dictionary is compatible with CANopenNode V4.0 and above!
 #endif", gitVersion, filename));
 
-    file.WriteLine(@"
+            file.WriteLine(@"
 /*******************************************************************************
     OD data initialization of all groups
 *******************************************************************************/");
@@ -757,9 +757,9 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                 valueDefined = false;
             else if (dataType != DataType.VISIBLE_STRING && dataType != DataType.UNICODE_STRING && dataType != DataType.OCTET_STRING)
             {
-                defaultvalue = defaultvalue.Trim();      
+                defaultvalue = defaultvalue.Trim();
 
-                if (defaultvalue.Contains("$NODEID",StringComparison.OrdinalIgnoreCase)) // fetch different case of "NODeID" (allowed according DS301)
+                if (defaultvalue.Contains("$NODEID", StringComparison.OrdinalIgnoreCase)) // fetch different case of "NODeID" (allowed according DS301)
                 {
                     defaultvalue = defaultvalue.ToUpper().Replace("$NODEID", "");
                     defaultvalue = defaultvalue.Replace("+", "");
@@ -981,7 +981,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                                 Byte[] encodedBytes = unicode.GetBytes(defaultvalue);
                                 for (UInt32 i = 0; i < encodedBytes.Length; i += 2)
                                 {
-                                    UInt16 val = (ushort)(encodedBytes[i] | (UInt16)encodedBytes[i+1] << 8);
+                                    UInt16 val = (ushort)(encodedBytes[i] | (UInt16)encodedBytes[i + 1] << 8);
                                     words.Add(String.Format("0x{0:X4}", val));
                                     len++;
                                 }

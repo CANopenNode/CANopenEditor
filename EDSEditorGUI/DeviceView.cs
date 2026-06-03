@@ -17,10 +17,10 @@
     Copyright(c) 2016 - 2019 Robin Cornelius <robin.cornelius@gmail.com>
 */
 
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using libEDSsharp;
 
 namespace ODEditor
 {
@@ -44,7 +44,7 @@ namespace ODEditor
 
             foreach (TabPage tp in tabControl1.TabPages)
             {
-                foreach(Object o in tp.Controls)
+                foreach (Object o in tp.Controls)
                 {
                     if (o is MyTabUserControl)
                     {
@@ -59,15 +59,15 @@ namespace ODEditor
 
             devicePDOView1.Init(true);
             devicePDOView2.Init(false);
-     
+
         }
 
         private void DeviceODView1_UpdateODView(object sender, UpdateODViewEventArgs e)
         {
             EventHandler<UpdateODViewEventArgs> handler = UpdateODViewForEDS;
-            if(handler != null)
+            if (handler != null)
             {
-                handler(this, e);  
+                handler(this, e);
             }
         }
 

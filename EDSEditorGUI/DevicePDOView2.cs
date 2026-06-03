@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using libEDSsharp;
-using System.Collections.Specialized;
+﻿using libEDSsharp;
 using SourceGrid;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace ODEditor
 {
@@ -70,7 +65,7 @@ namespace ODEditor
             }
 
             grid1.Rows[0].Height = 30;
-            
+
             contextMenuStrip_removeitem.ItemClicked += ContextMenuStrip_removeitem_ItemClicked;
 
             Invalidated += DevicePDOView2_Invalidated;
@@ -231,8 +226,8 @@ namespace ODEditor
             }
 
             Console.WriteLine(string.Format("Found grid at {0}x{1}", foundcol, foundrow));
-            
-            SourceGrid.Cells.ICellVirtual v =  grid1.GetCell(foundrow, foundcol);
+
+            SourceGrid.Cells.ICellVirtual v = grid1.GetCell(foundrow, foundcol);
 
             return v;
 
@@ -271,7 +266,7 @@ namespace ODEditor
             else if (foundrow > 1) //don't select headers or bits
             {
                 var obj = grid1.Rows[foundrow];
-                if (obj!= null && obj.Tag != null)
+                if (obj != null && obj.Tag != null)
                 {
 
                     PDOSlot slot = (PDOSlot)obj.Tag;
@@ -456,9 +451,9 @@ namespace ODEditor
 
 
             SourceGrid.Cells.Editors.ComboBox comboStandard = new SourceGrid.Cells.Editors.ComboBox(typeof(string), srray, false);
-            #if !NETCOREAPP
+#if !NETCOREAPP
             comboStandard.Control.DropDownWidth = 0x100;
-            #endif
+#endif
 
             //tableLayoutPanel1.SuspendLayout();
 
@@ -475,8 +470,8 @@ namespace ODEditor
             {
                 if (isTXPDO != slot.isTXPDO())
                     continue;
-                if (grid1.ColumnsCount > 64+INFO_COLS_COUNT)
-                    grid1.ColumnsCount = 64+INFO_COLS_COUNT;
+                if (grid1.ColumnsCount > 64 + INFO_COLS_COUNT)
+                    grid1.ColumnsCount = 64 + INFO_COLS_COUNT;
                 grid1.Redim(grid1.RowsCount + 1, grid1.ColumnsCount);
                 grid1.Rows[grid1.RowsCount - 1].Tag = slot;
                 grid1.Rows[row + 2].Height = 30;
@@ -495,8 +490,8 @@ namespace ODEditor
                 {
                     if ((bitoff + mappingentry.width) > 64)
                     {
-                       string toDisplay = string.Join(Environment.NewLine, slot.Mapping);
-                       MessageBox.Show(string.Format("Invalid TXPDO mapping parameters in 0x{0:X}!\r\nTrying to map more than the maximum lenght of a CAN message (8 bytes).\r\n\r\nMembers are:\r\n{1}", slot.ConfigurationIndex,toDisplay));
+                        string toDisplay = string.Join(Environment.NewLine, slot.Mapping);
+                        MessageBox.Show(string.Format("Invalid TXPDO mapping parameters in 0x{0:X}!\r\nTrying to map more than the maximum lenght of a CAN message (8 bytes).\r\n\r\nMembers are:\r\n{1}", slot.ConfigurationIndex, toDisplay));
                         break;
                     }
                     if ((bitoff + mappingentry.width) <= 0)
@@ -828,7 +823,7 @@ namespace ODEditor
                     MessageBox.Show(string.Format("Invalid RXPDO Communication parameters index 0x{0:X4}", config));
                     return;
                 }
-            }            
+            }
 
             UInt16 inhibit = libEDSsharp.EDSsharp.ConvertToUInt16(textBox_inhibit.Text);
             UInt16 eventtimer = libEDSsharp.EDSsharp.ConvertToUInt16(textBox_eventtimer.Text);
@@ -862,4 +857,3 @@ namespace ODEditor
         }
     }
 }
-    

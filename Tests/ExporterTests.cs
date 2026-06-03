@@ -1,10 +1,10 @@
+using libEDSsharp;
 using System;
 using Xunit;
-using libEDSsharp;
 
 namespace Tests
 {
-    
+
     public class ExporterTests : CanOpenNodeExporter
     {
         [Fact]
@@ -12,13 +12,13 @@ namespace Tests
         {
             ODentry od = new ODentry();
 
-            if (make_cname("axle 0 wheel right controlword",od) != "axle0WheelRightControlword")
+            if (make_cname("axle 0 wheel right controlword", od) != "axle0WheelRightControlword")
                 throw (new Exception("make_cname Conversion error"));
 
-            if (make_cname("mapped object 4",od) != "mappedObject4")
+            if (make_cname("mapped object 4", od) != "mappedObject4")
                 throw (new Exception("make_cname Conversion error"));
 
-            if (make_cname("COB ID used by RPDO",od) != "COB_IDUsedByRPDO")
+            if (make_cname("COB ID used by RPDO", od) != "COB_IDUsedByRPDO")
                 throw (new Exception("make_cname Conversion error"));
         }
 
@@ -109,9 +109,9 @@ namespace Tests
 
             od.subobjects.Add(0x00, new ODentry("No Entries", 0x00, DataType.UNSIGNED8, "0x7f", EDSsharp.AccessType.ro, PDOMappingType.no));
             od.subobjects.Add(0x01, new ODentry("LINE1", 0x01, DataType.UNSIGNED32, "0x01", EDSsharp.AccessType.ro, PDOMappingType.optional));
-          
+
             string test = write_od_line(od);
-            if(test != "{0x1011, 0x7F, 0x06,  0, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
+            if (test != "{0x1011, 0x7F, 0x06,  0, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
                 throw (new Exception("TestArrayNoEntries() failed"));
 
 
@@ -195,7 +195,7 @@ namespace Tests
                 Index = 0x2000
             };
 
-            
+
             ODentry od2 = new ODentry
             {
                 objecttype = ObjectType.VAR,
@@ -219,10 +219,10 @@ namespace Tests
             if (test != "{0x2000, 0x00, 0x86,  4, (void*)&CO_OD_RAM.testINT32}," + Environment.NewLine)
                 throw (new Exception("write_od_line() returning wrong data length"));
 
-           if((getflags(od2) & 0x80) == 0x80)
-           {
+            if ((getflags(od2) & 0x80) == 0x80)
+            {
                 throw (new Exception("Multi byte flag set for single byte"));
-           }
+            }
 
         }
 

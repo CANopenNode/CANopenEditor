@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
@@ -52,7 +49,7 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="warning">string to report</param>
         /// <param name="c">type of warning (filter usage)</param>
-        public static void AddWarning(string warning,warning_class c = warning_class.WARNING_GENERIC)
+        public static void AddWarning(string warning, warning_class c = warning_class.WARNING_GENERIC)
         {
             if (((UInt32)c & warning_mask) != 0)
             {
@@ -61,6 +58,6 @@ namespace libEDSsharp
         }
     }
 
-   
+
 
 }

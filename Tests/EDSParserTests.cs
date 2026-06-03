@@ -1,9 +1,9 @@
-﻿using System;
+﻿using libEDSsharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xunit;
-using libEDSsharp;
 
 namespace Tests
 {
@@ -27,7 +27,7 @@ namespace Tests
             {
                 eds.Clear();
                 sectionname = "Tests";
-                Parseline(teststring,0);
+                Parseline(teststring, 0);
 
                 if (!eds["Tests"].ContainsKey("ParameterName"))
                     throw (new Exception("Parser key detection error on string \"" + teststring + "\""));
@@ -46,7 +46,7 @@ namespace Tests
             string[] lines = testobject.Split('\n');
 
             foreach (string line in lines)
-                Parseline(line,0);
+                Parseline(line, 0);
 
             foreach (KeyValuePair<string, Dictionary<string, string>> kvp in eds)
             {
@@ -307,7 +307,7 @@ ProDucTNumbeR=test4
             string[] lines = testobject.Split('\n');
 
             foreach (string line in lines)
-                Parseline(line,0);
+                Parseline(line, 0);
             DeviceInfo di = new DeviceInfo(eds["DeviceInfo"]);
 
         }
@@ -321,14 +321,14 @@ ProDucTNumbeR=test4
             Dictionary<string, string> section = new Dictionary<string, string>();
             section.Add("CreationTime", "9:03AM");
             section.Add("CreationDate", "04-27-2017");
-            fi.Parse(section,"FileInfo");
+            fi.Parse(section, "FileInfo");
 
             fi = new FileInfo();
             section = new Dictionary<string, string>();
             section.Add("CreationTime", "10:15 AM");
             section.Add("CreationDate", "10-08-2013");
 
-            fi.Parse(section,"FileInfo");
+            fi.Parse(section, "FileInfo");
 
         }
 

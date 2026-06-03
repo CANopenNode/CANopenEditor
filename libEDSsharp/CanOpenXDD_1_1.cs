@@ -19,18 +19,18 @@
 */
 
 
+using CanOpenXSD_1_1;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using LibCanOpen;
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
-using CanOpenXSD_1_1;
-using LibCanOpen;
-using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
-using System.Linq;
-using System.Reflection;
 
 namespace libEDSsharp
 {
@@ -113,7 +113,7 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="file">Name of the multi xdd file</param>
         /// <returns>List of EDSsharp objects</returns>
-        public List<EDSsharp> ReadMultiXML(string file )
+        public List<EDSsharp> ReadMultiXML(string file)
         {
             List<EDSsharp> edss = new List<EDSsharp>();
 
@@ -123,7 +123,7 @@ namespace libEDSsharp
                 StreamReader reader = new StreamReader(file);
                 CanOpenProject_1_1 oep = (CanOpenProject_1_1)serializer.Deserialize(reader);
 
-                foreach(ISO15745ProfileContainer cont in oep.ISO15745ProfileContainer)
+                foreach (ISO15745ProfileContainer cont in oep.ISO15745ProfileContainer)
                 {
                     edss.Add(Convert(cont));
                 }
@@ -279,12 +279,12 @@ namespace libEDSsharp
             switch (edsAccessType)
             {
                 case EDSsharp.AccessType.@const: return parameterTemplateAccess.@const;
-                case EDSsharp.AccessType.ro:     return parameterTemplateAccess.read;
-                case EDSsharp.AccessType.rw:     return parameterTemplateAccess.readWrite;
-                case EDSsharp.AccessType.rwr:    return parameterTemplateAccess.readWriteInput;
-                case EDSsharp.AccessType.rww:    return parameterTemplateAccess.readWriteOutput;
-                case EDSsharp.AccessType.wo:     return parameterTemplateAccess.write;
-                default:                         return parameterTemplateAccess.noAccess;
+                case EDSsharp.AccessType.ro: return parameterTemplateAccess.read;
+                case EDSsharp.AccessType.rw: return parameterTemplateAccess.readWrite;
+                case EDSsharp.AccessType.rwr: return parameterTemplateAccess.readWriteInput;
+                case EDSsharp.AccessType.rww: return parameterTemplateAccess.readWriteOutput;
+                case EDSsharp.AccessType.wo: return parameterTemplateAccess.write;
+                default: return parameterTemplateAccess.noAccess;
             }
         }
 
@@ -309,13 +309,13 @@ namespace libEDSsharp
         {
             switch (xddAccessType)
             {
-                case parameterTemplateAccess.@const:          return EDSsharp.AccessType.@const;
-                case parameterTemplateAccess.read:            return EDSsharp.AccessType.ro;
-                case parameterTemplateAccess.readWrite:       return EDSsharp.AccessType.rw;
-                case parameterTemplateAccess.readWriteInput:  return EDSsharp.AccessType.rwr;
+                case parameterTemplateAccess.@const: return EDSsharp.AccessType.@const;
+                case parameterTemplateAccess.read: return EDSsharp.AccessType.ro;
+                case parameterTemplateAccess.readWrite: return EDSsharp.AccessType.rw;
+                case parameterTemplateAccess.readWriteInput: return EDSsharp.AccessType.rwr;
                 case parameterTemplateAccess.readWriteOutput: return EDSsharp.AccessType.rww;
-                case parameterTemplateAccess.write:           return EDSsharp.AccessType.wo;
-                default:                                      return EDSsharp.AccessType.UNKNOWN;
+                case parameterTemplateAccess.write: return EDSsharp.AccessType.wo;
+                default: return EDSsharp.AccessType.UNKNOWN;
             }
         }
 
@@ -347,7 +347,7 @@ namespace libEDSsharp
             }
         }
 
-        private Items1ChoiceType ConvertDataType (ODentry od)
+        private Items1ChoiceType ConvertDataType(ODentry od)
         {
             UInt32 byteLength;
             bool signed = false;
@@ -357,19 +357,19 @@ namespace libEDSsharp
 
             switch (dt)
             {
-                case DataType.BOOLEAN:        return Items1ChoiceType.BOOL;
-                case DataType.INTEGER8:       return Items1ChoiceType.SINT;
-                case DataType.INTEGER16:      return Items1ChoiceType.INT;
-                case DataType.INTEGER32:      return Items1ChoiceType.DINT;
-                case DataType.INTEGER64:      return Items1ChoiceType.LINT;
-                case DataType.UNSIGNED8:      return Items1ChoiceType.USINT;
-                case DataType.UNSIGNED16:     return Items1ChoiceType.UINT;
-                case DataType.UNSIGNED32:     return Items1ChoiceType.UDINT;
-                case DataType.UNSIGNED64:     return Items1ChoiceType.ULINT;
-                case DataType.REAL32:         return Items1ChoiceType.REAL;
-                case DataType.REAL64:         return Items1ChoiceType.LREAL;
+                case DataType.BOOLEAN: return Items1ChoiceType.BOOL;
+                case DataType.INTEGER8: return Items1ChoiceType.SINT;
+                case DataType.INTEGER16: return Items1ChoiceType.INT;
+                case DataType.INTEGER32: return Items1ChoiceType.DINT;
+                case DataType.INTEGER64: return Items1ChoiceType.LINT;
+                case DataType.UNSIGNED8: return Items1ChoiceType.USINT;
+                case DataType.UNSIGNED16: return Items1ChoiceType.UINT;
+                case DataType.UNSIGNED32: return Items1ChoiceType.UDINT;
+                case DataType.UNSIGNED64: return Items1ChoiceType.ULINT;
+                case DataType.REAL32: return Items1ChoiceType.REAL;
+                case DataType.REAL64: return Items1ChoiceType.LREAL;
                 case DataType.VISIBLE_STRING: return Items1ChoiceType.STRING;
-                case DataType.OCTET_STRING:   return Items1ChoiceType.BITSTRING;
+                case DataType.OCTET_STRING: return Items1ChoiceType.BITSTRING;
                 case DataType.UNICODE_STRING: return Items1ChoiceType.WSTRING;
 
                 case DataType.DOMAIN:
@@ -381,16 +381,16 @@ namespace libEDSsharp
                     return Items1ChoiceType.DINT;
 
                 // transform other non standard values to OCTET_STRING
-                case DataType.INTEGER24:       byteLength = 3; signed = true; break;
-                case DataType.INTEGER40:       byteLength = 5; signed = true; break;
-                case DataType.INTEGER48:       byteLength = 6; signed = true; break;
-                case DataType.INTEGER56:       byteLength = 7; signed = true; break;
-                case DataType.UNSIGNED24:      byteLength = 3; break;
-                case DataType.UNSIGNED40:      byteLength = 5; break;
+                case DataType.INTEGER24: byteLength = 3; signed = true; break;
+                case DataType.INTEGER40: byteLength = 5; signed = true; break;
+                case DataType.INTEGER48: byteLength = 6; signed = true; break;
+                case DataType.INTEGER56: byteLength = 7; signed = true; break;
+                case DataType.UNSIGNED24: byteLength = 3; break;
+                case DataType.UNSIGNED40: byteLength = 5; break;
                 case DataType.UNSIGNED48:
                 case DataType.TIME_OF_DAY:
                 case DataType.TIME_DIFFERENCE: byteLength = 6; break;
-                case DataType.UNSIGNED56:      byteLength = 7; break;
+                case DataType.UNSIGNED56: byteLength = 7; break;
             }
 
             // set datatype OCTET_STRING and write default value as a sequence of bytes, little endian, like "56 34 12"
@@ -398,7 +398,7 @@ namespace libEDSsharp
             try
             {
                 value = signed ? (UInt64)((Int64)new System.ComponentModel.Int64Converter().ConvertFromString(od.defaultvalue))
-                               : (UInt64) new System.ComponentModel.UInt64Converter().ConvertFromString(od.defaultvalue);
+                               : (UInt64)new System.ComponentModel.UInt64Converter().ConvertFromString(od.defaultvalue);
             }
             catch (Exception)
             {
@@ -582,7 +582,7 @@ namespace libEDSsharp
             devPar.Items1ElementName = new Items1ChoiceType[] { ConvertDataType(od) };
 
             if (od.defaultvalue != null && od.defaultvalue != "")
-                    devPar.defaultValue = new defaultValue { value = od.defaultvalue };
+                devPar.defaultValue = new defaultValue { value = od.defaultvalue };
 
             if (od.LowLimit != null && od.LowLimit != "" && od.HighLimit != null && od.HighLimit != "")
             {
@@ -864,7 +864,8 @@ namespace libEDSsharp
                         try { netSubObj.PDOmapping = (CANopenObjectListCANopenObjectCANopenSubObjectPDOmapping)System.Enum.Parse(typeof(CANopenObjectListCANopenObjectCANopenSubObjectPDOmapping), subod.PDOtype.ToString()); }
                         catch (Exception) { netSubObj.PDOmapping = CANopenObjectListCANopenObjectCANopenSubObjectPDOmapping.no; }
 
-                        var devSubPar = new parameter {
+                        var devSubPar = new parameter
+                        {
                             uniqueID = "UID_SUB_" + subUid
                         };
                         if (subod.Description != null && subod.Description != "")
@@ -1198,7 +1199,8 @@ namespace libEDSsharp
             return container;
         }
 
-        private string G_label_getDescription(object[] items) {
+        private string G_label_getDescription(object[] items)
+        {
             if (items != null)
             {
                 foreach (object o in items)
@@ -1394,7 +1396,8 @@ namespace libEDSsharp
                                 try { accessType = (EDSsharp.AccessType)System.Enum.Parse(typeof(EDSsharp.AccessType), netObj.accessType.ToString()); }
                                 catch (Exception) { accessType = EDSsharp.AccessType.ro; }
                             }
-                            else {
+                            else
+                            {
                                 accessType = EDSsharp.AccessType.ro;
                             }
 

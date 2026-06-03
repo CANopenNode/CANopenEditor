@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace libEDSsharp
 {
@@ -45,16 +43,17 @@ namespace libEDSsharp
         public ushort ConfigurationIndex
         {
             get { return _ConfigurationIndex; }
-            set {
+            set
+            {
 
-                if(value==0)
+                if (value == 0)
                 {
                     _ConfigurationIndex = 0;
                     _MappingIndex = 0;
                     return;
                 }
 
-                if ( ((value >= 0x1400) && (value < 0x1600)) || ((value >=0x1800) && (value <0x1a00)) )
+                if (((value >= 0x1400) && (value < 0x1600)) || ((value >= 0x1800) && (value < 0x1a00)))
                 {
                     _ConfigurationIndex = value; _MappingIndex = (UInt16)(_ConfigurationIndex + (UInt16)0x200);
                 }
@@ -62,8 +61,8 @@ namespace libEDSsharp
                 {
                     throw new ArgumentOutOfRangeException("Configuration Index", "Must be between 0x1400 and 0x17FF ");
                 }
-                   
-                   
+
+
             }
         }
         /// <summary>
@@ -120,7 +119,7 @@ namespace libEDSsharp
             }
             set
             {
-        
+
                 if (value == true)
                     COB = COB | 0x80000000;
                 else
@@ -218,7 +217,7 @@ namespace libEDSsharp
         public void insertMapping(int ordinal, PDOMappingEntry entry)
         {
             int size = 0;
-            foreach(PDOMappingEntry e in Mapping)
+            foreach (PDOMappingEntry e in Mapping)
             {
                 size += e.width;
             }
@@ -226,7 +225,7 @@ namespace libEDSsharp
             if (size + entry.width > 64)
                 return;
 
-            Mapping.Insert(ordinal,entry);
+            Mapping.Insert(ordinal, entry);
         }
 
     }
@@ -256,8 +255,8 @@ namespace libEDSsharp
         public void build_PDOlists()
         {
             //List<ODentry> odl = new List<ODentry>();
-            build_PDOlist(0x1800,pdoslots);
-            build_PDOlist(0x1400,pdoslots);
+            build_PDOlist(0x1800, pdoslots);
+            build_PDOlist(0x1400, pdoslots);
 
         }
         /// <summary>
@@ -288,14 +287,14 @@ namespace libEDSsharp
 
                     if (od.Containssubindex(2))
                         slot.transmissiontype = EDSsharp.ConvertToByte(od.Getsubobject(2).defaultvalue);
-                    
+
                     if (od.Containssubindex(3))
                         slot.inhibit = EDSsharp.ConvertToUInt16(od.Getsubobject(3).defaultvalue);
 
                     if (od.Containssubindex(5))
                         slot.eventtimer = EDSsharp.ConvertToUInt16(od.Getsubobject(5).defaultvalue);
 
-                    if (od.Containssubindex(6))                  
+                    if (od.Containssubindex(6))
                         slot.syncstart = EDSsharp.ConvertToByte(od.Getsubobject(6).defaultvalue);
 
                     slot.ConfigurationIndex = idx;
@@ -311,9 +310,11 @@ namespace libEDSsharp
 
                     ODentry mapping = eds.Getobject((ushort)(idx + 0x200));
 
-                    if (mapping != null) {
-                        slot.DescriptionMap = mapping.Description; 
-                    }else
+                    if (mapping != null)
+                    {
+                        slot.DescriptionMap = mapping.Description;
+                    }
+                    else
                     {
                         Console.WriteLine(string.Format("No mapping for index 0x{0:X4} should be at 0x{1:X4}", idx, idx + 0x200));
                         continue;
@@ -324,7 +325,7 @@ namespace libEDSsharp
                     slot.mappingAccessType = od.accesstype;
                     slot.mappingloc = od.prop.CO_storageGroup;
 
-                    for (ushort subindex= 1; subindex<= mapping.Getmaxsubindex();subindex++)
+                    for (ushort subindex = 1; subindex <= mapping.Getmaxsubindex(); subindex++)
                     {
                         ODentry sub = mapping.Getsubobject(subindex);
                         if (sub == null)
@@ -367,13 +368,13 @@ namespace libEDSsharp
                             else
                                 maptarget.entry = eds.ods[pdoindex].Getsubobject(pdosub);
                             // Check if mapped sub index was found in OD 
-                            if (maptarget.entry == null)         
+                            if (maptarget.entry == null)
                             {
                                 Console.WriteLine("MAPPING FAILED, OBJEKT NOT FOUND");
                                 continue;
                             }
                             else if ((maptarget.entry.prop.CO_disabled == false) &&
-                                (datasize <= maptarget.entry.Sizeofdatatype()) && 
+                                (datasize <= maptarget.entry.Sizeofdatatype()) &&
                                 (datasize > 0))
                             {
                                 //mappingfail = false;
@@ -385,7 +386,8 @@ namespace libEDSsharp
 
                             slot.Mapping.Add(maptarget);
                         }
-                        catch (Exception ex) {
+                        catch (Exception ex)
+                        {
                             // Log the exception instead of silently swallowing it so failures are visible
                             Console.WriteLine($"Mapping exception at PDO index 0x{idx:X4}: {ex}");
                         }
@@ -405,13 +407,13 @@ namespace libEDSsharp
         /// </summary>
         public void buildmappingsfromlists(bool isCANopenNode_V4)
         {
-            for(ushort x=0x1400;x<0x1c00;x++)
+            for (ushort x = 0x1400; x < 0x1c00; x++)
             {
                 if (eds.ods.ContainsKey(x))
                     eds.ods.Remove(x);
             }
 
-            foreach(PDOSlot slot in pdoslots)
+            foreach (PDOSlot slot in pdoslots)
             {
 
                 ODentry config = new ODentry();
@@ -512,14 +514,14 @@ namespace libEDSsharp
                     }
                 }
 
-                eds.ods.Add(slot.ConfigurationIndex,config);
+                eds.ods.Add(slot.ConfigurationIndex, config);
 
                 ODentry mapping = new ODentry();
                 mapping.Index = slot.MappingIndex;
                 mapping.datatype = DataType.PDO_MAPPING;
                 mapping.objecttype = ObjectType.RECORD;
 
-                if(slot.isTXPDO())
+                if (slot.isTXPDO())
                     mapping.parameter_name = "TPDO mapping parameter";
                 else
                     mapping.parameter_name = "RPDO mapping parameter";
@@ -555,8 +557,8 @@ namespace libEDSsharp
                     sub.accesstype = EDSsharp.AccessType.rw;
                     mapping.addsubobject(mappingcount, sub);
                 }
-                eds.ods.Add(slot.MappingIndex,mapping);
-               
+                eds.ods.Add(slot.MappingIndex, mapping);
+
             }
         }
 
@@ -568,11 +570,11 @@ namespace libEDSsharp
         {
 
             //quick range check, it must be a config index for an RXPDO or a TXPDO
-            if( (configindex<0x1400) || (configindex >= 0x1a00)  || ((configindex>=0x1600) && (configindex<0x1800)))
+            if ((configindex < 0x1400) || (configindex >= 0x1a00) || ((configindex >= 0x1600) && (configindex < 0x1800)))
 
                 return;
 
-            foreach(PDOSlot slot in pdoslots)
+            foreach (PDOSlot slot in pdoslots)
             {
                 if (slot.ConfigurationIndex == configindex)
                     return;
@@ -621,7 +623,7 @@ namespace libEDSsharp
                     newslot.COB = 0xC0000000;
                     break;
             }
-            
+
             newslot.configloc = "PERSIST_COMM";
             newslot.mappingloc = "PERSIST_COMM";
 
@@ -641,10 +643,10 @@ namespace libEDSsharp
             if (isTXPDO)
                 startindex = 0x1800;
 
-            for(UInt16 index = startindex; index<(startindex+0x200);index++)
+            for (UInt16 index = startindex; index < (startindex + 0x200); index++)
             {
                 bool found = false;
-                foreach(PDOSlot slot in pdoslots)
+                foreach (PDOSlot slot in pdoslots)
                 {
                     if (slot.ConfigurationIndex == index)
                     {
@@ -653,7 +655,7 @@ namespace libEDSsharp
                     }
                 }
 
-                if(found==false)
+                if (found == false)
                 {
                     return index;
                 }

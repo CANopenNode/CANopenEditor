@@ -17,12 +17,10 @@
     Copyright(c) 2016 - 2019 Robin Cornelius <robin.cornelius@gmail.com>
 */
 
-using System;
-using System.Windows.Forms;
 using libEDSsharp;
+using System;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Drawing;
+using System.Windows.Forms;
 
 namespace ODEditor
 {
@@ -94,7 +92,7 @@ namespace ODEditor
             textBox_mdFileName.Text = Path.GetFileName(eds.mdfilename);
 
             //DCF support
-            if (eds.dc!=null)
+            if (eds.dc != null)
             {
                 textBox_concretenodeid.Text = eds.dc.NodeID.ToString();
                 textBox_nodename.Text = eds.dc.NodeName;
@@ -118,16 +116,16 @@ namespace ODEditor
                     ((TextBox)subctrl).TextChanged +=
                         new EventHandler(InputControls_OnChange);
                 else
-                if (subctrl is CheckBox)
-                    ((CheckBox)subctrl).CheckedChanged +=
-                        new EventHandler(InputControls_OnChange);
-                else
-                {
-                    if (subctrl.Controls.Count > 0)
-                        this.AddOnChangeHandlerToInputControls(subctrl.Controls);
-                }
+                    if (subctrl is CheckBox)
+                        ((CheckBox)subctrl).CheckedChanged +=
+                            new EventHandler(InputControls_OnChange);
+                    else
+                    {
+                        if (subctrl.Controls.Count > 0)
+                            this.AddOnChangeHandlerToInputControls(subctrl.Controls);
+                    }
             }
-    }
+        }
 
         private void update_devfile_info()
         {
@@ -166,16 +164,16 @@ namespace ODEditor
                 // NG_Master active (according DSP302) if consumer time (0x1016) == 0  and NodeID is in network list (0x1F81) and Guardtime (0x100C)  != 0 
                 // NrOfNG_MonitoredNodes should be the sum of all NodeIDs that are in network list (0x1F81) if heartbeat consumer time (0x1016) == 0  and Guardtime (0x100C)  != 0 
                 textBox_NG_NumOfNodes.Enabled = checkBox_ngMaster.Checked;
-                eds.di.NG_Slave = checkBox_ngSlave.Checked; 
+                eds.di.NG_Slave = checkBox_ngSlave.Checked;
                 eds.di.NG_Master = checkBox_ngMaster.Checked;
-                System.UInt16.TryParse(textBox_NG_NumOfNodes.Text,out eds.di.NrOfNG_MonitoredNodes);
+                System.UInt16.TryParse(textBox_NG_NumOfNodes.Text, out eds.di.NrOfNG_MonitoredNodes);
                 if (eds.di.NrOfNG_MonitoredNodes > 127)
                 {
                     MessageBox.Show("Number of monitored nodes must be between 0 and 127");
                 }
 
                 doUpdatePDOs();
-               
+
                 //These are read only and auto calculated 
                 //textBox_rxpdos.Text = eds.di.NrOfRXPDO.ToString();
                 //textBox_txpdos.Text = eds.di.NrOfTXPDO.ToString();

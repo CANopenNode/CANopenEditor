@@ -1116,14 +1116,14 @@ namespace libEDSsharp
                     md.objectlist.Add(md.objectlist.Count + 1, entry.Index);
                 }
                 else
-                if (entry.Index >= 0x2000 && entry.Index < 0x6000)
-                {
-                    mo.objectlist.Add(mo.objectlist.Count + 1, entry.Index);
-                }
-                else
-                {
-                    oo.objectlist.Add(oo.objectlist.Count + 1, entry.Index);
-                }
+                    if (entry.Index >= 0x2000 && entry.Index < 0x6000)
+                    {
+                        mo.objectlist.Add(mo.objectlist.Count + 1, entry.Index);
+                    }
+                    else
+                    {
+                        oo.objectlist.Add(oo.objectlist.Count + 1, entry.Index);
+                    }
             }
 
             md.Write(writer);
