@@ -169,10 +169,10 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/cfr-mir">
-                    <img src="https://avatars.githubusercontent.com/u/44053860?v=4" width="100;" alt="cfr-mir"/>
+                <a href="https://github.com/cfrank-mir">
+                    <img src="https://avatars.githubusercontent.com/u/284268463?v=4" width="100;" alt="cfrank-mir"/>
                     <br />
-                    <sub><b>cfr-mir</b></sub>
+                    <sub><b>cfrank-mir</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -192,24 +192,10 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/wilkinsw">
-                    <img src="https://avatars.githubusercontent.com/u/10655771?v=4" width="100;" alt="wilkinsw"/>
+                <a href="https://github.com/Regelink">
+                    <img src="https://avatars.githubusercontent.com/u/1665817?v=4" width="100;" alt="Regelink"/>
                     <br />
-                    <sub><b>wilkinsw</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/pettaa123">
-                    <img src="https://avatars.githubusercontent.com/u/31046837?v=4" width="100;" alt="pettaa123"/>
-                    <br />
-                    <sub><b>pettaa123</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/henrikbrixandersen">
-                    <img src="https://avatars.githubusercontent.com/u/1076226?v=4" width="100;" alt="henrikbrixandersen"/>
-                    <br />
-                    <sub><b>henrikbrixandersen</b></sub>
+                    <sub><b>Regelink</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -220,21 +206,28 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/Regelink">
-                    <img src="https://avatars.githubusercontent.com/u/1665817?v=4" width="100;" alt="Regelink"/>
+                <a href="https://github.com/henrikbrixandersen">
+                    <img src="https://avatars.githubusercontent.com/u/1076226?v=4" width="100;" alt="henrikbrixandersen"/>
                     <br />
-                    <sub><b>Regelink</b></sub>
+                    <sub><b>henrikbrixandersen</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/pettaa123">
+                    <img src="https://avatars.githubusercontent.com/u/31046837?v=4" width="100;" alt="pettaa123"/>
+                    <br />
+                    <sub><b>pettaa123</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/wilkinsw">
+                    <img src="https://avatars.githubusercontent.com/u/10655771?v=4" width="100;" alt="wilkinsw"/>
+                    <br />
+                    <sub><b>wilkinsw</b></sub>
                 </a>
             </td>
 		</tr>
 		<tr>
-            <td align="center">
-                <a href="https://github.com/DylanRobertBennett">
-                    <img src="https://avatars.githubusercontent.com/u/87715493?v=4" width="100;" alt="DylanRobertBennett"/>
-                    <br />
-                    <sub><b>DylanRobertBennett</b></sub>
-                </a>
-            </td>
             <td align="center">
                 <a href="https://github.com/rgruening">
                     <img src="https://avatars.githubusercontent.com/u/72022918?v=4" width="100;" alt="rgruening"/>
@@ -270,8 +263,6 @@ Contributors
                     <sub><b>zhanglongqi</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/DaMutz">
                     <img src="https://avatars.githubusercontent.com/u/406081?v=4" width="100;" alt="DaMutz"/>
@@ -279,6 +270,8 @@ Contributors
                     <sub><b>DaMutz</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/StormOli">
                     <img src="https://avatars.githubusercontent.com/u/4819887?v=4" width="100;" alt="StormOli"/>
