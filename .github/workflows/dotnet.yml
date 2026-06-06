@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        dotnet: [net481, net8]
+        dotnet: [net8, net481]
         configuration: [Debug, Release]
 
     runs-on: windows-latest
