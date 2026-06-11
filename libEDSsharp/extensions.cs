@@ -18,7 +18,7 @@ namespace libEDSsharp
         /// <returns>hexadecimal string representing the value</returns>
         public static string ToHexString(this byte val)
         {
-            return String.Format("0x{0:x}", val);
+            return String.Format("0x{0:X2}", val);
         }
         /// <summary>
         /// returns a string containing the value as hexadecimal
@@ -27,7 +27,7 @@ namespace libEDSsharp
         /// <returns>hexadecimal string representing the value</returns>
         public static string ToHexString(this UInt16 val)
         {
-            return String.Format("0x{0:x}",val);
+            return String.Format("0x{0:X4}",val);
         }
         /// <summary>
         /// returns a string containing the value as hexadecimal
@@ -36,7 +36,7 @@ namespace libEDSsharp
         /// <returns>hexadecimal string representing the value</returns>
         public static string ToHexString(this UInt32 val)
         {
-            return String.Format("0x{0:x}", val);
+            return String.Format("0x{0:X8}", val);
         }
 
     }

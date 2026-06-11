@@ -446,9 +446,9 @@ namespace libEDSsharp
         Description:  {12}
 *******************************************************************************/",
             gitVersion, odname,
-            Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
+            Path.GetFileName(eds.projectFilename), eds.fi.fileVersionString,
             eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
-            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
+            eds.di.VendorName, eds.di.VendorNumber.ToHexString(), eds.di.ProductName, eds.di.ProductNumber.ToHexString(),
             eds.fi.Description));
 
             file.WriteLine(string.Format(@"

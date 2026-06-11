@@ -74,6 +74,10 @@ namespace libEDSsharp
                 {
                     writer.WriteLine(string.Format("{2}{0}={1}", f.Name, ((bool)f.GetValue(this)) == true ? 1 : 0, comment == true ? ";" : ""));
                 }
+                else  if (f.FieldType.Name == "UInt32")
+                {
+                    writer.WriteLine(string.Format("{2}{0}={1}", f.Name, string.Format("0x{0:x8}", f.GetValue(this)), comment == true ? ";" : ""));
+                }
                 else
                 {
                     writer.WriteLine(string.Format("{2}{0}={1}", f.Name, f.GetValue(this).ToString(), comment == true ? ";" : ""));
@@ -1020,6 +1024,27 @@ namespace libEDSsharp
                 }
             }
         }
+        public static UInt32 U32Parse(string str)
+        {
+            if (str[0] == '0')
+            {
+                if (str[1] == 'x' || str[1] == 'X')
+                {
+                    // Hex format
+                    return System.Convert.ToUInt32(str, 16);
+                }
+                else
+                {
+                    // Octal format
+                    return System.Convert.ToUInt32(str, 8);
+                }
+            }
+            else
+            {
+                // Decimal format
+                return System.Convert.ToUInt32(str);
+            }
+        }
 
         /// <summary>
         /// This function scans the PDO list and compares it to NrOfRXPDO and NrOfTXPDO
@@ -1059,7 +1084,38 @@ namespace libEDSsharp
             }
             UpdatePDOcount();
         }
-
+        private void GetEDSFileInfo()
+        {
+            string[] nums = fi.fileVersionString.Split('.');
+            if (nums.Length == 2)
+            {
+                if (byte.TryParse(nums[0], out fi.FileVersion) == false)
+                {
+                    fi.FileVersion = 1;
+                    Warnings.warning_list.Add("EDS FileVersion cannot be extracted from string \"" + nums[0] +"\", set to 1");
+                }
+                 if (byte.TryParse(nums[1], out fi.FileRevision) == false)
+                {
+                    fi.FileRevision = 0;
+                    Warnings.warning_list.Add("EDS FileRevision cannot be extracted from string \"" + nums[1] + "\", set to 0");
+                }
+            }
+            else if (nums.Length == 1)
+            {
+                if (byte.TryParse(nums[0], out fi.FileVersion) == false)
+                {
+                    fi.FileVersion = 1;
+                    Warnings.warning_list.Add("EDS FileVersion cannot be extracted from string \"" + nums[0] + "\", set to 1");
+                }
+                fi.FileRevision = 0;
+            }
+            else
+            {
+                fi.FileVersion = 1;
+                fi.FileRevision = 0;
+                Warnings.warning_list.Add("EDS FileVersion and FileRevision cannot be extracted from string \"" + fi.fileVersionString + "\", set to 1.0");
+            }
+        }
         public void Savefile(string filename, InfoSection.Filetype ft)
         {
             if (ft == InfoSection.Filetype.File_EDS)
@@ -1086,6 +1142,8 @@ namespace libEDSsharp
             fi.EDSVersion = "4.0";
             fi.EDSVersionMajor = 4;
             fi.EDSVersionMinor = 0;
+
+            GetEDSFileInfo();
 
             StreamWriter writer = System.IO.File.CreateText(filename);
             writer.NewLine = "\n";
