@@ -439,8 +439,9 @@ namespace libEDSsharp
                 case Items1ChoiceType.LREAL: return DataType.REAL64;
                 case Items1ChoiceType.STRING: return DataType.VISIBLE_STRING;
                 case Items1ChoiceType.WSTRING: return DataType.UNICODE_STRING;
-                case Items1ChoiceType.BITSTRING:
-                    return defaultValue == "" ? DataType.DOMAIN : DataType.OCTET_STRING;
+                // FIXME: With a valid default value of “”, which is permitted for OCTET_STRING, a valid OCTET_STRING is converted to DOMAIN.
+                // In my opinion, there is not enough information to determine whether BITSTRING is a DOMAIN or an OCTET_STRING type.
+                case Items1ChoiceType.BITSTRING: return defaultValue == "" ? DataType.DOMAIN : DataType.OCTET_STRING;
                 default:
                     return DataType.INTEGER32;
             }
@@ -563,6 +564,8 @@ namespace libEDSsharp
                     OdSubObject.DataType = LibCanOpen.OdSubObject.Types.DataType.UnicodeString;
                     break;
                 case Items1ChoiceType.BITSTRING:
+                    // FIXME: With a valid default value of “”, which is permitted for OCTET_STRING, a valid OCTET_STRING is converted to DOMAIN.
+                    // In my opinion, there is not enough information to determine whether BITSTRING is a DOMAIN or an OCTET_STRING type.
                     OdSubObject.DataType = OdSubObject.DefaultValue == "" ? LibCanOpen.OdSubObject.Types.DataType.Domain : LibCanOpen.OdSubObject.Types.DataType.OctetString;
                     break;
                 default:

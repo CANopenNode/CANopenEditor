@@ -28,9 +28,8 @@
     <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
-	<PropertyGroup>
-		<SelfContained>false</SelfContained>
-		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Index_8287_16x.ico</ApplicationIcon>
@@ -112,13 +111,14 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="10.0.8" />
     <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="10.0.9" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="10.0.8" />
     <PackageReference Include="runtime.android-x64.runtime.native.System.IO.Ports" Version="10.0.8" />
     <PackageReference Include="runtime.linux-bionic-x64.runtime.native.System.IO.Ports" Version="10.0.8" />
     <PackageReference Include="SourceGrid" Version="4.4.0" Condition="'$(TargetFramework)' == 'net481'" />
     <PackageReference Include="SourceGrid-huanlin" Version="6.1.1" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
     <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.8" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.8" />
     <PackageReference Include="System.Resources.Extensions" Version="10.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Runtime.Caching" Version="10.0.8" />
