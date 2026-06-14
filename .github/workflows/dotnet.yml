@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        dotnet: [net481, net8]
+        dotnet: [net8, net481]
         configuration: [Debug, Release]
 
     runs-on: windows-latest
@@ -21,7 +21,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Setup .NET
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
     - name: C# problem matcher
       run: |
         Invoke-WebRequest "https://raw.githubusercontent.com/actions/setup-dotnet/main/.github/csc.json" -OutFile "csc.json"
@@ -47,7 +47,7 @@ jobs:
       run: |
           dotnet test --no-build --verbosity normal GUITests\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}*\GUITests.dll
     - name: Upload Artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         name: EDSEditor_${{ matrix.dotnet }}
         path: |

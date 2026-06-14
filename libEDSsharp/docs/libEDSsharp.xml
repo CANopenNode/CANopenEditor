@@ -341,6 +341,17 @@
             </summary>
             <returns>string representation of object type </returns>
         </member>
+<<<<<<< HEAD
+=======
+        <member name="M:libEDSsharp.ODentry.IncrementNumberAtEnd(System.String,System.Int32)">
+            <summary>
+            Incremement number at end of string by given increment
+            </summary>
+            <param name="input">SubObject name as string to increment</param>
+            <param name="increment">increment for next SubObject</param>
+            <returns>incremented name or the original string if no number is found at the end</returns>
+        </member>
+>>>>>>> main_RC
         <member name="M:libEDSsharp.ODentry.AddSubEntry">
             <summary>
             Duplicate current sub entry and add it to parent
@@ -539,7 +550,10 @@
             </summary>
             <param name="source">EDS object type object</param>
             <param name="destination">protobuffer object type</param>
+<<<<<<< HEAD
             <param name="member">result object</param>
+=======
+>>>>>>> main_RC
             <param name="context">resolve context</param>
             <returns>result </returns>
         </member>
@@ -549,7 +563,10 @@
             </summary>
             <param name="source">EDS object type object</param>
             <param name="destination">protobuffer object type</param>
+<<<<<<< HEAD
             <param name="member">result object</param>
+=======
+>>>>>>> main_RC
             <param name="context">resolve context</param>
             <returns>result </returns>
         </member>
@@ -565,7 +582,10 @@
             </summary>
             <param name="source">EDS accesstype</param>
             <param name="destination">protobuffer sdo access type</param>
+<<<<<<< HEAD
             <param name="member">result object</param>
+=======
+>>>>>>> main_RC
             <param name="context">resolve context</param>
             <returns>result </returns>
         </member>
@@ -575,7 +595,10 @@
             </summary>
             <param name="source">EDS accesstype</param>
             <param name="destination">protobuffer pdo access type</param>
+<<<<<<< HEAD
             <param name="member">result object</param>
+=======
+>>>>>>> main_RC
             <param name="context">resolve context</param>
             <returns>result </returns>
         </member>
@@ -585,11 +608,26 @@
             </summary>
             <param name="source">protobuffer sdo access type</param>
             <param name="destination">EDS accesstype</param>
+<<<<<<< HEAD
             <param name="member">result object</param>
             <param name="context">resolve context</param>
             <returns>result </returns>
         </member>
         <!-- Badly formed XML comment ignored for member "M:libEDSsharp.ODStringToShortTypeResolver.Convert(System.String,System.UInt16,AutoMapper.ResolutionContext)" -->
+=======
+            <param name="context">resolve context</param>
+            <returns>result </returns>
+        </member>
+        <member name="M:libEDSsharp.ODStringToShortTypeResolver.Convert(System.String,System.UInt16,AutoMapper.ResolutionContext)">
+            <summary>
+            Resolver to convert index and subindex string into short, will try hex, then descimal
+            </summary>
+            <param name="source">string containing index or subindex</param>
+            <param name="destination">short int interpreted from the string</param>
+            <param name="context">resolve context</param>
+            <returns>result </returns>
+        </member>
+>>>>>>> main_RC
         <member name="T:libEDSsharp.CanOpenNodeExporter">
             <summary>
             Export .c and .h files for CanOpenNode v1-3
@@ -628,10 +666,18 @@
         </member>
         <member name="M:libEDSsharp.CanOpenNodeExporter.specialarraysearch(System.UInt16,System.UInt16)">
             <summary>
+<<<<<<< HEAD
             
             </summary>
             <param name="start"></param>
             <param name="end"></param>
+=======
+            Search for special array ranges within the object dictionary between start and end
+            and record their lowest and highest indices so they can be treated as arrays.
+            </summary>
+            <param name="start">Start index of the search range.</param>
+            <param name="end">End index of the search range.</param>
+>>>>>>> main_RC
         </member>
         <member name="M:libEDSsharp.CanOpenNodeExporter.ObjectActive(System.UInt16)">
             <summary>
@@ -1140,26 +1186,42 @@
             <param name="ex">what exporter version you want. Default is CANOPENNODE_LEGACY</param>
             <returns>A exporter</returns>
         </member>
+<<<<<<< HEAD
         <member name="T:libEDSsharp.extensions">
+=======
+        <member name="T:libEDSsharp.Extensions">
+>>>>>>> main_RC
             <summary>
             Helper functions to convert integral values into hexadecimal string
             </summary>
         </member>
+<<<<<<< HEAD
         <member name="M:libEDSsharp.extensions.ToHexString(System.Byte)">
+=======
+        <member name="M:libEDSsharp.Extensions.ToHexString(System.Byte)">
+>>>>>>> main_RC
             <summary>
             returns a string containing the value as hexadecimal
             </summary>
             <param name="val">the value</param>
             <returns>hexadecimal string representing the value</returns>
         </member>
+<<<<<<< HEAD
         <member name="M:libEDSsharp.extensions.ToHexString(System.UInt16)">
+=======
+        <member name="M:libEDSsharp.Extensions.ToHexString(System.UInt16)">
+>>>>>>> main_RC
             <summary>
             returns a string containing the value as hexadecimal
             </summary>
             <param name="val">the value</param>
             <returns>hexadecimal string representing the value</returns>
         </member>
+<<<<<<< HEAD
         <member name="M:libEDSsharp.extensions.ToHexString(System.UInt32)">
+=======
+        <member name="M:libEDSsharp.Extensions.ToHexString(System.UInt32)">
+>>>>>>> main_RC
             <summary>
             returns a string containing the value as hexadecimal
             </summary>
@@ -1301,6 +1363,15 @@
             <param name="a"></param>
             <param name="b"></param>
         </member>
+<<<<<<< HEAD
+=======
+        <member name="T:libEDSsharp.PDOMappingEntry">
+            <summary>
+            Represents a single PDO mapping entry
+            Holds a reference to ODentry and a mapped width
+            </summary>
+        </member>
+>>>>>>> main_RC
         <member name="T:libEDSsharp.PDOSlot">
             <summary>
             Represent a PDO slot (mapping + communication index)
@@ -1410,7 +1481,11 @@
             <param name="od">object dictionary entry</param>
             <returns>name of entry with index and subindex prefixed, or blank string if not found</returns>
         </member>
+<<<<<<< HEAD
         <member name="M:libEDSsharp.PDOSlot.insertMapping(System.Int32,libEDSsharp.ODentry)">
+=======
+        <member name="M:libEDSsharp.PDOSlot.insertMapping(System.Int32,libEDSsharp.PDOMappingEntry)">
+>>>>>>> main_RC
             <summary>
             Insert a OD entry into the mapping table
             </summary>

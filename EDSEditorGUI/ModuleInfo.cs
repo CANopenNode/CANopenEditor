@@ -1,13 +1,8 @@
-﻿using System;
+﻿using libEDSsharp;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using libEDSsharp;
 
 namespace ODEditor
 {
@@ -31,8 +26,8 @@ namespace ODEditor
 
         private void ModuleInfo_Invalidated(object sender, InvalidateEventArgs e)
         {
-           
-            
+
+
 
         }
 
@@ -46,7 +41,7 @@ namespace ODEditor
             this.listView_modules.Items.Clear();
 
 
-            foreach(KeyValuePair<UInt16,Module> kvp  in eds.modules)
+            foreach (KeyValuePair<UInt16, Module> kvp in eds.modules)
             {
                 Module m = kvp.Value;
                 UInt16 modindex = kvp.Key;
@@ -73,8 +68,8 @@ namespace ODEditor
 
 
                 listView_modules.Items.Add(lvi2);
-            
-            }         
+
+            }
 
         }
 
@@ -95,7 +90,7 @@ namespace ODEditor
 
                 if (eds.ods.ContainsKey(sindex))
                 {
-                    lvi = new ListViewItem(string.Format("0x{0:x4}",sindex));
+                    lvi = new ListViewItem(string.Format("0x{0:x4}", sindex));
                     lvi.SubItems.Add(eds.ods[sindex].parameter_name);
                 }
                 else

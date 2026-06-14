@@ -104,7 +104,11 @@ Device Information
 | LSS Master   | {8,-30} |
 | NG Slave     | {9,-30} |
 | NG Master    | {10,-30} |
+<<<<<<< HEAD
 ",          eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber, eds.di.RevisionNumber,
+=======
+", eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
+>>>>>>> main_RC
             eds.di.Granularity, eds.di.NrOfRXPDO.ToString(), eds.di.NrOfTXPDO.ToString(),
             eds.di.LSS_Supported, eds.di.LSS_Master, eds.di.NG_Slave, eds.di.NG_Master));
 

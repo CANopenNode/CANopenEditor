@@ -57,23 +57,23 @@ namespace libEDSsharp
             file = new StreamWriter(filepath, false);
             file.NewLine = "\n";
 
-           file.Write("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /></head><body>");
+            file.Write("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /></head><body>");
 
-           file.Write(string.Format("<h1> {0} Documentation </h1>",eds.di.ProductName));
+            file.Write(string.Format("<h1> {0} Documentation </h1>", eds.di.ProductName));
 
-           file.Write("<h2>Device Information</h2>");
+            file.Write("<h2>Device Information</h2>");
 
-           file.Write("<table id=\"deviceinfo\">");
-           write2linetableheader("Product name", eds.di.ProductName);
-           write2linetableheader("Product number", eds.di.ProductNumber);
-           write2linetableheader("Revision number", eds.di.RevisionNumber);
-           write2linetableheader("Vendor name", eds.di.VendorName);
-           file.Write("</table>");
+            file.Write("<table id=\"deviceinfo\">");
+            write2linetableheader("Product name", eds.di.ProductName);
+            write2linetableheader("Product number", eds.di.ProductNumber);
+            write2linetableheader("Revision number", eds.di.RevisionNumber);
+            write2linetableheader("Vendor name", eds.di.VendorName);
+            file.Write("</table>");
 
-           file.Write("<h2>Mandatory objects</h2>");
+            file.Write("<h2>Mandatory objects</h2>");
 
-           foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
-           {
+            foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
+            {
                 ODentry od = kvp.Value;
                 if (od.prop.CO_disabled == true)
                     continue;
@@ -92,7 +92,7 @@ namespace libEDSsharp
                 if (od.prop.CO_disabled == true)
                     continue;
 
-                if ((od.Index > 0x1001 && od.Index != 0x1018 && od.Index<0x2000) || od.Index>=0x6000)
+                if ((od.Index > 0x1001 && od.Index != 0x1018 && od.Index < 0x2000) || od.Index >= 0x6000)
                 {
                     writeODentryhtml(od);
                 }
@@ -106,7 +106,7 @@ namespace libEDSsharp
                 if (od.prop.CO_disabled == true)
                     continue;
 
-                if (od.Index >= 0x2000 && od.Index<0x6000)
+                if (od.Index >= 0x2000 && od.Index < 0x6000)
                 {
                     writeODentryhtml(od);
                 }
@@ -115,7 +115,7 @@ namespace libEDSsharp
 
             file.Write("</body></html>");
 
-           file.Close();
+            file.Close();
 
 
         }
@@ -132,7 +132,7 @@ namespace libEDSsharp
             }
             else
             {
-                file.Write(String.Format("<h3>0x{0:x4} sub 0x{2:x2} - {1}</h3>", od.Index, od.parameter_name,od.Subindex));
+                file.Write(String.Format("<h3>0x{0:x4} sub 0x{2:x2} - {1}</h3>", od.Index, od.parameter_name, od.Subindex));
             }
 
             file.Write("<table id=\"odentry\">");
@@ -161,7 +161,7 @@ namespace libEDSsharp
             string description = od.Description;
             file.Write(string.Format("<pre>{0}</pre>", description));
 
-            foreach (KeyValuePair<UInt16,ODentry> sub in od.subobjects)
+            foreach (KeyValuePair<UInt16, ODentry> sub in od.subobjects)
             {
                 ODentry subod = sub.Value;
                 writeODentryhtml(subod);
@@ -173,7 +173,7 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="a">element a</param>
         /// <param name="b">element b</param>
-        void write2linetablerow(string a,object b)
+        void write2linetablerow(string a, object b)
         {
             if (b == null)
                 b = "";
@@ -186,7 +186,7 @@ namespace libEDSsharp
         /// <param name="b"></param>
         void write2linetableheader(string a, object b)
         {
-            file.Write("<tr><th>{0}</th><th>{1}</th></tr>",a,b.ToString());
+            file.Write("<tr><th>{0}</th><th>{1}</th></tr>", a, b.ToString());
         }
         /// <summary>
         /// Returns the datatype of a object dictionary

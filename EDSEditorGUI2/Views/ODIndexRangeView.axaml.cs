@@ -27,7 +27,7 @@ public partial class ODIndexRangeView : UserControl
     /// <param name="e">event param</param>
     private void GridLoadingRow(object? sender, DataGridRowEventArgs e)
     {
-        if(e.Row.DataContext != null)
+        if (e.Row.DataContext != null)
         {
             var dc = (System.Collections.Generic.KeyValuePair<string, ViewModels.OdObject>)e.Row.DataContext;
             int index = int.Parse(dc.Key, System.Globalization.NumberStyles.HexNumber);

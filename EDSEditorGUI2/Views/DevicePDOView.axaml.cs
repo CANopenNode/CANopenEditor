@@ -47,10 +47,10 @@ public partial class DevicePDOView : UserControl
 
                 TextWrapping = TextWrapping.Wrap,
             };
-            AddToMappingGrid(indication, 1, 3 + (i*8), 8);
+            AddToMappingGrid(indication, 1, 3 + (i * 8), 8);
         }
     }
-    void AddToMappingGrid(Control element, int row,int column, int columnspam = 1)
+    void AddToMappingGrid(Control element, int row, int column, int columnspam = 1)
     {
         Grid.SetRow(element, row);
         Grid.SetColumn(element, column);

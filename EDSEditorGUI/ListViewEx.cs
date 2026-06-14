@@ -8,12 +8,11 @@
 
 #region Namespaces
 using System;
-using System.Drawing;
 using System.Collections;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 #endregion
 
 namespace CustomListView
@@ -26,7 +25,7 @@ namespace CustomListView
     {
 
 
-        public delegate void ComboBoxIndexChanged(int row, int col,String Text);
+        public delegate void ComboBoxIndexChanged(int row, int col, String Text);
         public event ComboBoxIndexChanged onComboBoxIndexChanged;
 
         #region SubItem Class
@@ -173,7 +172,7 @@ namespace CustomListView
                 {
 
                     subItemRect = item.SubItems[index].Bounds;
- 
+
                     this.row = item.Index;
                     // Add 1 because of the presence of above condition
                     this.col = index + 1;
@@ -193,9 +192,9 @@ namespace CustomListView
                             // Add 1 because of the presence of above condition
                             this.col = index + 0;
                             break;
-                        }    
+                        }
                     }
-                    
+
                 }
             }
 
@@ -336,9 +335,10 @@ namespace CustomListView
         }
 
         /// <summary>
-        /// 
+        /// Handles mouse button release and displays the appropriate editor
+        /// (textbox or combobox) for the clicked subitem when conditions are met.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Mouse event arguments</param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             try
@@ -374,7 +374,7 @@ namespace CustomListView
                 if (this.row != -1 && this.col != -1)
                 {
 
- 
+
                     // Check whether combobox or text box is set for the current cell
                     SubItem cell = GetKey(new SubItem(this.row, this.col));
 
@@ -404,13 +404,14 @@ namespace CustomListView
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION !!"+ex.ToString());
+                Console.WriteLine("EXCEPTION !!" + ex.ToString());
                 Trace.WriteLine(ex.ToString());
             }
         }
 
         /// <summary>
-        /// 
+        /// Ensures that the current item has subitems up to the number of columns
+        /// when AddSubItem is enabled.
         /// </summary>
         private void ValidateAndAddSubItems()
         {
@@ -563,7 +564,7 @@ namespace CustomListView
                     this.Items[row].SubItems[col].Text = this.combo.Text;
                     this.combo.Visible = !this.hideComboAfterSelChange;
 
-                    if (noevent==false && onComboBoxIndexChanged != null)
+                    if (noevent == false && onComboBoxIndexChanged != null)
                         onComboBoxIndexChanged(row, col, combo.Text);
                 }
             }

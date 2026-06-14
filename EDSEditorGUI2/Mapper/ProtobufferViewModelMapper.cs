@@ -34,7 +34,7 @@ namespace EDSEditorGUI2.Mapper
             return result;
         }
         public class ODConverter : ITypeConverter<Google.Protobuf.Collections.MapField<string, OdObject>, ViewModels.ObjectDictionary>,
-            ITypeConverter< ViewModels.ObjectDictionary, Google.Protobuf.Collections.MapField<string, OdObject>>
+            ITypeConverter<ViewModels.ObjectDictionary, Google.Protobuf.Collections.MapField<string, OdObject>>
         {
             public ViewModels.ObjectDictionary Convert(Google.Protobuf.Collections.MapField<string, OdObject> source, ViewModels.ObjectDictionary destination, ResolutionContext context)
             {

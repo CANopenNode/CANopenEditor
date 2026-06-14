@@ -1,6 +1,6 @@
-﻿using System;
+﻿using libEDSsharp;
+using System;
 using Xunit;
-using libEDSsharp;
 
 namespace Tests
 {
@@ -70,7 +70,7 @@ namespace Tests
             sub.defaultvalue = "1";
             sub.PDOtype = PDOMappingType.no;
             sub.objecttype = ObjectType.VAR;
-           
+
             od.subobjects.Add(0x00, sub);
 
             sub = new ODentry();
@@ -132,7 +132,7 @@ namespace Tests
             sub.parent = od;
             sub.accesstype = EDSsharp.AccessType.ro;
             sub.PDOtype = PDOMappingType.no;
-       
+
 
             sub.defaultvalue = "2";
             sub.objecttype = ObjectType.VAR;
@@ -148,9 +148,9 @@ namespace Tests
             sub.objecttype = ObjectType.VAR;
             sub.PDOtype = PDOMappingType.optional;
             sub.prop.CO_flagsPDO = true;
-   
+
             od.subobjects.Add(0x01, sub);
- 
+
             sub = new ODentry();
             sub.parameter_name = "entry 2";
             sub.datatype = DataType.UNSIGNED32;
@@ -160,7 +160,7 @@ namespace Tests
             sub.objecttype = ObjectType.VAR;
             sub.PDOtype = PDOMappingType.optional;
             sub.prop.CO_flagsPDO = true;
-   
+
             od.subobjects.Add(0x02, sub);
 
             eds.ods.Add(0x2000, od);

@@ -8,6 +8,18 @@ namespace EDSEditorGUI2.ViewModels
         {
         }
 
+        public override string ToString()
+        {
+            if (DeviceInfo == null)
+            {
+                return "unnamed device";
+            }
+            else
+            {
+                return DeviceInfo.ProductName;
+            }
+        }
+
         [ObservableProperty]
         private FileInfo _fileInfo = new();
 
