@@ -21,29 +21,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.analyzers" Version="1.25.0">
-=======
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
     <PackageReference Include="System.ValueTuple" Version="4.6.2" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.analyzers" Version="1.27.0">
->>>>>>> main_RC
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit.assert" Version="2.9.3" />
     <PackageReference Include="xunit.runner.console" Version="2.9.3">
-<<<<<<< HEAD
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-=======
->>>>>>> main_RC
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

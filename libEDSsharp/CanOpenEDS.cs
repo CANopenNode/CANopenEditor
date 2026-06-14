@@ -522,12 +522,8 @@ namespace libEDSsharp
                     }
                     else
                     {
-<<<<<<< HEAD
                         //Only allow our own extensions to populate the key/value pair
                         if (key == "CountLabel" || key == "StorageLocation" || key == "TPDODetectCos")
-=======
-                        if (string.Equals(key, "StorageLocation", StringComparison.OrdinalIgnoreCase) || string.Equals(key, "TPDODetectCos", StringComparison.OrdinalIgnoreCase))
->>>>>>> main_RC
                         {
                             try
                             {
