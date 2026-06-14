@@ -387,7 +387,14 @@ namespace libEDSsharp
             }
 
             writer.WriteLine(string.Format("ObjectType=0x{0:X}", (int)objecttype));
+            if (prop.CO_countLabel != "")
+            {
+                writer.WriteLine(string.Format(";CountLabel={0}", prop.CO_countLabel));
+            }
+            if (prop.CO_storageGroup != "")
+            {
                 writer.WriteLine(string.Format(";StorageLocation={0}", prop.CO_storageGroup));
+            }
 
             if (objecttype == ObjectType.ARRAY)
             {
@@ -522,12 +529,8 @@ namespace libEDSsharp
                     }
                     else
                     {
-<<<<<<< HEAD
                         //Only allow our own extensions to populate the key/value pair
                         if (key == "CountLabel" || key == "StorageLocation" || key == "TPDODetectCos")
-=======
-                        if (string.Equals(key, "StorageLocation", StringComparison.OrdinalIgnoreCase) || string.Equals(key, "TPDODetectCos", StringComparison.OrdinalIgnoreCase))
->>>>>>> main_RC
                         {
                             try
                             {

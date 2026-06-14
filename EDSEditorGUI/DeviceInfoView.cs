@@ -20,13 +20,7 @@
 using libEDSsharp;
 using System;
 using System.IO;
-<<<<<<< HEAD
-using System.Runtime.CompilerServices;
-using System.Drawing;
-using System.Linq;
-=======
 using System.Windows.Forms;
->>>>>>> main_RC
 
 namespace ODEditor
 {

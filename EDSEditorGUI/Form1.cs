@@ -26,11 +26,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-<<<<<<< HEAD
-using System.IO;
-using libEDSsharp;
-=======
->>>>>>> main_RC
 
 namespace ODEditor
 {
@@ -1353,29 +1348,16 @@ namespace ODEditor
                         DialogResult dialogResult = MessageBox.Show(tabControl1.TabPages[i].Text, "Close file?", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
-<<<<<<< HEAD
-                            DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
-=======
-
                             DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
 
->>>>>>> main_RC
                             if (device.eds.Dirty == true)
                             {
                                 if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
                                     return;
                             }
-<<<<<<< HEAD
                             network.Remove(device.eds);
                             tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
                         }                        
-=======
-
-                            network.Remove(device.eds);
-
-                            tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
-                        }
->>>>>>> main_RC
                     }
                 }
             }
