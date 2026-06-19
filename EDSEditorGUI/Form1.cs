@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using System.IO;
 using libEDSsharp;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Diagnostics;
 
 namespace ODEditor
 {
@@ -1038,7 +1039,14 @@ namespace ODEditor
                     docgenMarkup.genmddoc(temp2, dv.eds);
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd", $"/c start {temp2}"));
+                        // By using "cmd /c start" you avoid the child process to be attached to the current
+                        // process so the report viewer does not close when leaving the EDS editor.
+                        // {temp2} is quoted too, so spaces in the path do not cause problems.
+                        Process.Start(new ProcessStartInfo {
+                            FileName = "cmd",
+                            Arguments = $"/c start \"\" \"{temp2}\"",
+                            WindowStyle= ProcessWindowStyle.Hidden
+                        });
                     }
                     if (IsRunningOnMono())
                     {
