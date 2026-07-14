@@ -16,25 +16,13 @@ namespace EDSSharp
         {
             try
             {
+                Dictionary<string, string> argskvp = ParseArgs(args);
 
-                Dictionary<string, string> argskvp = new Dictionary<string, string>();
-
-                for (int argv = 0; argv < (args.Length - 1); argv++)
+                if (argskvp.ContainsKey("--export-project"))
                 {
-                    if (args[argv] == "--infile")
-                    {
-                        argskvp.Add("--infile", args[++argv]);
-                    }
-                    else if (args[argv] == "--outfile")
-                    {
-                        argskvp.Add("--outfile", args[++argv]);
-                    }
-                    else if (args[argv] == "--type")
-                    {
-                        argskvp.Add("--type", args[++argv]);
-                    }
+                    ExportProject(argskvp);
+                    return;
                 }
-
 
                 if (argskvp.ContainsKey("--infile") && argskvp.ContainsKey("--outfile"))
                 {
@@ -46,32 +34,15 @@ namespace EDSSharp
                         outtype = argskvp["--type"];
                     }
 
-
-                    switch (Path.GetExtension(infile).ToLower())
-                    {
-                        case ".xdd":
-                            openXDDfile(infile);
-                            break;
-
-                        case ".eds":
-                            openEDSfile(infile);
-                            break;
-
-
-                        default:
-                            Program.WriteError("Invalid INFILE extension.");
-                            PrintHelpText();
-                            return;
-
-                    }
-                    if(eds != null)
+                    eds = LoadProject(infile);
+                    if (eds != null)
                     {
                         Export(outfile, outtype);
                         Console.WriteLine("Successful conversion");
                     }
                     else
                     {
-                        Program.WriteError("Invalid XDD INFILE.");
+                        Program.WriteError("Invalid INFILE.");
                         PrintHelpText();
                     }
                 }
@@ -90,6 +61,118 @@ namespace EDSSharp
             }
         }
 
+        private static Dictionary<string, string> ParseArgs(string[] args)
+        {
+            Dictionary<string, string> argskvp = new Dictionary<string, string>();
+
+            for (int argv = 0; argv < args.Length; argv++)
+            {
+                if (!args[argv].StartsWith("--"))
+                {
+                    continue;
+                }
+
+                if (args[argv] == "--export-project")
+                {
+                    argskvp.Add("--export-project", "true");
+                    continue;
+                }
+
+                if (argv + 1 >= args.Length || args[argv + 1].StartsWith("--"))
+                {
+                    continue;
+                }
+
+                argskvp.Add(args[argv], args[++argv]);
+            }
+
+            return argskvp;
+        }
+
+        private static void ExportProject(Dictionary<string, string> argskvp)
+        {
+            if (!argskvp.ContainsKey("--infile") || !argskvp.ContainsKey("--outdir"))
+            {
+                Program.WriteError("INFILE or OUTDIR missing.");
+                PrintExportProjectHelpText();
+                return;
+            }
+
+            string infile = Path.GetFullPath(argskvp["--infile"]);
+            string outdir = Path.GetFullPath(argskvp["--outdir"]);
+            Directory.CreateDirectory(outdir);
+
+            eds = LoadProject(infile);
+            if (eds == null)
+            {
+                Program.WriteError("Invalid project INFILE.");
+                PrintExportProjectHelpText();
+                return;
+            }
+
+            eds.fi.exportFolder = outdir;
+
+            string basename = argskvp.ContainsKey("--od")
+                ? argskvp["--od"]
+                : Path.GetFileNameWithoutExtension(infile);
+
+            string canopennodeVersion = "v4";
+            if (argskvp.ContainsKey("--canopennode"))
+            {
+                canopennodeVersion = argskvp["--canopennode"].ToLower();
+            }
+
+            if (canopennodeVersion != "v4" && canopennodeVersion != "legacy")
+            {
+                Program.WriteError("Invalid --canopennode value. Use 'v4' or 'legacy'.");
+                PrintExportProjectHelpText();
+                return;
+            }
+
+            ExporterFactory.Exporter cnType = canopennodeVersion == "legacy"
+                ? ExporterFactory.Exporter.CANOPENNODE_LEGACY
+                : ExporterFactory.Exporter.CANOPENNODE_V4;
+
+            string odBasePath = Path.Combine(outdir, basename);
+            string jsonPath = argskvp.ContainsKey("--json")
+                ? Path.GetFullPath(argskvp["--json"])
+                : Path.Combine(outdir, basename + ".json");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(jsonPath));
+
+            Warnings.warning_list.Clear();
+
+            ExporterFactory.getExporter(cnType).export(odBasePath, eds);
+            Export(jsonPath, "CanOpenNodeProtobuf(json)");
+
+            Console.WriteLine("Successful export");
+        }
+
+        private static EDSsharp LoadProject(string infile)
+        {
+            switch (Path.GetExtension(infile).ToLower())
+            {
+                case ".xdd":
+                case ".xdc":
+                case ".xpd":
+                    return openXDDfile(infile);
+
+                case ".eds":
+                case ".dcf":
+                    return openEDSfile(infile);
+
+                case ".json":
+                    return openProtobuffile(infile, true);
+
+                case ".binpb":
+                    return openProtobuffile(infile, false);
+
+                default:
+                    Program.WriteError("Invalid INFILE extension.");
+                    return null;
+            }
+        }
+
         private static void WriteError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -98,26 +181,42 @@ namespace EDSSharp
             Console.WriteLine("");
         }
 
-        private static void openEDSfile(string infile)
+        private static EDSsharp openEDSfile(string infile)
         {
-            eds.Loadfile(infile);
+            var loadedEds = new EDSsharp();
+            loadedEds.Loadfile(infile);
+            loadedEds.projectFilename = infile;
+            return loadedEds;
         }
 
-        private static void openXDDfile(string path)
+        private static EDSsharp openXDDfile(string path)
         {
             CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
-            eds = coxml_1_1.ReadXML(path);
+            EDSsharp loadedEds = coxml_1_1.ReadXML(path);
 
-            if (eds == null)
+            if (loadedEds == null)
             {
                 CanOpenXDD coxml = new CanOpenXDD();
-                eds = coxml.readXML(path);
+                loadedEds = coxml.readXML(path);
 
-                if (eds == null)
-                    return;
+                if (loadedEds == null)
+                    return null;
             }
 
-            eds.projectFilename = path;
+            loadedEds.projectFilename = path;
+            return loadedEds;
+        }
+
+        private static EDSsharp openProtobuffile(string path, bool json)
+        {
+            CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
+            EDSsharp loadedEds = coxml_1_1.ReadProtobuf(path, json);
+
+            if (loadedEds == null)
+                return null;
+
+            loadedEds.projectFilename = path;
+            return loadedEds;
         }
 
         private static void Export(string outpath, string outType)
@@ -187,10 +286,12 @@ namespace EDSSharp
         {
             string name = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
             Console.WriteLine($"Usage: {name} --infile FILE1 --outfile FILE2 [--type EXPORTER]");
+            Console.WriteLine($"       {name} --export-project --infile FILE --outdir DIR [--od BASENAME] [--json FILE.json] [--canopennode v4|legacy]");
             Console.WriteLine("Converts a given XDD or EDS file to many other available types.");
             Console.WriteLine($"Example: {name} --infile project.xdd --outfile map.md --type NetworkPDOReport");
+            Console.WriteLine($"Example: {name} --export-project --infile project.xdd --outdir ./out");
             Console.WriteLine("");
-            Console.WriteLine("FILE1 shall be a .xdd or .eds file.");
+            Console.WriteLine("FILE1 shall be a .xdd, .eds, .json, or .binpb file.");
             Console.WriteLine("FILE2 shall have the extension of one of the supported exporters below.");
             Console.WriteLine("EXPORTER shall be one of the listed exporters below IF AND ONLY IF multiple of them support your output file extension.");
             Console.WriteLine("");
@@ -213,6 +314,20 @@ namespace EDSSharp
                 string description = $"  {exporter.Description.Replace(" ",null)} [{filetypes}]";
                 Console.WriteLine(description);
             }
+        }
+
+        static void PrintExportProjectHelpText()
+        {
+            string name = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
+            Console.WriteLine($"Usage: {name} --export-project --infile FILE --outdir DIR [--od BASENAME] [--json FILE.json] [--canopennode v4|legacy]");
+            Console.WriteLine("Exports a project file to CanOpenNode .c/.h and CanOpenNode protobuf JSON.");
+            Console.WriteLine($"Example: {name} --export-project --infile project.xdd --outdir ./out");
+            Console.WriteLine("");
+            Console.WriteLine("FILE shall be a .xdd, .xdc, .xpd, .eds, .dcf, .json, or .binpb file.");
+            Console.WriteLine("DIR is the output directory.");
+            Console.WriteLine("BASENAME is the base name for the generated .c and .h files (default: input file name without extension).");
+            Console.WriteLine("FILE.json is the output JSON path (default: DIR/BASENAME.json).");
+            Console.WriteLine("--canopennode defaults to v4.");
         }
     }
 }

@@ -9,12 +9,18 @@ namespace Tests
     {
         string RunEDSSharp(string arguments)
         {
-            File.Delete("Legacy.c");
-            File.Delete("Legacy.h");
-            File.Delete("V4.c");
-            File.Delete("V4.h");
-            File.Delete("file.eds");
-            File.Delete("file.xpd");
+            foreach (string file in new[] { "Legacy.c", "Legacy.h", "V4.c", "V4.h", "file.eds", "file.xpd",
+                "export_out/minimal_project.c", "export_out/minimal_project.h", "export_out/minimal_project.json" })
+            {
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+            }
+            if (Directory.Exists("export_out"))
+            {
+                Directory.Delete("export_out");
+            }
 
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -62,6 +68,14 @@ namespace Tests
             RunEDSSharp("--type CanOpenXDDv1.1 --infile minimal_project.xdd --outfile file.nxdd");
             string[] files = Directory.GetFiles(".", "file.nxdd");
             Assert.Single(files);
+        }
+        [Fact]
+        public void ExportProjectToCanOpenNodeAndJson()
+        {
+            RunEDSSharp("--export-project --infile minimal_project.xdd --outdir export_out");
+            Assert.True(File.Exists("export_out/minimal_project.h"));
+            Assert.True(File.Exists("export_out/minimal_project.c"));
+            Assert.True(File.Exists("export_out/minimal_project.json"));
         }
     }
 }
