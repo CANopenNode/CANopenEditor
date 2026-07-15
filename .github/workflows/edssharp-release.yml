@@ -1,0 +1,80 @@
+# EDSSharp-CLI als GitHub-Release veroeffentlichen.
+#
+# Manuell ausloesen (Actions -> "EDSSharp CLI Release" -> Run workflow)
+# mit dem gewuenschten Tag. Baut den Kommandozeilen-Konverter aus
+# EDSSharp/ (net8.0) und haengt drei Artefakte an das Release:
+#
+#   EDSSharp-linux-x64.tar.gz  eigenstaendiges Binary (keine .NET-Installation noetig)
+#   EDSSharp-win-x64.zip       dito fuer Windows
+#   EDSSharp-portable.zip      frameworkabhaengig (braucht .NET-8-Runtime, klein)
+#
+# CANboss nutzt das linux-x64-Binary zur Buildzeit fuer die OD-Generierung
+# aus den EDS-Dateien (tools/get-edssharp.sh im CANboss-Repo).
+
+name: EDSSharp CLI Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release-Tag (z.B. cli-v4.2.3-protronic.1)"
+        required: true
+        default: "cli-v4.2.3-protronic.1"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag fuer den Versionsstempel setzen (git describe im Build)
+        run: git tag "${{ inputs.tag }}" || true
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish linux-x64 (self-contained)
+        run: >
+          dotnet publish EDSSharp/EDSSharp.csproj -c Release -f net8.0
+          -p:BuildNet8=true -r linux-x64 --self-contained true
+          -p:PublishSingleFile=true -o out/linux-x64
+
+      - name: Publish win-x64 (self-contained)
+        run: >
+          dotnet publish EDSSharp/EDSSharp.csproj -c Release -f net8.0
+          -p:BuildNet8=true -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -o out/win-x64
+
+      - name: Publish portable (frameworkabhaengig)
+        run: >
+          dotnet publish EDSSharp/EDSSharp.csproj -c Release -f net8.0
+          -p:BuildNet8=true -o out/portable
+
+      - name: Artefakte packen
+        run: |
+          tar -C out/linux-x64 -czf EDSSharp-linux-x64.tar.gz EDSSharp
+          (cd out/win-x64 && zip -q ../../EDSSharp-win-x64.zip EDSSharp.exe)
+          (cd out/portable && zip -qr ../../EDSSharp-portable.zip .)
+
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.tag }}" \
+            EDSSharp-linux-x64.tar.gz EDSSharp-win-x64.zip EDSSharp-portable.zip \
+            --target "${{ github.sha }}" \
+            --title "EDSSharp CLI ${{ inputs.tag }}" \
+            --notes "EDSSharp-Kommandozeilen-Konverter (CANopenEditor) als Build-Tool.
+
+          EDS/XDD -> CANopenNode-v4-OD (C/H) u.a.:
+
+              EDSSharp --export-project --infile geraet.eds --outdir out --od mein_od --canopennode v4
+
+          Wird vom CANboss-Monorepo zur Buildzeit fuer die OD-Generierung
+          verwendet (tools/get-edssharp.sh laedt das linux-x64-Binary)."
