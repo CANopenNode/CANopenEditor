@@ -25,3 +25,4 @@ edseditor-Setup.exe
 /packages/
 *.bak
 releases/*
+out-cli/
