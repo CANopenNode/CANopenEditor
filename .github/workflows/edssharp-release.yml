@@ -13,13 +13,18 @@
 
 name: EDSSharp CLI Release
 
-# Zwei Ausloeser: Tag "cli-v*" pushen (laeuft vom getaggten Commit,
-# muss also nicht auf main liegen) oder manuell per workflow_dispatch.
+# Drei Ausloeser (Push-Events laufen immer vom gepushten Commit, der
+# Workflow muss dafuer nicht auf main liegen):
+#   1. Aenderung der Marker-Datei EDSSharp/RELEASE_TAG (enthaelt den Tag)
+#   2. Tag "cli-v*" pushen
+#   3. manuell per workflow_dispatch (sobald der Workflow auf main liegt)
 # Das GUI-Release (release.yml, Tags "v*.*.*") bleibt unberuehrt.
 on:
   push:
-    tags:
-      - "cli-v*"
+    branches:
+      - "**"
+    paths:
+      - "EDSSharp/RELEASE_TAG"
   workflow_dispatch:
     inputs:
       tag:
@@ -30,9 +35,6 @@ on:
 permissions:
   contents: write
 
-env:
-  TAG: ${{ inputs.tag || github.ref_name }}
-
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -40,6 +42,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Release-Tag bestimmen (Input > Git-Tag > Marker-Datei)
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+          elif [ "${GITHUB_REF#refs/tags/}" != "$GITHUB_REF" ]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="$(tr -d ' \n' < EDSSharp/RELEASE_TAG)"
+          fi
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Release-Tag: $TAG"
 
       - name: Tag fuer den Versionsstempel setzen (git describe im Build)
         run: git tag "$TAG" || true
@@ -75,10 +89,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ inputs.tag }}" \
+          gh release create "$TAG" \
             EDSSharp-linux-x64.tar.gz EDSSharp-win-x64.zip EDSSharp-portable.zip \
             --target "${{ github.sha }}" \
-            --title "EDSSharp CLI ${{ inputs.tag }}" \
+            --title "EDSSharp CLI $TAG" \
             --notes "EDSSharp-Kommandozeilen-Konverter (CANopenEditor) als Build-Tool.
 
           EDS/XDD -> CANopenNode-v4-OD (C/H) u.a.:
