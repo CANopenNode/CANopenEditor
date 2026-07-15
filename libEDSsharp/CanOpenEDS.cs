@@ -388,6 +388,10 @@ namespace libEDSsharp
 
             writer.WriteLine(string.Format("ObjectType=0x{0:X}", (int)objecttype));
             writer.WriteLine(string.Format(";StorageLocation={0}", prop.CO_storageGroup));
+            if (!string.IsNullOrEmpty(prop.CO_countLabel))
+            {
+                writer.WriteLine(string.Format(";CO_countLabel={0}", prop.CO_countLabel));
+            }
 
             if (objecttype == ObjectType.ARRAY)
             {
@@ -523,7 +527,7 @@ namespace libEDSsharp
                     else
                     //Only allow our own extensions to populate the key/value pair
                     {
-                        if (key == "StorageLocation" || key == "TPDODetectCos")
+                        if (key == "StorageLocation" || key == "TPDODetectCos" || key == "CO_countLabel")
                         {
                             try
                             {
@@ -621,6 +625,11 @@ namespace libEDSsharp
                 if (kvp.Value.ContainsKey("StorageLocation"))
                 {
                     od.prop.CO_storageGroup = kvp.Value["StorageLocation"];
+                }
+
+                if (kvp.Value.ContainsKey("CO_countLabel"))
+                {
+                    od.prop.CO_countLabel = kvp.Value["CO_countLabel"];
                 }
 
                 if (kvp.Value.ContainsKey("TPDODetectCos"))
@@ -1300,7 +1309,7 @@ Transmission type
  value = 255:     asynchronous, specification in device profile
 
 inhibit time
- bit 0 - 15:  Minimum time between transmissions of the PDO in 100µs.Zero disables functionality.
+ bit 0 - 15:  Minimum time between transmissions of the PDO in 100ï¿½s.Zero disables functionality.
 
 event timer
  bit 0-15:  Time between periodic transmissions of the PDO in ms.Zero disables functionality.

@@ -1,0 +1,1217 @@
+{
+  "fileInfo": {
+    "fileVersion": "1",
+    "description": "Demo-Netzwerk: IO-Modul (digitale Ausgaenge, analoge Eingaenge, Temperatur), Node 16",
+    "creationTime": "2026-07-15T00:00:00Z",
+    "createdBy": "Protronic",
+    "modificationTime": "2026-07-14T15:18:51.509112800Z",
+    "modifiedBy": "Protronic"
+  },
+  "deviceInfo": {
+    "vendorName": "Protronic",
+    "productName": "Demo-IO",
+    "baudRate10": false,
+    "baudRate20": false,
+    "baudRate50": false,
+    "baudRate125": true,
+    "baudRate250": true,
+    "baudRate500": true,
+    "baudRate800": false,
+    "baudRate1000": true,
+    "baudRateAuto": false,
+    "lssSlave": false,
+    "lssMaster": false
+  },
+  "deviceCommissioning": {
+    "nodeId": 0,
+    "nodeName": "",
+    "baudrate": 0
+  },
+  "objects": {
+    "1000": {
+      "disabled": false,
+      "name": "Device type",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "NMT",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00060191",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1001": {
+      "disabled": false,
+      "name": "Error register",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "EM",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1008": {
+      "disabled": false,
+      "name": "Manufacturer device name",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "VISIBLE_STRING",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "Demo-IO",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1009": {
+      "disabled": false,
+      "name": "Manufacturer hardware version",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "VISIBLE_STRING",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "1.0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "100A": {
+      "disabled": false,
+      "name": "Manufacturer software version",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "VISIBLE_STRING",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "1.0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1014": {
+      "disabled": false,
+      "name": "COB-ID EMCY",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "EM_PROD",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x80+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1015": {
+      "disabled": false,
+      "name": "Inhibit time EMCY",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1017": {
+      "disabled": false,
+      "name": "Producer heartbeat time",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "HB_PROD",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "1000",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1018": {
+      "disabled": false,
+      "name": "Identity",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x04",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Vendor-ID",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00000000",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Product code",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00010010",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Revision number",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00010000",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Serial number",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00000000",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1200": {
+      "disabled": false,
+      "name": "SDO server parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "SDO_SRV",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x02",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "COB-ID client to server (rx)",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x600+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "COB-ID server to client (tx)",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x580+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1400": {
+      "disabled": false,
+      "name": "RPDO communication parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "RPDO",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x05",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "COB-ID used by RPDO",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x200+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Transmission type",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "255",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "05": {
+          "name": "Event timer",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1600": {
+      "disabled": false,
+      "name": "RPDO mapping parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Number of mapped application objects in PDO",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "5",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Application object 1",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20000108",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Application object 2",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20000208",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Application object 3",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20000308",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Application object 4",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20000408",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "05": {
+          "name": "Application object 5",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x21010010",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1800": {
+      "disabled": false,
+      "name": "TPDO communication parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "TPDO",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x06",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "COB-ID used by TPDO",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x40000180+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Transmission type",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "255",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Inhibit time",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "100",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "05": {
+          "name": "Event timer",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "200",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "06": {
+          "name": "SYNC start value",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1801": {
+      "disabled": false,
+      "name": "TPDO communication parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "TPDO",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x06",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "COB-ID used by TPDO",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x40000280+$NODEID",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Transmission type",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "255",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Inhibit time",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "100",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "05": {
+          "name": "Event timer",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "1000",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "06": {
+          "name": "SYNC start value",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1A00": {
+      "disabled": false,
+      "name": "TPDO mapping parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Number of mapped application objects in PDO",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "4",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Application object 1",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20010110",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Application object 2",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20010210",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Application object 3",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20010310",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Application object 4",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20010410",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "1A01": {
+      "disabled": false,
+      "name": "TPDO mapping parameter",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_RECORD",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Number of mapped application objects in PDO",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "5",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Application object 1",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x21000020",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Application object 2",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20030108",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Application object 3",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20030208",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Application object 4",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20030308",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "05": {
+          "name": "Application object 5",
+          "alias": "",
+          "dataType": "UNSIGNED32",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x20030408",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2000": {
+      "disabled": false,
+      "name": "Digitale Ausgaenge",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_ARRAY",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x04",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Ausgang 1",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_R",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Ausgang 2",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_R",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Ausgang 3",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_R",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Ausgang 4",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_R",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2001": {
+      "disabled": false,
+      "name": "Analoge Eingaenge",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_ARRAY",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x04",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Eingang 1",
+          "alias": "",
+          "dataType": "INTEGER16",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "-1000",
+          "highLimit": "1000",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Eingang 2",
+          "alias": "",
+          "dataType": "INTEGER16",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "-1000",
+          "highLimit": "1000",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Eingang 3",
+          "alias": "",
+          "dataType": "INTEGER16",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "-1000",
+          "highLimit": "1000",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Eingang 4",
+          "alias": "",
+          "dataType": "INTEGER16",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "-1000",
+          "highLimit": "1000",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2002": {
+      "disabled": false,
+      "name": "Digitale Ausgaenge Maske",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x00",
+          "actualValue": "",
+          "lowLimit": "0",
+          "highLimit": "15",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2003": {
+      "disabled": false,
+      "name": "Digitale Eingaenge",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_ARRAY",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "Highest sub-index supported",
+          "alias": "",
+          "dataType": "UNSIGNED8",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0x04",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "01": {
+          "name": "Eingang D1",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "02": {
+          "name": "Eingang D2",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "03": {
+          "name": "Eingang D3",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        },
+        "04": {
+          "name": "Eingang D4",
+          "alias": "",
+          "dataType": "BOOLEAN",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2100": {
+      "disabled": false,
+      "name": "Temperatur",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "REAL32",
+          "sdo": "ACCESS_SDO_RO",
+          "pdo": "ACCESS_PDO_TR",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0.0",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2101": {
+      "disabled": false,
+      "name": "Sollwert",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "INTEGER16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_R",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "0",
+          "actualValue": "",
+          "lowLimit": "-1000",
+          "highLimit": "1000",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2102": {
+      "disabled": false,
+      "name": "Geraetename",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "VISIBLE_STRING",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "Demo-IO",
+          "actualValue": "",
+          "lowLimit": "",
+          "highLimit": "",
+          "stringLengthMin": 0
+        }
+      }
+    },
+    "2103": {
+      "disabled": false,
+      "name": "Filterzeit ms",
+      "alias": "",
+      "description": "",
+      "objectType": "OBJECT_TYPE_VAR",
+      "countLabel": "",
+      "storageGroup": "PERSIST_COMM",
+      "flagsPDO": false,
+      "subObjects": {
+        "00": {
+          "name": "",
+          "alias": "",
+          "dataType": "UNSIGNED16",
+          "sdo": "ACCESS_SDO_RW",
+          "pdo": "ACCESS_PDO_NO",
+          "srdo": "ACCESS_SRDO_NO",
+          "defaultValue": "10",
+          "actualValue": "",
+          "lowLimit": "0",
+          "highLimit": "10000",
+          "stringLengthMin": 0
+        }
+      }
+    }
+  }
+}

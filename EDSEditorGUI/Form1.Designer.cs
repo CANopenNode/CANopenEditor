@@ -44,6 +44,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exportDeviceFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportCanOpenNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCouchDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveExportAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.closeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +90,7 @@
             this.toolStripSeparator1,
             this.exportDeviceFileToolStripMenuItem,
             this.exportCanOpenNodeToolStripMenuItem,
+            this.exportCouchDBToolStripMenuItem,
             this.saveExportAllToolStripMenuItem,
             this.toolStripSeparator2,
             this.closeFileToolStripMenuItem,
@@ -191,6 +193,14 @@
             this.exportCanOpenNodeToolStripMenuItem.Size = new System.Drawing.Size(359, 26);
             this.exportCanOpenNodeToolStripMenuItem.Text = "E&xport CanOpenNode...";
             this.exportCanOpenNodeToolStripMenuItem.Click += new System.EventHandler(this.exportCanOpenNodeToolStripMenuItem_Click);
+            // 
+            // exportCouchDBToolStripMenuItem
+            // 
+            this.exportCouchDBToolStripMenuItem.Enabled = false;
+            this.exportCouchDBToolStripMenuItem.Name = "exportCouchDBToolStripMenuItem";
+            this.exportCouchDBToolStripMenuItem.Size = new System.Drawing.Size(359, 26);
+            this.exportCouchDBToolStripMenuItem.Text = "Export to Couch&DB...";
+            this.exportCouchDBToolStripMenuItem.Click += new System.EventHandler(this.exportCouchDBToolStripMenuItem_Click);
             // 
             // saveExportAllToolStripMenuItem
             // 
@@ -352,6 +362,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadNetworkXmlToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem exportCanOpenNodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportCouchDBToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem networkPDOToolStripMenuItem;

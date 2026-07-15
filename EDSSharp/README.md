@@ -22,3 +22,37 @@ It is a work in progress and is rapidly changing.
 Every attempt has been made to comply with the relevant DSP306 and other standards and EDS files from multiple sources have been tested for loading/saving and as been (at times) validated for errors using EDS conformance tools.
 
 [Available exporters' list can be found here](https://github.com/CANopenNode/CANopenEditor?tab=readme-ov-file#available-formats).
+
+CLI usage
+---------
+
+Convert a project file to any supported exporter format:
+
+```
+EDSSharp --infile project.xdd --outfile map.md --type NetworkPDOReport
+```
+
+Export a project to CANopenNode v4 `.c`/`.h` sources plus a protobuf JSON
+document in one call:
+
+```
+EDSSharp --export-project --infile device.eds --outdir ./out [--od BASENAME] [--json FILE.json] [--canopennode v4|legacy]
+```
+
+`--od OD` names the generated sources `OD.c`/`OD.h` with `OD_CNT_*` macros as
+expected by CANopenNode applications.
+
+EDS custom extensions
+---------------------
+
+CANopenNode-specific object properties that plain EDS cannot express are
+stored as `;Key=Value` comment lines (also understood by this parser):
+
+- `;StorageLocation=RAM|PERSIST_COMM|...` — CANopenNode storage group
+- `;CO_countLabel=NMT|EM|HB_PROD|SDO_SRV|RPDO|TPDO|...` — count label used to
+  derive the `OD_CNT_*` counters of the CANopenNode v4 export. Without count
+  labels the exported object dictionary has no counters and cannot be used to
+  initialize the CANopenNode stack.
+
+A complete demo network (three device nodes plus a monitoring master) built
+with these extensions lives in [`../demo/`](../demo/).

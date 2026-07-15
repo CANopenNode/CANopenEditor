@@ -274,6 +274,88 @@ namespace ODEditor
             }
         }
 
+        private async void exportCouchDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab != null)
+            {
+                DeviceView dv = (DeviceView)tabControl1.SelectedTab.Controls[0];
+                
+                // Ask user: upload to CouchDB or save to file?
+                DialogResult uploadChoice = MessageBox.Show(
+                    "Do you want to upload directly to CouchDB?\n\n" +
+                    "Yes = Upload to CouchDB server\n" +
+                    "No = Save to local file\n" +
+                    "Cancel = Cancel operation",
+                    "Export to CouchDB",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (uploadChoice == DialogResult.Cancel)
+                    return;
+
+                if (uploadChoice == DialogResult.Yes)
+                {
+                    // Upload to CouchDB
+                    try
+                    {
+                        string couchDbUrl = Properties.Settings.Default.CouchDBUrl;
+                        if (string.IsNullOrWhiteSpace(couchDbUrl))
+                        {
+                            MessageBox.Show("CouchDB URL is not configured.\nPlease set the URL in Tools > Preferences.",
+                                          "Configuration Required",
+                                          MessageBoxButtons.OK,
+                                          MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        var exporter = new libEDSsharp.CouchDBExporter();
+                        string result = await exporter.UploadToCouchDB(couchDbUrl, dv.eds);
+                        
+                        MessageBox.Show($"CouchDB Upload Result:\n\n{result}",
+                                      "Upload Complete",
+                                      MessageBoxButtons.OK,
+                                      result.StartsWith("Success") ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error uploading to CouchDB:\n{ex.Message}",
+                                      "Upload Error",
+                                      MessageBoxButtons.OK,
+                                      MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    // Save to file
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "CouchDB JSON (CanOpenNode Protobuf) (*.json)|*.json";
+                    sfd.InitialDirectory = Path.GetDirectoryName(dv.eds.projectFilename);
+                    sfd.RestoreDirectory = true;
+                    sfd.FileName = Path.GetFileNameWithoutExtension(dv.eds.projectFilename);
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            var exporter = new libEDSsharp.CouchDBExporter();
+                            exporter.ExportSingleDocument(sfd.FileName, dv.eds);
+                            MessageBox.Show($"Successfully exported to CouchDB JSON format:\n{sfd.FileName}",
+                                          "Export Complete",
+                                          MessageBoxButtons.OK,
+                                          MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error exporting to CouchDB JSON:\n{ex.Message}",
+                                          "Export Error",
+                                          MessageBoxButtons.OK,
+                                          MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -735,6 +817,7 @@ namespace ODEditor
             saveNetworkXmlToolStripMenuItem.Enabled = enable;
             documentationToolStripMenuItem.Enabled = enable;
             networkPDOToolStripMenuItem.Enabled = enable;
+            exportCouchDBToolStripMenuItem.Enabled = enable;
             saveExportAllToolStripMenuItem.Enabled = enable;
             exportDeviceFileToolStripMenuItem.Enabled = enable;
             saveAsToolStripMenuItem.Enabled = true;

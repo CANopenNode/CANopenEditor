@@ -24,3 +24,5 @@ edseditor-Setup.exe
 /SourceGrid_4.21
 /packages/
 *.bak
+releases/*
+out-cli/

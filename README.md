@@ -86,36 +86,6 @@ Collaborators
 <!-- readme: collaborators -start -->
 <table>
 	<tbody>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/robincornelius">
-                    <img src="https://avatars.githubusercontent.com/u/159000?v=4" width="100;" alt="robincornelius"/>
-                    <br />
-                    <sub><b>robincornelius</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/nimrof">
-                    <img src="https://avatars.githubusercontent.com/u/9848846?v=4" width="100;" alt="nimrof"/>
-                    <br />
-                    <sub><b>nimrof</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/CANopenNode">
-                    <img src="https://avatars.githubusercontent.com/u/13575344?v=4" width="100;" alt="CANopenNode"/>
-                    <br />
-                    <sub><b>CANopenNode</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/trojanobelix">
-                    <img src="https://avatars.githubusercontent.com/u/15106425?v=4" width="100;" alt="trojanobelix"/>
-                    <br />
-                    <sub><b>trojanobelix</b></sub>
-                </a>
-            </td>
-		</tr>
 	<tbody>
 </table>
 <!-- readme: collaborators -end -->
@@ -178,6 +148,13 @@ Contributors
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/KMK0815">
+                    <img src="https://avatars.githubusercontent.com/u/42606060?v=4" width="100;" alt="KMK0815"/>
+                    <br />
+                    <sub><b>KMK0815</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/heliochronix">
                     <img src="https://avatars.githubusercontent.com/u/1733202?v=4" width="100;" alt="heliochronix"/>
                     <br />
@@ -205,6 +182,8 @@ Contributors
                     <sub><b>JuPrgn</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/gotocoffee1">
                     <img src="https://avatars.githubusercontent.com/u/26260677?v=4" width="100;" alt="gotocoffee1"/>
@@ -212,8 +191,6 @@ Contributors
                     <sub><b>gotocoffee1</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/wilkinsw">
                     <img src="https://avatars.githubusercontent.com/u/10655771?v=4" width="100;" alt="wilkinsw"/>
@@ -249,6 +226,15 @@ Contributors
                     <sub><b>Regelink</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/Sl-Alex">
+                    <img src="https://avatars.githubusercontent.com/u/7002691?v=4" width="100;" alt="Sl-Alex"/>
+                    <br />
+                    <sub><b>Sl-Alex</b></sub>
+                </a>
+            </td>
             <td align="center">
                 <a href="https://github.com/rgruening">
                     <img src="https://avatars.githubusercontent.com/u/72022918?v=4" width="100;" alt="rgruening"/>
@@ -256,8 +242,6 @@ Contributors
                     <sub><b>rgruening</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/Barzello">
                     <img src="https://avatars.githubusercontent.com/u/52344726?v=4" width="100;" alt="Barzello"/>
@@ -286,6 +270,8 @@ Contributors
                     <sub><b>zhanglongqi</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/DaMutz">
                     <img src="https://avatars.githubusercontent.com/u/406081?v=4" width="100;" alt="DaMutz"/>
@@ -300,8 +286,6 @@ Contributors
                     <sub><b>StormOli</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/possibly-not">
                     <img src="https://avatars.githubusercontent.com/u/12588174?v=4" width="100;" alt="possibly-not"/>

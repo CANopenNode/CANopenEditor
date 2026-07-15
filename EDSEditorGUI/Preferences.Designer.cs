@@ -37,6 +37,8 @@
             this.checkBox_buildwarning = new System.Windows.Forms.CheckBox();
             this.checkBox_stringwarning = new System.Windows.Forms.CheckBox();
             this.checkBox_structwarning = new System.Windows.Forms.CheckBox();
+            this.label_couchdb = new System.Windows.Forms.Label();
+            this.textBox_couchdburl = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -127,11 +129,29 @@
             this.checkBox_structwarning.Text = "Show Struct Warnings";
             this.checkBox_structwarning.UseVisualStyleBackColor = true;
             // 
+            // label_couchdb
+            // 
+            this.label_couchdb.AutoSize = true;
+            this.label_couchdb.Location = new System.Drawing.Point(32, 265);
+            this.label_couchdb.Name = "label_couchdb";
+            this.label_couchdb.Size = new System.Drawing.Size(96, 17);
+            this.label_couchdb.TabIndex = 9;
+            this.label_couchdb.Text = "CouchDB URL";
+            // 
+            // textBox_couchdburl
+            // 
+            this.textBox_couchdburl.Location = new System.Drawing.Point(157, 262);
+            this.textBox_couchdburl.Name = "textBox_couchdburl";
+            this.textBox_couchdburl.Size = new System.Drawing.Size(478, 22);
+            this.textBox_couchdburl.TabIndex = 10;
+            // 
             // Preferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBox_couchdburl);
+            this.Controls.Add(this.label_couchdb);
             this.Controls.Add(this.checkBox_structwarning);
             this.Controls.Add(this.checkBox_stringwarning);
             this.Controls.Add(this.checkBox_buildwarning);
@@ -159,5 +179,7 @@
         private System.Windows.Forms.CheckBox checkBox_buildwarning;
         private System.Windows.Forms.CheckBox checkBox_stringwarning;
         private System.Windows.Forms.CheckBox checkBox_structwarning;
+        private System.Windows.Forms.Label label_couchdb;
+        private System.Windows.Forms.TextBox textBox_couchdburl;
     }
 }
