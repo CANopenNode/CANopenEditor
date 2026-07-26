@@ -150,6 +150,13 @@ Contributors
 		</tr>
 		<tr>
             <td align="center">
+                <a href="https://github.com/reza0310">
+                    <img src="https://avatars.githubusercontent.com/u/70545529?v=4" width="100;" alt="reza0310"/>
+                    <br />
+                    <sub><b>reza0310</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/heliochronix">
                     <img src="https://avatars.githubusercontent.com/u/1733202?v=4" width="100;" alt="heliochronix"/>
                     <br />
@@ -182,13 +189,6 @@ Contributors
                     <img src="https://avatars.githubusercontent.com/u/26260677?v=4" width="100;" alt="gotocoffee1"/>
                     <br />
                     <sub><b>gotocoffee1</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/reza0310">
-                    <img src="https://avatars.githubusercontent.com/u/70545529?v=4" width="100;" alt="reza0310"/>
-                    <br />
-                    <sub><b>reza0310</b></sub>
                 </a>
             </td>
 		</tr>
