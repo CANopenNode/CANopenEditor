@@ -20,6 +20,7 @@
 using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -167,7 +168,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.objecttype, opt => opt.Ignore())
                 .ForMember(dest => dest.Description, opt => opt.Ignore())
                 .ForMember(dest => dest.subobjects, opt => opt.Ignore());
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
 
@@ -236,7 +237,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Srdo, opt => opt.MapFrom(src => src.prop.CO_accessSRDO))
                 .ForMember(dest => dest.StringLengthMin, opt => opt.MapFrom(src => src.prop.CO_stringLengthMin));
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
 
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
