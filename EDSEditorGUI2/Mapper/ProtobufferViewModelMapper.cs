@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace EDSEditorGUI2.Mapper
@@ -27,14 +28,14 @@ namespace EDSEditorGUI2.Mapper
                 .ForMember(dest => dest.Objects, opt => opt.MapFrom(src => src.Objects));
                 cfg.CreateMap<CanOpen_DeviceInfo, ViewModels.DeviceInfo>();
                 cfg.CreateMap<CanOpen_DeviceCommissioning, ViewModels.DeviceCommissioning>();
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
             var result = mapper.Map<ViewModels.Device>(source);
             return result;
         }
         public class ODConverter : ITypeConverter<Google.Protobuf.Collections.MapField<string, OdObject>, ViewModels.ObjectDictionary>,
-            ITypeConverter< ViewModels.ObjectDictionary, Google.Protobuf.Collections.MapField<string, OdObject>>
+            ITypeConverter<ViewModels.ObjectDictionary, Google.Protobuf.Collections.MapField<string, OdObject>>
         {
             public ViewModels.ObjectDictionary Convert(Google.Protobuf.Collections.MapField<string, OdObject> source, ViewModels.ObjectDictionary destination, ResolutionContext context)
             {
@@ -42,7 +43,7 @@ namespace EDSEditorGUI2.Mapper
                 {
                     cfg.CreateMap<OdObject, ViewModels.OdObject>();
                     cfg.CreateMap<OdSubObject, ViewModels.OdSubObject>();
-                });
+                }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
                 config.AssertConfigurationIsValid();
                 var mapper = config.CreateMapper();
 
@@ -59,7 +60,7 @@ namespace EDSEditorGUI2.Mapper
                 {
                     cfg.CreateMap<ViewModels.OdObject, OdObject>();
                     cfg.CreateMap<ViewModels.OdSubObject, OdSubObject>();
-                });
+                }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
                 config.AssertConfigurationIsValid();
                 var mapper = config.CreateMapper();
 
@@ -77,7 +78,7 @@ namespace EDSEditorGUI2.Mapper
             var config = new MapperConfiguration(cfg =>
             {
                 //TODO
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
             var result = mapper.Map<CanOpenDevice>(source);

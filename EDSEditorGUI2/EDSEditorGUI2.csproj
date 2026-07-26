@@ -19,23 +19,20 @@
       <ResourceFiles Include="../EDSEditorGUI/Profiles/**/*.*" />
     </ItemGroup>
 
-    <Copy
-      SourceFiles="@(ResourceFiles)"
-      DestinationFolder="$(OutDir)Profiles\%(RecursiveDir)"
-      SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ResourceFiles)" DestinationFolder="$(OutDir)Profiles\%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.1.5" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.1.5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.5" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.5" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.5" />
+    <PackageReference Include="Avalonia" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.5" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="DialogHost.Avalonia" Version="0.8.1" />
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.18" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.12.3" />
+	<PackageReference Include="AutoMapper" Version="16.2.0" />
   </ItemGroup>
 </Project>

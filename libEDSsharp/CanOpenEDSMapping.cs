@@ -20,6 +20,7 @@
 using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using LibCanOpen;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +31,7 @@ namespace libEDSsharp
     /// <summary>
     /// Conversion class to/from EDS to protobuffer
     /// </summary>
-    public class MappingEDS
+    static public class MappingEDS
     {
         /// <summary>
         /// Converts from protobuffer to EDS
@@ -167,7 +168,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.objecttype, opt => opt.Ignore())
                 .ForMember(dest => dest.Description, opt => opt.Ignore())
                 .ForMember(dest => dest.subobjects, opt => opt.Ignore());
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
 
@@ -236,7 +237,7 @@ namespace libEDSsharp
                 .ForMember(dest => dest.Pdo, opt => opt.MapFrom(src => src.accesstype))
                 .ForMember(dest => dest.Srdo, opt => opt.MapFrom(src => src.prop.CO_accessSRDO))
                 .ForMember(dest => dest.StringLengthMin, opt => opt.MapFrom(src => src.prop.CO_stringLengthMin));
-            });
+            }, LoggerFactory.Create(builder => { builder.AddDebug(); }));
 
             config.AssertConfigurationIsValid();
             var mapper = config.CreateMapper();
@@ -320,7 +321,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">EDS object type object</param>
         /// <param name="destination">protobuffer object type</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public OdObject.Types.ObjectType Convert(ObjectType source, OdObject.Types.ObjectType destination, ResolutionContext context)
@@ -347,7 +347,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">EDS object type object</param>
         /// <param name="destination">protobuffer object type</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public ObjectType Convert(OdObject.Types.ObjectType source, ObjectType destination, ResolutionContext context)
@@ -380,7 +379,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">EDS accesstype</param>
         /// <param name="destination">protobuffer sdo access type</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public OdSubObject.Types.AccessSDO Convert(EDSsharp.AccessType source, OdSubObject.Types.AccessSDO destination, ResolutionContext context)
@@ -406,7 +404,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">EDS accesstype</param>
         /// <param name="destination">protobuffer pdo access type</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public OdSubObject.Types.AccessPDO Convert(EDSsharp.AccessType source, OdSubObject.Types.AccessPDO destination, ResolutionContext context)
@@ -432,7 +429,6 @@ namespace libEDSsharp
         /// </summary>
         /// <param name="source">protobuffer sdo access type</param>
         /// <param name="destination">EDS accesstype</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public EDSsharp.AccessType Convert(OdSubObject source, EDSsharp.AccessType destination, ResolutionContext context)
@@ -457,11 +453,10 @@ namespace libEDSsharp
     public class ODStringToShortTypeResolver : ITypeConverter<string, UInt16>
     {
         /// <summary>
-        /// Resolver to convert index & subindex string into short, will try hex, then descimal
+        /// Resolver to convert index and subindex string into short, will try hex, then descimal
         /// </summary>
         /// <param name="source">string containing index or subindex</param>
         /// <param name="destination">short int interpreted from the string</param>
-        /// <param name="member">result object</param>
         /// <param name="context">resolve context</param>
         /// <returns>result </returns>
         public UInt16 Convert(string source, UInt16 destination, ResolutionContext context)

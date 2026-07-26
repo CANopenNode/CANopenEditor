@@ -20,11 +20,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace libEDSsharp
 {
@@ -158,7 +158,7 @@ namespace libEDSsharp
                 ODList.Add($"{{0x{indexH}, 0x{subEntriesCount:X2}, ODT_{odObjectType}, &{odname}Objs.o_{varName}, NULL}}");
 
                 // count labels
-                if (od.prop.CO_countLabel != null && od.prop.CO_countLabel != "")
+                if (!string.IsNullOrEmpty(od.prop.CO_countLabel))
                 {
                     if (ODCnt.ContainsKey(od.prop.CO_countLabel))
                         ODCnt[od.prop.CO_countLabel]++;
@@ -168,6 +168,7 @@ namespace libEDSsharp
 
                 // Verify objects, if they have set correct "CO_countLabel", according to Object Dictionary Requirements By CANopenNode V4.
                 // https://github.com/CANopenNode/CANopenNode/blob/master/doc/objectDictionary.md
+
                 VerifyCountLabel(od, 0x1000, 0x1000, "NMT");
                 VerifyCountLabel(od, 0x1001, 0x1001, "EM");
                 VerifyCountLabel(od, 0x1005, 0x1005, "SYNC");
@@ -198,7 +199,10 @@ namespace libEDSsharp
         {
             if (od.Index >= indexL && od.Index <= indexH && od.prop.CO_countLabel != countLabel)
             {
-                Warnings.AddWarning($"Error in 0x{od.Index:X4}: 'Count Label' must be '{countLabel}'", Warnings.warning_class.WARNING_BUILD);
+                Warnings.AddWarning($"Error in 0x{od.Index:X4}: missing 'Count Label' '{countLabel}', was added", Warnings.warning_class.WARNING_BUILD);
+                od.prop.CO_countLabel = countLabel;
+            
+                // ToDo Add "dirty" to indicate unsaved changes              
             }
         }
 
@@ -372,7 +376,7 @@ namespace libEDSsharp
                 {
                     subODStorage_t.Add($"{data.cType} {subcName}{data.cTypeArray};");
                     subODStorage.Add($".{subcName} = {data.cValue}");
-                dataPtr = $"&{odname}_{group}.x{varName}.{subcName}{data.cTypeArray0}";
+                    dataPtr = $"&{odname}_{group}.x{varName}.{subcName}{data.cTypeArray0}";
                 }
                 ODObjs.Add($"        {{");
                 ODObjs.Add($"            .dataOrig = {dataPtr},");
@@ -448,7 +452,7 @@ namespace libEDSsharp
             gitVersion, odname,
             Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
             eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
-            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber,
+            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber, eds.di.RevisionNumber,
             eds.fi.Description));
 
             file.WriteLine(string.Format(@"
@@ -584,7 +588,7 @@ namespace libEDSsharp
         /// <param name="gitVersion">git version that will be added to file comment</param>
         /// <param name="eds">data that contain the data that will be exported</param>
         private void Export_c(string folderpath, string filename, string gitVersion, EDSsharp eds)
-            {
+        {
 
             if (filename == "")
                 filename = "OD";
@@ -602,8 +606,33 @@ namespace libEDSsharp
     https://github.com/CANopenNode/CANopenEditor
 
     DON'T EDIT THIS FILE MANUALLY, UNLESS YOU KNOW WHAT YOU ARE DOING !!!!
-*******************************************************************************/
+*******************************************************************************
 
+    File info:
+        File Names:   {1}.h; {1}.c
+        Project File: {2}
+        File Version: {3}
+
+        Created:      {4}
+        Created By:   {5}
+        Modified:     {6}
+        Modified By:  {7}
+
+    Device Info:
+        Vendor Name:  {8}
+        Vendor ID:    {9}
+        Product Name: {10}
+        Product ID:   {11}
+
+        Description:  {12}
+*******************************************************************************/",
+            gitVersion, odname,
+            Path.GetFileName(eds.projectFilename), eds.fi.FileVersion,
+            eds.fi.CreationDateTime, eds.fi.CreatedBy, eds.fi.ModificationDateTime, eds.fi.ModifiedBy,
+            eds.di.VendorName, eds.di.VendorNumber, eds.di.ProductName, eds.di.ProductNumber, eds.di.RevisionNumber,
+            eds.fi.Description));
+
+            file.WriteLine(string.Format(@"
 #define OD_DEFINITION
 #include ""301/CO_ODinterface.h""
 #include ""{1}.h""
@@ -612,7 +641,7 @@ namespace libEDSsharp
 #error This Object dictionary is compatible with CANopenNode V4.0 and above!
 #endif", gitVersion, filename));
 
-    file.WriteLine(@"
+            file.WriteLine(@"
 /*******************************************************************************
     OD data initialization of all groups
 *******************************************************************************/");
@@ -757,9 +786,9 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                 valueDefined = false;
             else if (dataType != DataType.VISIBLE_STRING && dataType != DataType.UNICODE_STRING && dataType != DataType.OCTET_STRING)
             {
-                defaultvalue = defaultvalue.Trim();       
+                defaultvalue = defaultvalue.Trim();
 
-                if (defaultvalue.Contains("$NODEID",StringComparison.OrdinalIgnoreCase)) // fetch different case of "NODeID" (allowed according DS301)
+                if (defaultvalue.Contains("$NODEID", StringComparison.OrdinalIgnoreCase)) // fetch different case of "NODeID" (allowed according DS301)
                 {
                     defaultvalue = defaultvalue.ToUpper().Replace("$NODEID", "");
                     defaultvalue = defaultvalue.Replace("+", "");
@@ -799,7 +828,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                         data.cType = "bool_t";
                         if (valueDefined)
                         {
-                            data.cValue = (defaultvalue.ToLower() == "false" || defaultvalue == "0") ? "false" : "true";
+                            data.cValue = (defaultvalue.Equals("false", StringComparison.OrdinalIgnoreCase) || defaultvalue.Equals("0", StringComparison.OrdinalIgnoreCase)) ? "false" : "true";
                         }
                         break;
                     case DataType.INTEGER8:
@@ -940,7 +969,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
 
                     case DataType.OCTET_STRING:
                         defaultvalue = defaultvalue.Trim();
-                        if (defaultvalue == "")
+                        if (string.IsNullOrEmpty(defaultvalue))
                             valueDefined = false;
                         if (valueDefined || stringLength > 0)
                         {
@@ -981,7 +1010,7 @@ OD_t *{0} = &_{0};", odname, string.Join(",\n    ", ODList)));
                                 Byte[] encodedBytes = unicode.GetBytes(defaultvalue);
                                 for (UInt32 i = 0; i < encodedBytes.Length; i += 2)
                                 {
-                                    UInt16 val = (ushort)(encodedBytes[i] | (UInt16)encodedBytes[i+1] << 8);
+                                    UInt16 val = (ushort)(encodedBytes[i] | (UInt16)encodedBytes[i + 1] << 8);
                                     words.Add(String.Format("0x{0:X4}", val));
                                     len++;
                                 }

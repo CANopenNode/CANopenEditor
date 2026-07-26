@@ -18,15 +18,18 @@
     Copyright(c) 2016 - 2019 Robin Cornelius <robin.cornelius@gmail.com>
 */
 
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.IO;
-using libEDSsharp;
+<<<<<<< HEAD
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+=======
+>>>>>>> 9eb31e317df2a5d5e3b9eceaceb0f070d8f332e4
 
 namespace ODEditor
 {
@@ -101,7 +104,7 @@ namespace ODEditor
             {
                 MessageBox.Show("Loading profiles has failed for the following reason :\n" + e.ToString());
             }
-        
+
         }
 
         void ProfileAddClick(object sender, EventArgs e)
@@ -154,20 +157,20 @@ namespace ODEditor
                     EDSsharp modifiedEds = insObjForm.GetModifiedEDS();
                     modifiedEds.Dirty = true;
 
-                    if(modifiedEds == dv.eds)
+                    if (modifiedEds == dv.eds)
                     {
-                    dv.dispatch_updateOD();
-                    dv.dispatch_updatePDOinfo();
+                        dv.dispatch_updateOD();
+                        dv.dispatch_updatePDOinfo();
 
-                    dv.eds.UpdatePDOcount();
-                    dv.dispatch_updatedevice();
-                }
+                        dv.eds.UpdatePDOcount();
+                        dv.dispatch_updatedevice();
+                    }
                     else
                     {
-                        foreach(TabPage page in tabControl1.TabPages)
+                        foreach (TabPage page in tabControl1.TabPages)
                         {
                             DeviceView devView = (DeviceView)page.Controls[0];
-                            if(devView.eds == modifiedEds)
+                            if (devView.eds == modifiedEds)
                             {
                                 devView.dispatch_updateOD();
                                 devView.dispatch_updatePDOinfo();
@@ -181,13 +184,19 @@ namespace ODEditor
             }
         }
 
-        private void openEDSfile(string path,InfoSection.Filetype ft)
+        private void openEDSfile(string path, InfoSection.Filetype ft)
         {
             Warnings.warning_list.Clear();
 
             try
             {
                 EDSsharp eds = new EDSsharp();
+
+                if (!File.Exists(path))
+                {
+                    MessageBox.Show("File " +path + "\ndoes not exist.");
+                    return;
+                }
 
                 eds.Loadfile(path);
 
@@ -242,7 +251,7 @@ namespace ODEditor
             }
 
             dv.dispatch_updateOD();
-           dv.eds.Dirty = saveDirty; // dispatch update will set it to dirty. Restore saved dirty status
+            dv.eds.Dirty = saveDirty; // dispatch update will set it to dirty. Restore saved dirty status
         }
 
         private void exportCanOpenNodeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -291,7 +300,7 @@ namespace ODEditor
             if (odf.ShowDialog() == DialogResult.OK)
             {
 
-                switch(Path.GetExtension(odf.FileName).ToLower())
+                switch (Path.GetExtension(odf.FileName).ToLower())
                 {
                     case ".xdd":
                     case ".xdc":
@@ -319,7 +328,7 @@ namespace ODEditor
                         return;
 
                 }
-              
+
                 addtoMRU(odf.FileName);
             }
 
@@ -327,6 +336,11 @@ namespace ODEditor
 
         private void openXDDfile(string path)
         {
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("File " + path + "\ndoes not exist.");
+                return;
+            }
             try
             {
                 EDSsharp eds;
@@ -445,11 +459,11 @@ namespace ODEditor
 
         private void Eds_onDataDirty(bool dirty, EDSsharp sender)
         {
-            foreach(TabPage page in tabControl1.TabPages)
+            foreach (TabPage page in tabControl1.TabPages)
             {
-                foreach(Control c in page.Controls)
+                foreach (Control c in page.Controls)
                 {
-                    if(c.GetType() == typeof(DeviceView))
+                    if (c.GetType() == typeof(DeviceView))
                     {
                         DeviceView d = (DeviceView)c;
                         if (d.eds.Dirty == true)
@@ -510,9 +524,9 @@ namespace ODEditor
 
                 DeviceView device = (DeviceView)tabControl1.SelectedTab.Controls[0];
 
-                if(device.eds.Dirty==true)
+                if (device.eds.Dirty == true)
                 {
-                    if (MessageBox.Show( "All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
+                    if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
                         return;
                 }
 
@@ -525,7 +539,7 @@ namespace ODEditor
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-             Close();
+            Close();
         }
 
         private void exportDeviceFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -705,7 +719,7 @@ namespace ODEditor
         }
         private void TabControl1_Selected(Object sender, TabControlEventArgs e)
         {
-            if(tabControl1.SelectedIndex == 0)
+            if (tabControl1.SelectedIndex == 0)
             {
                 DeviceView dv = (DeviceView)tabControl1.SelectedTab.Controls[0];
                 dv.dispatch_updateOD();
@@ -716,7 +730,7 @@ namespace ODEditor
         }
         private void tabControl1_ControlsChanged(object sender, ControlEventArgs e)
         {
-            enablesavemenus(tabControl1.TabCount > 0);  
+            enablesavemenus(tabControl1.TabCount > 0);
         }
 
         private void tabControl1_Controlsremoved(object sender, ControlEventArgs e)
@@ -759,7 +773,7 @@ namespace ODEditor
             else if (ext == ".json")
                 OpenProtobufferfile(filepath, true);
 
-            if ( ext == ".eds" )
+            if (ext == ".eds")
                 openEDSfile(filepath, InfoSection.Filetype.File_EDS);
             if (ext == ".dcf")
                 openEDSfile(filepath, InfoSection.Filetype.File_DCF);
@@ -837,7 +851,7 @@ namespace ODEditor
                 var item = new ToolStripMenuItem(path);
                 item.Tag = path;
                 item.Click += OpenRecentFile;
-                switch(Path.GetExtension(path))
+                switch (Path.GetExtension(path))
                 {
                     case ".xml":
                         item.Image = Properties.Resources.GenericVSEditor_9905;
@@ -971,7 +985,7 @@ namespace ODEditor
 
             if (IsRunningOnMono())
             {
-                System.Diagnostics.Process.Start("file://"+temp);
+                System.Diagnostics.Process.Start("file://" + temp);
             }
             else
             {
@@ -1143,13 +1157,13 @@ namespace ODEditor
                         DeviceView d = (DeviceView)c;
                         if (d.eds.Dirty == true)
                         {
-                           if(MessageBox.Show("Warning you have unsaved changes\n Do you wish to continue","Unsaved changes",MessageBoxButtons.YesNo)==DialogResult.No)
+                            if (MessageBox.Show("Warning you have unsaved changes\n Do you wish to continue", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
                             {
                                 e.Cancel = true;
                                 return;
                             }
                         }
-                       
+
                     }
 
                 }
@@ -1187,15 +1201,15 @@ namespace ODEditor
             this.Activate();
             bool unsupportedFile = false;
             string[] data = e.Data.GetData(DataFormats.FileDrop) as string[];
-            if (data != null) 
-            {                
+            if (data != null)
+            {
                 var rawFileNames = data as string[];
                 if (rawFileNames.Length > 0)
                 {
                     var fileNames = rawFileNames.Distinct();
                     foreach (string fileName in fileNames)
                     {
-                        if(fileTypeSupported(fileName) == false)
+                        if (fileTypeSupported(fileName) == false)
                         {
                             unsupportedFile = true;
                             break;
@@ -1218,14 +1232,14 @@ namespace ODEditor
                 enableDragDropTooltip();
 
             }
-                
+
             else
             {
-               e.Effect = DragDropEffects.None;
+                e.Effect = DragDropEffects.None;
                 //disableDragDropTooltip();
                 enableDragDropTooltip();
             }
-                
+
         }
 
         private void enableDragDropTooltip()
@@ -1304,7 +1318,7 @@ namespace ODEditor
 
         private void ODEditor_MainForm_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
-            if(e.EscapePressed)
+            if (e.EscapePressed)
             {
                 e.Action = DragAction.Cancel;
                 disableDragDropTooltip();
@@ -1329,34 +1343,53 @@ namespace ODEditor
 
         private void tabControl1_MouseClick(object sender, MouseEventArgs e)
         {
-            TabPage tp;
             if (e.Button == MouseButtons.Right)
             {
                 for (int i = 0; i <= tabControl1.TabCount - 1; i++)
                 {
                     if (tabControl1.GetTabRect(i).Contains(e.Location))
                     {
-                        tp = tabControl1.TabPages[i];
-
                         DialogResult dialogResult = MessageBox.Show(tabControl1.TabPages[i].Text, "Close file?", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
+                            DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
 
-                                DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
-
-                                if (device.eds.Dirty == true)
-                                {
-                                    if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
-                                        return;
-                                }
-
-                                network.Remove(device.eds);
-
-                                tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
+                            if (device.eds.Dirty == true)
+                            {
+                                if (MessageBox.Show("All unsaved changes will be lost\n continue?", "Unsaved changes", MessageBoxButtons.YesNo) == DialogResult.No)
+                                    return;
+                            }
+                            network.Remove(device.eds);
+                            tabControl1.TabPages.Remove(tabControl1.TabPages[i]);
                         }                        
                     }
                 }
             }
         }
+        private void tabControl1_MouseHover(object sender, EventArgs e)
+        {
+
+            TabControl tabControl = sender as TabControl;
+            Point mousePosition = tabControl.PointToClient(Cursor.Position);
+            for (int i = 0; i < tabControl.TabCount; i++)
+            {
+                Rectangle tabRect = tabControl.GetTabRect(i);
+                if (tabRect.Contains(mousePosition))
+                {
+                    ToolTip toolTip = new ToolTip();
+                    // Set up the delays for the ToolTip.
+
+                    toolTip.AutoPopDelay = 5000;
+                    toolTip.InitialDelay = 1000;
+                    toolTip.ReshowDelay = 500;
+                    // Force the ToolTip text to be displayed whether or not the form is active.
+                    toolTip.ShowAlways = true;
+                    DeviceView device = (DeviceView)tabControl1.TabPages[i].Controls[0];
+                    toolTip.SetToolTip(tabControl, device.eds.projectFilename);
+                    break;
+                }
+            }
+        }
+        
     }
 }

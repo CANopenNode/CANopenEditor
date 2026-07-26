@@ -60,6 +60,8 @@
             this.label32 = new System.Windows.Forms.Label();
             this.textBox_concretenodeid = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBox_revisionnumber = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.textBox_productnumber = new System.Windows.Forms.TextBox();
             this.textBox_productname = new System.Windows.Forms.TextBox();
             this.textBox_vendornumber = new System.Windows.Forms.TextBox();
@@ -142,7 +144,7 @@
             this.groupBox5.Controls.Add(this.label31);
             this.groupBox5.Controls.Add(this.textBox_projectFileName);
             this.groupBox5.Controls.Add(this.textBox_deviceedsname);
-            this.groupBox5.Location = new System.Drawing.Point(12, 332);
+            this.groupBox5.Location = new System.Drawing.Point(12, 353);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(377, 182);
             this.groupBox5.TabIndex = 63;
@@ -283,7 +285,7 @@
             this.groupBox6.Controls.Add(this.textBox_nodename);
             this.groupBox6.Controls.Add(this.label32);
             this.groupBox6.Controls.Add(this.textBox_concretenodeid);
-            this.groupBox6.Location = new System.Drawing.Point(395, 313);
+            this.groupBox6.Location = new System.Drawing.Point(395, 333);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(339, 202);
             this.groupBox6.TabIndex = 5;
@@ -414,6 +416,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.textBox_revisionnumber);
+            this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.textBox_productnumber);
             this.groupBox4.Controls.Add(this.textBox_productname);
             this.groupBox4.Controls.Add(this.textBox_vendornumber);
@@ -424,10 +428,26 @@
             this.groupBox4.Controls.Add(this.label26);
             this.groupBox4.Location = new System.Drawing.Point(12, 14);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(377, 126);
+            this.groupBox4.Size = new System.Drawing.Size(377, 147);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Device Info";
+            // 
+            // textBox_revisionnumber
+            // 
+            this.textBox_revisionnumber.Location = new System.Drawing.Point(139, 124);
+            this.textBox_revisionnumber.Name = "textBox_revisionnumber";
+            this.textBox_revisionnumber.Size = new System.Drawing.Size(226, 20);
+            this.textBox_revisionnumber.TabIndex = 38;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 127);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(48, 13);
+            this.label11.TabIndex = 39;
+            this.label11.Text = "Revision";
             // 
             // textBox_productnumber
             // 
@@ -743,7 +763,7 @@
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.label20);
             this.groupBox3.Controls.Add(this.label18);
-            this.groupBox3.Location = new System.Drawing.Point(12, 146);
+            this.groupBox3.Location = new System.Drawing.Point(12, 167);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(377, 180);
             this.groupBox3.TabIndex = 1;
@@ -949,5 +969,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox checkBox_ngMaster;
         private System.Windows.Forms.CheckBox checkBox_ngSlave;
+        private System.Windows.Forms.TextBox textBox_revisionnumber;
+        private System.Windows.Forms.Label label11;
     }
 }

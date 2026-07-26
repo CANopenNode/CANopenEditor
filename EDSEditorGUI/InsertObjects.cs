@@ -18,13 +18,12 @@
     Copyright(c) 2020 Janez Paternoster
 */
 
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using libEDSsharp;
 
 namespace ODEditor
 {
@@ -51,7 +50,7 @@ namespace ODEditor
             InitializeComponent();
 
             cbox_Target.Items.Clear();
-            foreach(var item in network)
+            foreach (var item in network)
             {
                 cbox_Target.Items.Add(item.di.ProductName);
             }
@@ -71,7 +70,7 @@ namespace ODEditor
             dataGridView_InitialColumnCount = dataGridView.ColumnCount;
 
             enabled = new bool[srcObjects.Count];
-            for(int i = 0; i < enabled.Length; i++)
+            for (int i = 0; i < enabled.Length; i++)
                 enabled[i] = true;
 
             Verify(initialOffset == "0");
@@ -159,7 +158,7 @@ namespace ODEditor
             int j = 1;
             foreach (ODentry od in srcObjects.Values)
             {
-                String numpattern = @"(\w*\d+\Z)";
+                String numpattern = @"(\d+\Z)";
                 string newname;
 
                 string[] words = Regex.Split(od.parameter_name, numpattern);
@@ -173,10 +172,11 @@ namespace ODEditor
                     newname = words[0] + nameidx;// nameidx.ToString  ;
 
                 }
-                else {
-                     newname = od.parameter_name;
+                else
+                {
+                    newname = od.parameter_name;
                 }
-                    int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {newname}");
+                int rowIdx = dataGridView.Rows.Add(enabled[odIdx], $"0x{od.Index:X4} - {newname}");
                 int cellIdx = dataGridView_InitialColumnCount;
 
                 foreach (int o in offsets)
@@ -191,7 +191,7 @@ namespace ODEditor
 
                     if (!err)
                     {
-                        
+
                         newIndexes.Add(newIndex);
                         err = eds.ods.ContainsKey((UInt16)newIndex);
                     }
@@ -235,7 +235,7 @@ namespace ODEditor
                             UInt16 newIndex = (UInt16)(od.Index + o);
                             ODentry newObject = od.Clone();
 
-                            String pattern = @"(\w*\d+\Z)";
+                            String pattern = @"(\d+\Z)";
 
                             string[] words = Regex.Split(od.parameter_name, pattern);
                             // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
@@ -315,13 +315,13 @@ namespace ODEditor
             EDSsharp edsBefore = eds;
             foreach (var item in network)
             {
-                if((string)cbox_Target.SelectedItem == item.di.ProductName)
+                if ((string)cbox_Target.SelectedItem == item.di.ProductName)
                 {
                     this.eds = item;
                     break;
                 }
             }
-            if(this.eds != null && this.eds != edsBefore)
+            if (this.eds != null && this.eds != edsBefore)
             {
                 Verify(false);
             }

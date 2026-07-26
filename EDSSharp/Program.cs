@@ -1,10 +1,7 @@
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using libEDSsharp;
 
 namespace EDSSharp
 {
@@ -64,7 +61,7 @@ namespace EDSSharp
                             return;
 
                     }
-                    if(eds != null)
+                    if (eds != null)
                     {
                         Export(outfile, outtype);
                         Console.WriteLine("Successful conversion");
@@ -81,7 +78,7 @@ namespace EDSSharp
                     PrintHelpText();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 Console.WriteLine("");
@@ -132,7 +129,7 @@ namespace EDSSharp
 
             var exporterDef = FindMatchingExporter(outpath, outType);
 
-            if(exporterDef == null)
+            if (exporterDef == null)
             {
                 throw new Exception("Unable to find matching exporter)");
             }
@@ -140,7 +137,7 @@ namespace EDSSharp
             var edss = new List<EDSsharp> { eds };
             exporterDef.Func(outpath, edss);
 
-            foreach(string warning in Warnings.warning_list)
+            foreach (string warning in Warnings.warning_list)
             {
                 Console.WriteLine("WARNING :" + warning);
             }
@@ -204,13 +201,13 @@ namespace EDSSharp
                 {
                     filetypes += exporter.Filetypes[i];
                     //add seperator char if multiple filetypes
-                    if(i +1 != exporter.Filetypes.Length)
+                    if (i + 1 != exporter.Filetypes.Length)
                     {
                         filetypes += ',';
                     }
                 }
 
-                string description = $"  {exporter.Description.Replace(" ",null)} [{filetypes}]";
+                string description = $"  {exporter.Description.Replace(" ", null)} [{filetypes}]";
                 Console.WriteLine(description);
             }
         }

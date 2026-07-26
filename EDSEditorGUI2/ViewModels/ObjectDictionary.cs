@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 //based on https://raw.githubusercontent.com/Cysharp/ObservableCollections/refs/heads/master/src/ObservableCollections/ObservableDictionary.cs
 
 namespace EDSEditorGUI2.ViewModels;
+
 public class ObjectDictionary : IDictionary<string, OdObject>, INotifyCollectionChanged, INotifyPropertyChanged
 {
     #region ObservableDictionary

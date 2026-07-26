@@ -10,14 +10,14 @@ jobs:
   build:
     strategy:
       matrix:
-        dotnet: [net481, net8]
+        dotnet: [net8, net481]
         configuration: [Debug, Release]
 
     runs-on: windows-latest
 #    runs-on: ubuntu-latest # Error: setup-msbuild can only be run on Windows runners
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
     - name: Setup .NET

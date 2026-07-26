@@ -497,9 +497,9 @@ namespace ODEditor
             this.groupBox1.Controls.Add(this.comboBox_accessPDO);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(0, 329);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(854, 188);
             this.groupBox1.TabIndex = 33;
             this.groupBox1.TabStop = false;
@@ -507,6 +507,8 @@ namespace ODEditor
             // 
             // checkBox_autosave
             // 
+            this.checkBox_autosave.Checked = true;
+            this.checkBox_autosave.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_autosave.Location = new System.Drawing.Point(634, 146);
             this.checkBox_autosave.Name = "checkBox_autosave";
             this.checkBox_autosave.Size = new System.Drawing.Size(116, 21);

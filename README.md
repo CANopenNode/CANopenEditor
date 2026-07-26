@@ -88,27 +88,6 @@ Collaborators
 	<tbody>
 		<tr>
             <td align="center">
-                <a href="https://github.com/robincornelius">
-                    <img src="https://avatars.githubusercontent.com/u/159000?v=4" width="100;" alt="robincornelius"/>
-                    <br />
-                    <sub><b>robincornelius</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/nimrof">
-                    <img src="https://avatars.githubusercontent.com/u/9848846?v=4" width="100;" alt="nimrof"/>
-                    <br />
-                    <sub><b>nimrof</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/CANopenNode">
-                    <img src="https://avatars.githubusercontent.com/u/13575344?v=4" width="100;" alt="CANopenNode"/>
-                    <br />
-                    <sub><b>CANopenNode</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/trojanobelix">
                     <img src="https://avatars.githubusercontent.com/u/15106425?v=4" width="100;" alt="trojanobelix"/>
                     <br />
@@ -250,14 +229,21 @@ Contributors
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/Sl-Alex">
+                    <img src="https://avatars.githubusercontent.com/u/7002691?v=4" width="100;" alt="Sl-Alex"/>
+                    <br />
+                    <sub><b>Sl-Alex</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
                 <a href="https://github.com/rgruening">
                     <img src="https://avatars.githubusercontent.com/u/72022918?v=4" width="100;" alt="rgruening"/>
                     <br />
                     <sub><b>rgruening</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/Barzello">
                     <img src="https://avatars.githubusercontent.com/u/52344726?v=4" width="100;" alt="Barzello"/>
@@ -293,6 +279,8 @@ Contributors
                     <sub><b>DaMutz</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/StormOli">
                     <img src="https://avatars.githubusercontent.com/u/4819887?v=4" width="100;" alt="StormOli"/>
@@ -300,8 +288,6 @@ Contributors
                     <sub><b>StormOli</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/possibly-not">
                     <img src="https://avatars.githubusercontent.com/u/12588174?v=4" width="100;" alt="possibly-not"/>

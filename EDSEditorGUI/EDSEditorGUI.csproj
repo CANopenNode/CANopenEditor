@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
     <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0-windows</TargetFrameworks>
-    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net481;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net8.0-windows;net481</TargetFrameworks>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ODEditor</RootNamespace>
@@ -28,6 +28,9 @@
     <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Index_8287_16x.ico</ApplicationIcon>
   </PropertyGroup>
@@ -98,13 +101,43 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="10.0.10" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="10.0.10" />
+    <PackageReference Include="runtime.android-x64.runtime.native.System.IO.Ports" Version="10.0.10" />
+    <PackageReference Include="runtime.linux-bionic-x64.runtime.native.System.IO.Ports" Version="10.0.10" />
     <PackageReference Include="SourceGrid" Version="4.4.0" Condition="'$(TargetFramework)' == 'net481'" />
     <PackageReference Include="SourceGrid-huanlin" Version="6.1.1" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-    <PackageReference Include="System.Resources.Extensions" Version="10.0.0" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="10.0.10" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.10" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.10" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="10.0.10" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.1" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.10" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.10" />
+    <PackageReference Include="System.Threading.AccessControl" Version="10.0.10" />
+    <PackageReference Include="System.Web.Services.Description" Version="10.0.652802" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <PackageReference Include="System.Windows.Extensions">
+      <Version>10.0.10</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent>git describe --tags --long --dirty &gt; "$(MSBuildProjectDirectory)$([System.IO.Path]::DirectorySeparatorChar)version.txt" || exit 0</PreBuildEvent>
+    <StartupObject></StartupObject>
+    <TargetFrameworks>net8.0-windows;net481</TargetFrameworks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 </Project>

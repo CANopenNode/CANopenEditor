@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using mshtml;
+using System;
 using System.IO;
-using mshtml;
+using System.Windows.Forms;
 
 namespace ODEditor
 {
@@ -11,13 +11,13 @@ namespace ODEditor
         {
             InitializeComponent();
 
-           
+
 
             webBrowser1.Url = new Uri(pathtohtml);
 
             webBrowser1.Navigated += WebBrowser1_Navigated;
 
-          
+
         }
 
         private void WebBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
@@ -28,7 +28,7 @@ namespace ODEditor
             string csspath = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".edseditor");
             csspath = Path.Combine(csspath, "style.css");
 
-            if(!File.Exists(csspath))
+            if (!File.Exists(csspath))
             {
                 csspath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "style.css");
             }

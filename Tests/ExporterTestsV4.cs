@@ -1,8 +1,8 @@
+using libEDSsharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
-using libEDSsharp;
 
 namespace Tests
 {
@@ -183,7 +183,7 @@ namespace Tests
                $"        .str = {{{expectedInitialValues}}}",
                 "    }",
                 "};"}));
-            
+
             Assert.True(FindExpectedLines(cfile, new List<string>
             {
                 "typedef struct {",
