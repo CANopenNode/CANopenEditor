@@ -192,10 +192,10 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/cfr-mir">
-                    <img src="https://avatars.githubusercontent.com/u/44053860?v=4" width="100;" alt="cfr-mir"/>
+                <a href="https://github.com/cfrank-mir">
+                    <img src="https://avatars.githubusercontent.com/u/284268463?v=4" width="100;" alt="cfrank-mir"/>
                     <br />
-                    <sub><b>cfr-mir</b></sub>
+                    <sub><b>cfrank-mir</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -250,10 +250,10 @@ Contributors
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/DylanRobertBennett">
-                    <img src="https://avatars.githubusercontent.com/u/87715493?v=4" width="100;" alt="DylanRobertBennett"/>
+                <a href="https://github.com/Sl-Alex">
+                    <img src="https://avatars.githubusercontent.com/u/7002691?v=4" width="100;" alt="Sl-Alex"/>
                     <br />
-                    <sub><b>DylanRobertBennett</b></sub>
+                    <sub><b>Sl-Alex</b></sub>
                 </a>
             </td>
 		</tr>
