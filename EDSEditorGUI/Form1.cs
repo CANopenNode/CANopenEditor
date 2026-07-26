@@ -26,7 +26,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+<<<<<<< HEAD
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+=======
+>>>>>>> 9eb31e317df2a5d5e3b9eceaceb0f070d8f332e4
 
 namespace ODEditor
 {
