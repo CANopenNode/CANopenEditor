@@ -159,7 +159,7 @@ namespace ODEditor
             int j = 1;
             foreach (ODentry od in srcObjects.Values)
             {
-                String numpattern = @"(\w*\d+\Z)";
+                String numpattern = @"(\d+\Z)";
                 string newname;
 
                 string[] words = Regex.Split(od.parameter_name, numpattern);
@@ -235,7 +235,7 @@ namespace ODEditor
                             UInt16 newIndex = (UInt16)(od.Index + o);
                             ODentry newObject = od.Clone();
 
-                            String pattern = @"(\w*\d+\Z)";
+                            String pattern = @"(\d+\Z)";
 
                             string[] words = Regex.Split(od.parameter_name, pattern);
                             // MatchCollection nummatches = System.Text.RegularExpressions.Regex.Matches(od.parameter_name, numpattern);
