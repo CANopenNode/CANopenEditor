@@ -112,3 +112,8 @@ table tr:hover td {
 {
 width: 90%;
 }
+
+.error
+{
+	color: red;
+}
