@@ -705,7 +705,10 @@ namespace libEDSsharp
             if (mappingErrors.Count > 0)
                 Warnings.AddWarning($"Errors in PDO mappings:\r\n    " + string.Join("\r\n    ", mappingErrors), Warnings.warning_class.WARNING_BUILD);
 
-            eds.fi.ModificationDateTime = DateTime.Now;
+            if (eds.Dirty)
+            {
+                eds.fi.ModificationDateTime = DateTime.Now;
+            }
 
             #region base_elements
             // create required xml objects, where necessay
@@ -793,6 +796,7 @@ namespace libEDSsharp
                     index = new byte[] { (byte)(od.Index >> 8), (byte)(od.Index & 0xFF) },
                     name = od.parameter_name,
                     objectType = (byte)od.objecttype,
+                    objFlags = EDSsharp.EncodeObjFlags(od.ObjFlags),
                     uniqueIDRef = "UID_OBJ_" + uid
                 };
                 body_network_objectList.Add(netObj);
@@ -855,6 +859,7 @@ namespace libEDSsharp
 
                         var netSubObj = new CANopenObjectListCANopenObjectCANopenSubObject
                         {
+                            objFlags = EDSsharp.EncodeObjFlags(subod.ObjFlags),
                             subIndex = new byte[] { (byte)(subindex & 0xFF) },
                             name = subod.parameter_name,
                             objectType = (byte)ObjectType.VAR,
@@ -955,6 +960,17 @@ namespace libEDSsharp
             body_device.DeviceIdentity.vendorName = new vendorName { Value = eds.di.VendorName };
             body_device.DeviceIdentity.vendorID = new vendorID { Value = eds.di.VendorNumber };
             body_device.DeviceIdentity.productName = new productName { Value = eds.di.ProductName };
+            if (body_device.DeviceIdentity.orderNumber == null || body_device.DeviceIdentity.orderNumber.Length == 0)
+            {
+                if (!string.IsNullOrEmpty(eds.di.OrderCode))
+                {
+                    body_device.DeviceIdentity.orderNumber = new[] { new orderNumber { Value = eds.di.OrderCode } };
+                }
+            }
+            else
+            {
+                body_device.DeviceIdentity.orderNumber[0].Value = eds.di.OrderCode;
+            }
             body_device.DeviceIdentity.productID = new productID { Value = eds.di.ProductNumber };
             if (eds.fi.Description != null && eds.fi.Description != "")
             {
@@ -1256,6 +1272,8 @@ namespace libEDSsharp
                         eds.di.VendorName = body_device.DeviceIdentity.vendorName.Value ?? "";
                     if (body_device.DeviceIdentity.vendorID != null)
                         eds.di.VendorNumber = body_device.DeviceIdentity.vendorID.Value ?? "";
+                    if (body_device.DeviceIdentity.orderNumber != null && body_device.DeviceIdentity.orderNumber.Length > 0)
+                        eds.di.OrderCode = body_device.DeviceIdentity.orderNumber[0].Value ?? "";
                     if (body_device.DeviceIdentity.productName != null)
                         eds.di.ProductName = body_device.DeviceIdentity.productName.Value ?? "";
                     if (body_device.DeviceIdentity.productID != null)
@@ -1431,7 +1449,7 @@ namespace libEDSsharp
                                 denotation = netObj.denotation ?? "",
                                 LowLimit = netObj.lowLimit ?? "",
                                 HighLimit = netObj.highLimit ?? "",
-                                ObjFlags = netObj.objFlags != null && netObj.objFlags.Length == 2 ? netObj.objFlags[1] : (byte)0,
+                                ObjFlags = EDSsharp.DecodeObjFlags(netObj.objFlags),
                                 uniqueID = netObj.uniqueIDRef ?? ""
                             };
 
@@ -1518,7 +1536,7 @@ namespace libEDSsharp
                                         denotation = netSubObj.denotation ?? "",
                                         LowLimit = netSubObj.lowLimit ?? "",
                                         HighLimit = netSubObj.highLimit ?? "",
-                                        ObjFlags = netSubObj.objFlags != null && netSubObj.objFlags.Length == 2 ? netSubObj.objFlags[1] : (byte)0,
+                                        ObjFlags = EDSsharp.DecodeObjFlags(netSubObj.objFlags),
                                         uniqueID = netSubObj.uniqueIDRef ?? ""
                                     };
 

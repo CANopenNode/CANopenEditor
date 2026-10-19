@@ -11,7 +11,9 @@
   </ItemGroup>
   <Target Name="CopyEDSSharpToTestOutDir" AfterTargets="Build">
     <ItemGroup>
-      <EDSSharpFiles Include="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\*"/>
+      <!-- Do not overwrite the current ProjectReference with a stale CLI copy. -->
+      <EDSSharpFiles Include="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\*"
+                     Exclude="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\libEDSsharp.*" />
     </ItemGroup>
     <Copy SourceFiles="@(EDSSharpFiles)" DestinationFolder="$(OutDir)" />
   </Target>

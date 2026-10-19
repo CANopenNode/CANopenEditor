@@ -298,7 +298,7 @@ namespace libEDSsharp
                         if (attr != attrElem)
                             Warnings.AddWarning($"Error in 0x{indexH}: Attributes of elements in ARRAY must be equal", Warnings.warning_class.WARNING_BUILD);
                     }
-                    ODStorageValues.Add($"{data.cValue}");
+                    ODStorageValues.Add(data.cValue);
                 }
                 i++;
             }
@@ -310,10 +310,14 @@ namespace libEDSsharp
                 ODStorage[group].Add($".x{varName}_sub0 = {cValue0}");
                 dataPtr0 = $"&{odname}_{group}.x{varName}_sub0";
             }
-            if (dataElem.cValue != null)
+            if (ODStorageValues.Any(value => value != null))
             {
                 ODStorage_t[group].Add($"{dataElem.cType} x{varName}[{odname}_CNT_ARR_{indexH}]{dataElem.cTypeArray};");
-                ODStorage[group].Add($".x{varName} = {{{string.Join(", ", ODStorageValues)}}}");
+                // Mixed supplied/omitted defaults still require a complete C initializer.
+                // Keep fully undefined arrays callback-backed, but zero-fill holes whenever
+                // any element requires physical storage, including a missing first element.
+                string zero = string.IsNullOrEmpty(dataElem.cTypeArray) ? "0" : "{0}";
+                ODStorage[group].Add($".x{varName} = {{{string.Join(", ", ODStorageValues.Select(value => value ?? zero))}}}");
                 dataPtr = $"&{odname}_{group}.x{varName}[0]{dataElem.cTypeArray0}";
             }
 

@@ -481,7 +481,8 @@ namespace ODEditor
                 grid1.Rows[grid1.RowsCount - 1].Tag = slot;
                 grid1.Rows[row + 2].Height = 30;
 
-                grid1[row + 2, 0] = new SourceGrid.Cells.Cell(String.Format("{0}", row + 1), typeof(string));
+                int pdoNumber = slot.ConfigurationIndex - (slot.isTXPDO() ? 0x1800 : 0x1400) + 1;
+                grid1[row + 2, 0] = new SourceGrid.Cells.Cell(pdoNumber.ToString(), typeof(string));
                 grid1[row + 2, 1] = new SourceGrid.Cells.Cell(String.Format("{0:X}", slot.COB), typeof(string));
                 grid1[row + 2, 2] = new SourceGrid.Cells.Cell(String.Format("{0:X}", slot.ConfigurationIndex), typeof(string));
 

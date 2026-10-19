@@ -274,6 +274,8 @@ namespace libEDSsharp
 
             device.DeviceIdentity.productName = new productName();
             device.DeviceIdentity.productName.Value = eds.di.ProductName;
+            device.DeviceIdentity.orderNumber = string.IsNullOrEmpty(eds.di.OrderCode) ? null
+                : new[] { new orderNumber { Value = eds.di.OrderCode } };
             device.DeviceIdentity.productName.readOnly = true;
 
             device.DeviceIdentity.productID = new productID();
@@ -436,6 +438,7 @@ namespace libEDSsharp
                 AppLayer.CANopenObjectList.CANopenObject[count].index = bytes;
                 AppLayer.CANopenObjectList.CANopenObject[count].name = od.parameter_name;
                 AppLayer.CANopenObjectList.CANopenObject[count].objectType = (byte)od.objecttype;
+                AppLayer.CANopenObjectList.CANopenObject[count].objFlags = EDSsharp.EncodeObjFlags(od.ObjFlags);
 
                 bytes = BitConverter.GetBytes((UInt16)od.datatype);
                 Array.Reverse(bytes);
@@ -512,6 +515,7 @@ namespace libEDSsharp
                         AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].subIndex = bytes;
                         AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].name = subod.parameter_name;
                         AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].objectType = (byte)subod.objecttype;
+                AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].objFlags = EDSsharp.EncodeObjFlags(subod.ObjFlags);
 
                         AppLayer.CANopenObjectList.CANopenObject[count].CANopenSubObject[subcount].denotation = subod.denotation;
 
@@ -1013,7 +1017,7 @@ namespace libEDSsharp
 
                         //FIXME im not sure this is correct
                         if (obj3.objFlags != null)
-                            entry.ObjFlags = obj3.objFlags[0];
+                            entry.ObjFlags = EDSsharp.DecodeObjFlags(obj3.objFlags);
 
                         entry.uniqueID = obj3.uniqueIDRef;
 
@@ -1132,7 +1136,7 @@ namespace libEDSsharp
                                     subentry.denotation = subobj.denotation;
 
                                 if(subobj.objFlags!=null)
-                                    subentry.ObjFlags = subobj.objFlags[0];
+                                    subentry.ObjFlags = EDSsharp.DecodeObjFlags(subobj.objFlags);
 
 
                                 subentry.uniqueID = subobj.uniqueIDRef;
@@ -1157,6 +1161,8 @@ namespace libEDSsharp
                 if (obj.DeviceIdentity != null)
                 {
                     eds.di.ProductName = obj.DeviceIdentity.productName.Value;
+                    eds.di.OrderCode = obj.DeviceIdentity.orderNumber != null && obj.DeviceIdentity.orderNumber.Length > 0
+                        ? obj.DeviceIdentity.orderNumber[0].Value : "";
                     eds.di.ProductNumber = obj.DeviceIdentity.productID.Value;
                     eds.di.VendorName = obj.DeviceIdentity.vendorName.Value;
                     eds.di.VendorNumber = obj.DeviceIdentity.vendorID.Value;
@@ -1218,7 +1224,7 @@ namespace libEDSsharp
 
                     if (obj.fileModificationDateSpecified)
                     {
-                        eds.fi.ModificationDateTime = obj.fileModificationDate.Add(obj.fileCreationTime.TimeOfDay);
+                        eds.fi.ModificationDateTime = obj.fileModificationDate.Add(obj.fileModificationTime.TimeOfDay);
                         eds.fi.ModificationDate = eds.fi.ModificationDateTime.ToString("MM-dd-yyyy");
                         eds.fi.ModificationTime = eds.fi.ModificationDateTime.ToString("h:mmtt");
 

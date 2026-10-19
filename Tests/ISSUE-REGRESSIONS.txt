@@ -1,0 +1,44 @@
+Local issue regression workflow
+================================
+
+Run ./Tests/run-tests.ps1 from the repository root to build and run Debug/Release
+on x64 and x86. IssueRegressionTests uses synthetic inputs to cover the original
+failures rather than depending on vendor attachments or a connected CAN device.
+
+Run ./EditorRegressionTests/run-tests.ps1 after building the editor deployments.
+It exercises actual WinForms editor controls, save/reopen, PDO grids, record
+creation and document closure. It also tests cancelling Add Storage Group.
+An explicit -EditorDirectory with one platform/configuration lets the same
+harness run against the upstream CANopenEditor .NET Framework deployment.
+
+To retain generated C fixtures for compiler checks, set an absolute output root
+in EDS_REGRESSION_OUTPUT_DIRECTORY before running the unit suite, then unset it.
+Use a fresh root for each source revision; do not mix baseline and fixed output.
+
+Compile the generated C using:
+
+  ./Tests/compile-generated-regressions.ps1 -FixtureDirectory C:/fixtures/local,C:/fixtures/upstream -LegacyStackDirectory C:/sources/CANopenNode-v1.3 -V4StackDirectory C:/sources/CANopenNode-v4.1
+
+Repeat with -Configuration Release and -Platform Win32 as required. This compiles
+each translation unit separately against actual stack headers. It is a C ABI/
+syntax check, not a complete linked CANopen firmware build or device test.
+
+Pinned stack references used for this review:
+- Legacy: CANopenNode v1.3, b92b4bb5b1fcb41c2291fc3f76330bb0c981e20e.
+- V4: CANopenNode v4.1, ac2140717c3c498d9b0351bce052bab630a74764.
+
+Do not infer compatibility with all historical V1/V2/V3 targets from the legacy
+exporter's name. Select the exporter matching the target stack and compile its
+output with that stack's headers and configuration. The V4 DOMAIN entry remains
+callback-backed when storage is undefined.
+
+Issue #200: the pinned legacy stack's CANopen.c references the SYNC COB-ID,
+communication period, counter overflow and synchronous window fields when
+CO_NO_SYNC is enabled. Removing the editor's associated-object requirements
+without changing that stack would produce unusable output. The regression
+therefore preserves this version-specific contract; a different target requires
+a separate compatibility case.
+
+Windows tests do not establish Linux/Mono rendering, Vector CANeds acceptance,
+SRDO safety conformance, or complete modular-device support. Those requests
+remain separately identified in the private issue review report.

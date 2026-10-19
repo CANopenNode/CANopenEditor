@@ -24,6 +24,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
@@ -101,7 +102,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="SourceGrid" Version="4.4.0" Condition="'$(TargetFramework)' == 'net481'" />
     <PackageReference Include="SourceGrid-huanlin" Version="6.1.1" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-    <PackageReference Include="System.Resources.Extensions" Version="10.0.0" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <PropertyGroup>

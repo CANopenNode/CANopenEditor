@@ -155,6 +155,8 @@ namespace libEDSsharp
         /// Description of PDO mapping index
         /// </summary>
         public string DescriptionMap;
+        internal ODentry ConfigurationTemplate;
+        internal ODentry MappingTemplate;
         /// <summary>
         /// default constructor
         /// </summary>
@@ -238,6 +240,7 @@ namespace libEDSsharp
     {
 
         EDSsharp eds;
+        private readonly HashSet<ushort> managedIndices = new HashSet<ushort>();
         /// <summary>
         /// Constructor 
         /// </summary>
@@ -255,6 +258,7 @@ namespace libEDSsharp
         /// </summary>
         public void build_PDOlists()
         {
+            pdoslots.Clear();
             //List<ODentry> odl = new List<ODentry>();
             build_PDOlist(0x1800,pdoslots);
             build_PDOlist(0x1400,pdoslots);
@@ -267,7 +271,7 @@ namespace libEDSsharp
         /// <param name="slots">list to add found pdo into</param>
         void build_PDOlist(UInt16 startIdx, List<PDOSlot> slots)
         {
-            for (UInt16 idx = startIdx; idx < startIdx + 0x01ff; idx++)
+            for (UInt16 idx = startIdx; idx < startIdx + 0x0200; idx++)
             {
                 if (eds.ods.ContainsKey(idx))
                 {
@@ -303,6 +307,7 @@ namespace libEDSsharp
                     slot.configAccessType = od.accesstype;
                     slot.configloc = od.prop.CO_storageGroup;
                     slot.DescriptionComm = od.Description;
+                    slot.ConfigurationTemplate = od;
 
 
                     Console.WriteLine(String.Format("Found PDO Entry {0:X4} {1:X3}", idx, slot.COB));
@@ -319,10 +324,13 @@ namespace libEDSsharp
                         continue;
                     }
 
+                    slot.MappingTemplate = mapping;
+                    managedIndices.Add(idx);
+                    managedIndices.Add((ushort)(idx + 0x200));
                     uint totalsize = 0;
 
-                    slot.mappingAccessType = od.accesstype;
-                    slot.mappingloc = od.prop.CO_storageGroup;
+                    slot.mappingAccessType = mapping.accesstype;
+                    slot.mappingloc = mapping.prop.CO_storageGroup;
 
                     for (ushort subindex= 1; subindex<= mapping.Getmaxsubindex();subindex++)
                     {
@@ -402,10 +410,22 @@ namespace libEDSsharp
         /// </summary>
         public void buildmappingsfromlists(bool isCANopenNode_V4)
         {
-            for(ushort x=0x1400;x<0x1c00;x++)
+            var requestedIndices = new HashSet<ushort>();
+            foreach (PDOSlot slot in pdoslots)
             {
-                if (eds.ods.ContainsKey(x))
-                    eds.ods.Remove(x);
+                foreach (ushort index in new[] { slot.ConfigurationIndex, slot.MappingIndex })
+                {
+                    if (!requestedIndices.Add(index) || (eds.ods.ContainsKey(index) && !managedIndices.Contains(index)))
+                    {
+                        throw new InvalidOperationException(string.Format("PDO index 0x{0:X4} is already in use.", index));
+                    }
+                }
+            }
+
+            // Keep disabled/incomplete records outside this helper's editable list.
+            foreach (ushort index in managedIndices)
+            {
+                eds.ods.Remove(index);
             }
 
             foreach(PDOSlot slot in pdoslots)
@@ -509,7 +529,10 @@ namespace libEDSsharp
                     }
                 }
 
-                eds.ods.Add(slot.ConfigurationIndex,config);
+                config = PreserveMetadata(slot.ConfigurationTemplate, config);
+                eds.ods[slot.ConfigurationIndex] = config;
+                slot.ConfigurationTemplate = config;
+                managedIndices.Add(slot.ConfigurationIndex);
 
                 ODentry mapping = new ODentry();
                 mapping.Index = slot.MappingIndex;
@@ -552,9 +575,45 @@ namespace libEDSsharp
                     sub.accesstype = EDSsharp.AccessType.rw;
                     mapping.addsubobject(mappingcount, sub);
                 }
-                eds.ods.Add(slot.MappingIndex,mapping);
+                mapping = PreserveMetadata(slot.MappingTemplate, mapping);
+                eds.ods[slot.MappingIndex] = mapping;
+                slot.MappingTemplate = mapping;
+                managedIndices.Add(slot.MappingIndex);
                
             }
+        }
+
+        private static ODentry PreserveMetadata(ODentry original, ODentry generated)
+        {
+            if (original == null)
+            {
+                return generated;
+            }
+
+            ODentry result = original.Clone();
+            result.Index = generated.Index;
+            result.accesstype = generated.accesstype;
+            result.Description = generated.Description;
+            result.prop.CO_storageGroup = generated.prop.CO_storageGroup;
+            if (string.IsNullOrEmpty(result.prop.CO_countLabel))
+            {
+                result.prop.CO_countLabel = generated.prop.CO_countLabel;
+            }
+            foreach (var pair in generated.subobjects)
+            {
+                ODentry sub;
+                if (!result.subobjects.TryGetValue(pair.Key, out sub))
+                {
+                    result.addsubobject(checked((byte)pair.Key), pair.Value.Clone(result));
+                }
+                else
+                {
+                    // Only the edited wire values change; access, labels, bounds,
+                    // vendor flags and extensions continue to describe the same entry.
+                    sub.defaultvalue = pair.Value.defaultvalue;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -650,7 +709,7 @@ namespace libEDSsharp
                     }
                 }
 
-                if(found==false)
+                if(found==false && !eds.ods.ContainsKey(index) && !eds.ods.ContainsKey((ushort)(index + 0x200)))
                 {
                     return index;
                 }
