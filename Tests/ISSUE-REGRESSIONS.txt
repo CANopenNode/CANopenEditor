@@ -49,3 +49,23 @@ a separate compatibility case.
 Windows tests do not establish Linux/Mono rendering, Vector CANeds acceptance,
 SRDO safety conformance, or complete modular-device support. Those requests
 remain separately identified in the private issue review report.
+
+XDD schema selection
+--------------------
+Use XddLoader.Load for a device XDD/XDC/XPD and XddLoader.LoadNetwork for
+custom multi-device projects. The expanded XML root name selects the 1.0 or
+1.1 schema; ProfileBody.formatVersion and generator/application versions do
+not identify the schema. Namespace prefixes are irrelevant.
+
+Single-device loading detects and deserializes from the same XmlReader, without
+a trial parser or an extra XML tree. Network loading validates the custom
+container and child schemas before conversion so mixed versions cannot silently
+lose devices. Unsupported formats raise InvalidDataException; malformed XML
+raises XmlException. The version-specific reader APIs remain available for
+existing callers that deliberately request a particular serialization format.
+
+XddLoaderTests covers both schemas, prefixes, body formatVersion=1.0, network
+order and values, conflicting/unknown/mixed formats, malformed XML, file-handle
+release and actual CLI imports. EditorRegressionTests exercises actual single
+and network loading in both formats. CanMonitor's application regression also
+checks its OD editor and conformance description loader for both formats.

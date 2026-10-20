@@ -270,6 +270,64 @@ internal static class EditorRegressionTests
         Console.WriteLine("PASS #180: actual first-document close leaves the remaining document selectable");
     }
 
+    private static void XddSchemaLoading()
+    {
+        string folder = Path.Combine(Path.GetTempPath(), "editor-xdd-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(folder);
+        try
+        {
+            foreach (bool legacy in new[] { false, true })
+            {
+                object model = Model();
+                object info = Field(model, "di");
+                info.GetType().GetField("ProductName").SetValue(info, "Schema test");
+                var objects = (IDictionary)Field(model, "ods");
+                objects.Clear();
+                Type entryType = library.GetType("libEDSsharp.ODentry", true);
+                object entry = Activator.CreateInstance(entryType, new object[] { "Value", (ushort)0x2000, (byte)0 });
+                entryType.GetField("datatype").SetValue(entry, Enum.Parse(library.GetType("libEDSsharp.DataType"), "UNSIGNED32"));
+                entryType.GetField("defaultvalue").SetValue(entry, "42");
+                entryType.GetField("objecttype").SetValue(entry, Enum.Parse(library.GetType("libEDSsharp.ObjectType"), "VAR"));
+                entryType.GetField("accesstype").SetValue(entry, Enum.Parse(library.GetType("libEDSsharp.EDSsharp+AccessType"), "rw"));
+                objects.Add((ushort)0x2000, entry);
+                object converter = Activator.CreateInstance(library.GetType(legacy ? "libEDSsharp.CanOpenXDD" : "libEDSsharp.CanOpenXDD_1_1", true));
+                string path = Path.Combine(folder, legacy ? "legacy.xdd" : "current.xdd");
+                Call(converter, legacy ? "writeXML" : "WriteXML",
+                    legacy ? new object[] { path, model } : new object[] { path, model, false, false });
+                Type listType = typeof(List<>).MakeGenericType(model.GetType());
+                object models = Activator.CreateInstance(listType);
+                ((IList)models).Add(model);
+                ((IList)models).Add(model);
+                string project = Path.ChangeExtension(path, ".nxdd");
+                Call(converter, legacy ? "writeMultiXML" : "WriteMultiXML",
+                    legacy ? new object[] { project, models } : new object[] { project, models, false });
+                using (var form = (Form)Activator.CreateInstance(editor.GetType("ODEditor.ODEditor_MainForm", true)))
+                {
+                    form.GetType().GetField("appdatafolder", Fields).SetValue(form, folder);
+                    ((TabControl)Field(form, "tabControl1")).TabPages.Clear();
+                    var network = (IList)Field(form, "network");
+                    network.Clear();
+                    Call(form, "openXDDfile", path);
+                    Require(network.Count == 1, "Editor did not load XDD " + (legacy ? "1.0" : "1.1"));
+                    Require((string)Field(network[0], legacy ? "xddfilename_1_0" : "xddfilename_1_1") == path,
+                        "Editor lost source schema filename");
+                    Call(form, "openXDDNetworkfile", project);
+                    Require(network.Count == 3, "Editor did not append both network devices");
+                    foreach (object loaded in network)
+                    {
+                        object value = ((IDictionary)Field(loaded, "ods"))[(ushort)0x2000];
+                        Require((string)Field(value, "defaultvalue") == "42", "Editor changed an XDD value");
+                    }
+                }
+            }
+            Console.WriteLine("PASS: actual editor single-device and network loading accepts both XDD schemas and tracks source version");
+        }
+        finally
+        {
+            Directory.Delete(folder, true);
+        }
+    }
+
     [STAThread]
     private static int Main(string[] args)
     {
@@ -291,7 +349,7 @@ internal static class EditorRegressionTests
             editor = Assembly.LoadFrom(Path.Combine(directory, "EDSEditor.exe"));
             Application.EnableVisualStyles();
             int failed = 0;
-            foreach (Action test in new Action[] { PendingDeviceInfoSave, SparsePdoNumbers, AdditionalMetadata, StorageGroupSelection, MappingInvalidationWarning, RecordCreationAndDocumentClose })
+            foreach (Action test in new Action[] { PendingDeviceInfoSave, SparsePdoNumbers, AdditionalMetadata, StorageGroupSelection, MappingInvalidationWarning, RecordCreationAndDocumentClose, XddSchemaLoading })
             {
                 try
                 {

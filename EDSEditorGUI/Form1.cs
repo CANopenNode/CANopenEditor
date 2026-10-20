@@ -118,7 +118,7 @@ namespace ODEditor
                     OpenFileDialog odf = new OpenFileDialog();
                     odf.Filter = "All supported files (*.xpd;*.xdd;*.xdc)|*.xpd;*.xdd;*.xdc|"
                                + "CANopen XPD 1.1 (*.xpd)|*.xpd|"
-                               + "CANopen XDD 1.1 (*.xdd)|*.xdd|"
+                               + "CANopen XDD 1.0/1.1 (*.xdd)|*.xdd|"
                                + "CANopen XDC 1.1 (*.xdc)|*.xdc";
 
                     if (odf.ShowDialog() != DialogResult.OK)
@@ -136,8 +136,7 @@ namespace ODEditor
                     case ".xdd":
                     case ".xdc":
                     case ".xpd":
-                        CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
-                        eds = coxml_1_1.ReadXML(filename);
+                        eds = XddLoader.Load(filename);
                         break;
                 }
 
@@ -329,27 +328,8 @@ namespace ODEditor
         {
             try
             {
-                EDSsharp eds;
-
-                string xddfileVersion = "1.1";
-                CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
-                eds = coxml_1_1.ReadXML(path);
-
-                if (eds == null)
-                {
-                    xddfileVersion = "1.0";
-                    CanOpenXDD coxml = new CanOpenXDD();
-                    eds = coxml.readXML(path);
-
-                    if (eds == null)
-                        return;
-                }
-
+                EDSsharp eds = XddLoader.Load(path);
                 eds.projectFilename = path;
-                if (xddfileVersion == "1.0")
-                    eds.xddfilename_1_0 = path;
-                else
-                    eds.xddfilename_1_1 = path;
 
                 tabControl1.TabPages.Add(eds.di.ProductName);
 
@@ -911,16 +891,15 @@ namespace ODEditor
 
         private void openXDDNetworkfile(string file)
         {
-            CanOpenXDD_1_1 xdd_1_1 = new CanOpenXDD_1_1();
-            List<EDSsharp> edss = xdd_1_1.ReadMultiXML(file);
-
-            if (edss == null)
+            List<EDSsharp> edss;
+            try
             {
-                CanOpenXDD xdd = new CanOpenXDD();
-                edss = xdd.readMultiXML(file);
-
-                if (edss == null)
-                    return;
+                edss = XddLoader.LoadNetwork(file);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Open XDD network");
+                return;
             }
 
             foreach (EDSsharp eds in edss)

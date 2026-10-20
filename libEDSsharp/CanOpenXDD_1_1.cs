@@ -1229,7 +1229,7 @@ namespace libEDSsharp
             return "";
         }
 
-        private EDSsharp Convert(ISO15745ProfileContainer container)
+        internal EDSsharp Convert(ISO15745ProfileContainer container)
         {
             EDSsharp eds = new EDSsharp();
 

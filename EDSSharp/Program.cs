@@ -105,17 +105,7 @@ namespace EDSSharp
 
         private static void openXDDfile(string path)
         {
-            CanOpenXDD_1_1 coxml_1_1 = new CanOpenXDD_1_1();
-            eds = coxml_1_1.ReadXML(path);
-
-            if (eds == null)
-            {
-                CanOpenXDD coxml = new CanOpenXDD();
-                eds = coxml.readXML(path);
-
-                if (eds == null)
-                    return;
-            }
+            eds = XddLoader.Load(path);
 
             eds.projectFilename = path;
         }
