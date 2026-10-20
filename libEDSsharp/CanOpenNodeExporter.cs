@@ -53,6 +53,8 @@ namespace libEDSsharp
         Dictionary<string, int> au = new Dictionary<string, int>();
         List<UInt16> openings = new List<UInt16>();
         List<UInt16> closings = new List<UInt16>();
+        private readonly Dictionary<ODentry, string> exportedNames = new Dictionary<ODentry, string>();
+        private readonly HashSet<string> declaredArrays = new HashSet<string>();
 
         private byte maxRXmappingsize = 0;
         private byte maxTXmappingsize = 0;
@@ -80,12 +82,33 @@ namespace libEDSsharp
         /// </summary>
         public void prepareCanOpenNames()
         {
+            acceptable_canopen_names.Clear();
             acceptable_canopen_names.Add(0x101800, "identity");
            
             acceptable_canopen_names.Add(0x140000, "RPDOCommunicationParameter");
             acceptable_canopen_names.Add(0x160000, "RPDOMappingParameter");
             acceptable_canopen_names.Add(0x180000, "TPDOCommunicationParameter");
             acceptable_canopen_names.Add(0x1a0000, "TPDOMappingParameter");
+            foreach (uint index in new uint[] { 0x1400, 0x1800 })
+            {
+                bool transmit = index == 0x1800;
+                acceptable_canopen_names.Add((index << 8) + 1, transmit ? "COB_IDUsedByTPDO" : "COB_IDUsedByRPDO");
+                acceptable_canopen_names.Add((index << 8) + 2, "transmissionType");
+                if (transmit)
+                {
+                    acceptable_canopen_names.Add((index << 8) + 3, "inhibitTime");
+                    acceptable_canopen_names.Add((index << 8) + 4, "compatibilityEntry");
+                    acceptable_canopen_names.Add((index << 8) + 5, "eventTimer");
+                    acceptable_canopen_names.Add((index << 8) + 6, "SYNCStartValue");
+                }
+            }
+            foreach (uint index in new uint[] { 0x1600, 0x1A00 })
+            {
+                for (uint subindex = 1; subindex <= 8; subindex++)
+                {
+                    acceptable_canopen_names.Add((index << 8) + subindex, "applicationObject" + subindex);
+                }
+            }
 
             acceptable_canopen_names.Add(0x100500, "COB_ID_SYNCMessage");
 
@@ -215,87 +238,38 @@ namespace libEDSsharp
 
         protected void prewalkArrays()
         {
+            PrepareExportedNames();
 
-            foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
+            au.Clear();
+            openings.Clear();
+            closings.Clear();
+
+            // A generated C field belongs to one storage struct. Group by that
+            // struct as well as its field name; indices may interleave RAM/ROM.
+            foreach (var group in eds.ods.Values.Where(od => !od.prop.CO_disabled).GroupBy(ArrayGroupKey))
             {
-                ODentry od = kvp.Value;
-                if (od.prop.CO_disabled == true)
-                    continue;
-
-                string name = make_cname(od.parameter_name,od);
-                if (au.ContainsKey(name))
+                ODentry first = group.First();
+                au[group.Key] = group.Count();
+                if (first.Nosubindexes != 0 && (group.Count() > 1 || IsSpecialArray(first.Index)))
                 {
-                    au[name]++;
+                    openings.Add(first.Index);
+                    closings.Add(group.Last().Index);
                 }
-                else
-                {
-                    au[name] = 1;
-                }
-            }
-
-
-            //Handle special arrays
-
-            specialarraysearch(0x1301, 0x1340);
-            specialarraysearch(0x1381, 0x13C0);
-
-
-            //SDO Client parameters
-            specialarraysearch(0x1200, 0x127F);
-            //SDO Server Parameters
-            specialarraysearch(0x1280, 0x12FF);
-
-            //PDO Mappings and configs
-            specialarraysearch(0x1400, 0x15FF);
-            specialarraysearch(0x1600, 0x17FF);
-            specialarraysearch(0x1800, 0x19FF);
-            specialarraysearch(0x1A00, 0x1BFF);
-
-            //now find opening and closing points for these arrays
-            foreach (KeyValuePair<string, int> kvp in au)
-            {
-                if ( kvp.Value > 1)
-                {
-                    string targetname = kvp.Key;
-                    UInt16 lowest=0xffff;
-                    UInt16 highest=0x0000;
-                    foreach (KeyValuePair<UInt16, ODentry> kvp2 in eds.ods)
-                    {
-
-                        string name = make_cname(kvp2.Value.parameter_name,kvp2.Value);
-                        if(name==targetname)
-                        {
-                            if (kvp2.Key > highest)
-                                highest = kvp2.Key;
-
-                            if (kvp2.Key < lowest)
-                                lowest = kvp2.Key;
-                        }
-
-                    }
-
-                    if (!openings.Contains(lowest))
-                    {
-                        openings.Add(lowest);
-                        closings.Add(highest);
-                        Console.WriteLine(string.Format("New array detected start 0x{0:X4} end 0x{1:X4}", lowest, highest));
-                    }
-
-                }
-
             }
 
             //Find maximum no entries in a mapping config to define an appropriate array
             maxRXmappingsize = 0;
             maxTXmappingsize = 0;
+            maxRXmappingsOD = null;
+            maxTXmappingsOD = null;
 
             for (ushort x=0x1600;x<0x1800;x++)
             {
                 if(ObjectActive(x))
                 {
-                    byte maxcount = EDSsharp.ConvertToByte(eds.ods[x].subobjects[0].defaultvalue);
+                    byte maxcount = checked((byte)eds.ods[x].subobjects.Keys.Max());
 
-                    if(maxcount > maxRXmappingsize)
+                    if(maxRXmappingsOD == null || maxcount > maxRXmappingsize)
                     {
                         maxRXmappingsize = maxcount;
                         maxRXmappingsOD = eds.ods[x];
@@ -307,9 +281,9 @@ namespace libEDSsharp
             {
                 if (ObjectActive(x))
                 {
-                    byte maxcount = EDSsharp.ConvertToByte(eds.ods[x].subobjects[0].defaultvalue);
+                    byte maxcount = checked((byte)eds.ods[x].subobjects.Keys.Max());
 
-                    if (maxcount > maxTXmappingsize)
+                    if (maxTXmappingsOD == null || maxcount > maxTXmappingsize)
                     {
                         maxTXmappingsize = maxcount;
                         maxTXmappingsOD = eds.ods[x];
@@ -318,14 +292,63 @@ namespace libEDSsharp
             }
         }
 
-        string lastname = "";
+        private string ArrayGroupKey(ODentry od)
+        {
+            return od.prop.CO_storageGroup + ":" + make_cname(od.parameter_name, od);
+        }
+
+        private static bool IsSpecialArray(ushort index)
+        {
+            return (index >= 0x1200 && index < 0x1300)
+                || (index >= 0x1301 && index <= 0x1340)
+                || (index >= 0x1381 && index <= 0x13C0)
+                || (index >= 0x1400 && index < 0x1C00);
+        }
+
+        private string RecordArrayAccess(ODentry od)
+        {
+            string key = ArrayGroupKey(od);
+            if (au[key] <= 1 && !IsSpecialArray(od.Index))
+            {
+                return "";
+            }
+            int offset = eds.ods.Values.Count(candidate => !candidate.prop.CO_disabled
+                && candidate.Index < od.Index && ArrayGroupKey(candidate) == key);
+            return "[" + offset + "]";
+        }
+
+        private void PrepareExportedNames()
+        {
+            exportedNames.Clear();
+            var groups = eds.ods.Values.Where(od => !od.prop.CO_disabled).GroupBy(ArrayGroupKey).ToList();
+            foreach (var group in groups)
+            {
+                ODentry first = group.First();
+                foreach (ODentry other in group.Skip(1))
+                {
+                    // Scalars/arrays need separate fields. Records may share storage only
+                    // when their member layouts agree; PDO members use canonical names.
+                    if (first.objecttype != ObjectType.RECORD || other.objecttype != ObjectType.RECORD
+                        || (!IsSpecialArray(first.Index) && RecordShape(first) != RecordShape(other)))
+                    {
+                        exportedNames[other] = make_cname(other.parameter_name, other) + "_" + other.Index.ToString("X4");
+                    }
+                }
+            }
+        }
+
+        private string RecordShape(ODentry record)
+        {
+            return string.Join(";", record.subobjects.Select(pair => pair.Key + ":" + pair.Value.datatype
+                + ":" + make_cname(pair.Value.parameter_name, pair.Value)));
+        }
 
         private string print_h_bylocation(string location)
         {
 
             StringBuilder sb = new StringBuilder();
 
-            lastname = "";
+            declaredArrays.Clear();
 
             foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
             {
@@ -356,14 +379,14 @@ namespace libEDSsharp
                 if (od.datatype == DataType.VISIBLE_STRING || od.datatype == DataType.OCTET_STRING || od.datatype == DataType.UNICODE_STRING)
                 {
 
-                    if (od.Lengthofstring == 0)
+                    if (od.Lengthofstring == 0 && od.prop.CO_stringLengthMin == 0)
                     {
                          Warnings.AddWarning(string.Format(" Object 0x{0:X4}/{1:X2} A string must have a default value to set the required datasize for canopen node, i have set this to [1] byte to prevent compile errors", od.Index, od.Subindex),Warnings.warning_class.WARNING_STRING);
                         specialarraylength = "[1]";
                     }
                     else
                     {
-                        specialarraylength = string.Format("[{0}]", od.Lengthofstring);
+                        specialarraylength = string.Format("[{0}]", StringCapacity(od));
                     }
                 }
 
@@ -394,13 +417,11 @@ namespace libEDSsharp
                 }
 
                 string name = make_cname(od.parameter_name,od);
-                if (au[name] > 1)
+                if (au[ArrayGroupKey(od)] > 1)
                 {
-                    if (lastname == name)
+                    if (!declaredArrays.Add(ArrayGroupKey(od)))
                         return "";
-
-                    lastname = name;
-                    sb.AppendLine($"/*{od.Index:X4}      */ {objecttypewords,-15} {make_cname(od.parameter_name,od)}[{au[name]}];");
+                    sb.AppendLine($"/*{od.Index:X4}      */ {objecttypewords,-15} {make_cname(od.parameter_name,od)}[{au[ArrayGroupKey(od)]}];");
                 }
                 else
                 {
@@ -427,8 +448,7 @@ namespace libEDSsharp
                             int maxlength = 0;
                             foreach (ODentry sub in od.subobjects.Values)
                             {
-                                if (sub.Lengthofstring> maxlength)
-                                    maxlength = sub.Lengthofstring;
+                                maxlength = Math.Max(maxlength, StringCapacity(sub));
                             }
 
                             if (maxlength == 0)
@@ -611,7 +631,7 @@ namespace libEDSsharp
                 /* make sure, we have all storage groups */
                 eds.CO_storageGroups.Add(od.prop.CO_storageGroup);
 
-                if (od.objecttype != ObjectType.RECORD)
+                if (od.prop.CO_disabled || od.objecttype != ObjectType.RECORD)
                     continue;
 
                 string structname = String.Format("OD_{0}_t", make_cname(od.parameter_name,od));
@@ -661,7 +681,15 @@ namespace libEDSsharp
 
                     if (subod.datatype==DataType.VISIBLE_STRING || subod.datatype==DataType.OCTET_STRING)
                     {
-                        paramaterarrlen = String.Format("[{0}]", subod.Lengthofstring);
+                        // One typedef is shared by every instance of this record. Its
+                        // members must accommodate the largest value/minimum capacity.
+                        int capacity = eds.ods.Values
+                            .Where(candidate => !candidate.prop.CO_disabled && candidate.objecttype == ObjectType.RECORD
+                                && make_cname(candidate.parameter_name, candidate) == make_cname(od.parameter_name, od)
+                                && candidate.subobjects.ContainsKey(kvp2.Key))
+                            .Select(candidate => candidate.subobjects[kvp2.Key])
+                            .Max(member => Math.Max(member.Lengthofstring, checked((int)member.prop.CO_stringLengthMin)));
+                        paramaterarrlen = String.Format("[{0}]", Math.Max(1, capacity));
                     }
 
                     file.WriteLine(string.Format("               {0,-15}{1}{2};", subod.datatype.ToString(), proposedname,paramaterarrlen));
@@ -981,8 +1009,6 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
             file.Close();
         }
 
-        bool arrayspecialcase = false;
-        int arrayspecialcasecount = 0;
 
         string write_od()
         {
@@ -1018,6 +1044,23 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
             byte flags = getflags(od);
 
             int datasize = od.objecttype == ObjectType.RECORD ? 0 : (int)Math.Ceiling((double)od.Sizeofdatatype() / (double)8.0);
+            if (od.objecttype == ObjectType.VAR && (od.datatype == DataType.VISIBLE_STRING
+                || od.datatype == DataType.OCTET_STRING || od.datatype == DataType.UNICODE_STRING))
+            {
+                datasize = StringCapacity(od) * (od.datatype == DataType.UNICODE_STRING ? 2 : 1);
+            }
+            if (od.objecttype == ObjectType.ARRAY && (od.datatype == DataType.OCTET_STRING
+                || od.datatype == DataType.VISIBLE_STRING || od.datatype == DataType.UNICODE_STRING))
+            {
+                datasize = od.subobjects.Where(pair => pair.Key != 0)
+                    .Select(pair => StringCapacity(pair.Value))
+                    .DefaultIfEmpty(1).Max();
+                if (od.datatype == DataType.UNICODE_STRING)
+                {
+                    datasize *= 2;
+                }
+                datasize = Math.Max(1, datasize);
+            }
   
             string array = "";
 
@@ -1026,16 +1069,9 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
                 array = string.Format("[0]");
 
 
-            if (arrayspecial(od.Index, true))
+            if (od.objecttype == ObjectType.RECORD)
             {
-                arrayspecialcase = true;
-                arrayspecialcasecount = 0;
-            }
-
-            if (arrayspecialcase)
-            {
-                array = string.Format("[{0}]", arrayspecialcasecount);
-                arrayspecialcasecount++;
+                array = RecordArrayAccess(od);
             }
 
             //Arrays and Recs have 1 less subindex than actually present in the od.subobjects
@@ -1087,11 +1123,6 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
             }
 
             sb.AppendLine($"{{0x{od.Index:X4}, 0x{nosubindexs:X2}, 0x{flags:X2}, {datasize,2:#0}, (void*){pdata}}},");
-
-            if (arrayspecial(od.Index, false))
-            {
-                arrayspecialcase = false;
-            }
 
             return sb.ToString();
         }
@@ -1228,7 +1259,7 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
                     {
 
                         if (fixstring == true)
-                            return "'X'";
+                            return dt == DataType.UNKNOWN ? "0" : "{0}";
 
                         return "";
                     }
@@ -1316,19 +1347,14 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
 
                     case DataType.OCTET_STRING:
                     {
-                        string[] bits = defaultvalue.Split(' ');
-                        string octet = "{";
-                        foreach (string s in bits)
+                        string hex = Regex.Replace(defaultvalue, @"\s", "");
+                        if (hex.Length % 2 != 0 || !Regex.IsMatch(hex, @"\A[0-9a-fA-F]*\z"))
                         {
-                            octet += formatvaluewithdatatype(s, DataType.UNSIGNED8);
-
-                            if (!object.ReferenceEquals(s, bits.Last()))
-                            {
-                                octet += ", ";
-                            }
+                            throw new FormatException("OCTET_STRING requires hexadecimal byte pairs.");
                         }
-                        octet += "}";
-                        return octet;
+                        var bytes = Enumerable.Range(0, hex.Length / 2)
+                            .Select(index => "0x" + hex.Substring(index * 2, 2).ToUpperInvariant());
+                        return "{" + string.Join(", ", bytes) + "}";
                     }
 
                     case DataType.INTEGER8:
@@ -1372,6 +1398,11 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
         /// <returns></returns>
        protected string make_cname(string name,ODentry entry)
        {
+            string exported;
+            if (entry != null && name == entry.parameter_name && exportedNames.TryGetValue(entry, out exported))
+            {
+                return exported;
+            }
             if (name == null)
                 return null;
 
@@ -1414,6 +1445,12 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
                 output = output.ToLowerInvariant(); //single character
 
 
+            if (entry.parent != null && entry.Subindex == 0 && entry.Index >= 0x1400 && entry.Index < 0x1C00)
+            {
+                return (entry.Index >= 0x1600 && entry.Index < 0x1800) || entry.Index >= 0x1A00
+                    ? "numberOfMappedApplicationObjectsInPDO" : "highestSubIndexSupported";
+            }
+
             UInt32 key = (UInt32)((entry.Index << 8) + entry.Subindex );
 
             if ((entry.Index >= 0x1200) && (entry.Index < 0x1280))
@@ -1453,8 +1490,6 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
         {
             StringBuilder returndata = new StringBuilder();
 
-            bool arrayopen = false;
-            int arrayindex = 0;
 
             foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
             {
@@ -1476,24 +1511,11 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
 
                 returndata.AppendLine($"/*0x{od.Index:X4}*/ const CO_OD_entryRecord_t OD_record{od.Index:X4}[{count}] = {{");
 
-                string arrayaccess = "";
-
-                if (arrayspecial(od.Index, true) || arrayopen)
-                {
-                    arrayaccess = string.Format("[{0}]",arrayindex);
-                    arrayindex++;
-                    arrayopen = true;
-                }
+                string arrayaccess = RecordArrayAccess(od);
 
                 foreach (KeyValuePair<UInt16, ODentry> kvpsub in od.subobjects)
                 {
                     returndata.Append(export_one_record_type(kvpsub.Value,arrayaccess));
-                }
-
-                if (arrayspecial(od.Index, false))
-                {
-                    arrayindex=0;
-                    arrayopen = false;
                 }
 
                 returndata.AppendLine($"}};{Environment.NewLine}");
@@ -1518,8 +1540,13 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
 
             string cname = make_cname(sub.parent.parameter_name,sub.parent);
 
-            string subcname = make_cname(sub.parameter_name,sub);
+            string subcname = RecordMemberName(sub);
             int datasize = (int)Math.Ceiling((double)sub.Sizeofdatatype() / (double)8.0);
+            if (sub.datatype == DataType.VISIBLE_STRING || sub.datatype == DataType.OCTET_STRING
+                || sub.datatype == DataType.UNICODE_STRING)
+            {
+                datasize = StringCapacity(sub) * (sub.datatype == DataType.UNICODE_STRING ? 2 : 1);
+            }
 
             if (sub.datatype != DataType.DOMAIN)
             {
@@ -1532,6 +1559,32 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
             }
 
             return sb.ToString();
+        }
+
+        private static int StringCapacity(ODentry entry)
+        {
+            return Math.Max(1, Math.Max(entry.Lengthofstring, checked((int)entry.prop.CO_stringLengthMin)));
+        }
+
+        private string RecordMemberName(ODentry target)
+        {
+            // Use the same deterministic suffixes as the shared record typedef.
+            var names = new HashSet<string>();
+            foreach (ODentry member in target.parent.subobjects.Values)
+            {
+                string name = make_cname(member.parameter_name, member);
+                string unique = name;
+                int suffix = 1;
+                while (!names.Add(unique))
+                {
+                    unique = name + suffix++;
+                }
+                if (ReferenceEquals(member, target))
+                {
+                    return unique;
+                }
+            }
+            return make_cname(target.parameter_name, target);
         }
 
 
@@ -1551,6 +1604,15 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
         {
             noRXpdos = 0;
             noTXpdos = 0;
+            distTXpdo = 0;
+            distRXpdo = 0;
+            noSDOclients = 0;
+            noSDOservers = 0;
+            noSYNC = 0;
+            noEMCY = 0;
+            noTIME = 0;
+            noGFC = 0;
+            noSRDO = 0;
 
             //feature tests for default CanOpenNode build
             //if you have a custom CanOpen.c then you may not require all these features
@@ -1679,59 +1741,33 @@ const CO_OD_entry_t CO_OD[CO_OD_NoOfElements] = {
 
         string export_OD_def_array(string location)
         {
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (KeyValuePair<UInt16, ODentry> kvp in eds.ods)
+            var result = new StringBuilder();
+            foreach (var group in eds.ods.Values.Where(od => !od.prop.CO_disabled
+                && od.prop.CO_storageGroup == location).GroupBy(ArrayGroupKey))
             {
-                ODentry od = kvp.Value;
-
-                if (od.prop.CO_disabled == true || od.prop.CO_storageGroup != location)
-                    continue;
-
-                if (od.Nosubindexes == 0)
+                ODentry first = group.First();
+                bool aggregate = first.objecttype == ObjectType.RECORD
+                    && (group.Count() > 1 || IsSpecialArray(first.Index));
+                int ordinal = 0;
+                foreach (ODentry od in group)
                 {
-                    sb.AppendLine($"/*{od.Index:X4}*/ {formatvaluewithdatatype(od.defaultvalue, od.datatype,true)},");
-                }
-                else
-                {
-                    if (arrayspecial(od.Index, true))
+                    if (od.Nosubindexes == 0)
                     {
-                        sb.AppendFormat("/*{0:X4}*/ {{{{", od.Index);
+                        result.AppendLine($"/*{od.Index:X4}*/ {formatvaluewithdatatype(od.defaultvalue, od.datatype, true)},");
+                        continue;
                     }
-                    else
-                    {
-                        sb.AppendFormat("/*{0:X4}*/ {{", od.Index);
-                    }
-
-                    foreach (KeyValuePair<UInt16, ODentry> kvp2 in od.subobjects)
-                    {
-                        ODentry sub = kvp2.Value;
-
-                        DataType dt = sub.datatype;
-
-                        if ((od.objecttype==ObjectType.ARRAY) && kvp2.Key == 0)
-                            continue;
-
-                        sb.Append(formatvaluewithdatatype(sub.defaultvalue, dt,true));
-
-                        if (od.subobjects.Keys.Last() != kvp2.Key)
-                            sb.Append(", ");
-                    }
-
-                    if (arrayspecial(od.Index, false))
-                    {
-                        sb.AppendLine("}},");
-                    }
-                    else
-                    {
-                        sb.AppendLine("},");
-                    }
+                    result.AppendFormat("/*{0:X4}*/ {1}", od.Index, aggregate && ordinal == 0 ? "{{" : "{");
+                    var values = od.subobjects.Where(pair => od.objecttype != ObjectType.ARRAY || pair.Key != 0)
+                        .Select(pair => formatvaluewithdatatype(pair.Value.defaultvalue,
+                            pair.Value.datatype == DataType.UNKNOWN ? od.datatype : pair.Value.datatype, true));
+                    result.Append(string.Join(", ", values));
+                    ordinal++;
+                    result.AppendLine(aggregate && ordinal == group.Count() ? "}}," : "},");
                 }
             }
-
-            return sb.ToString();
+            return result.ToString();
         }
+
     }
 
 

@@ -19,6 +19,7 @@
 */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -457,6 +458,7 @@ namespace ODEditor
 
             eds.Dirty = true;
             button_saveChanges.BackColor = default;
+            var previousMappingErrors = new HashSet<string>(eds.VerifyPDOMapping());
             ODentry od = selectedObject;
 
             od.parameter_name = textBox_name.Text;
@@ -619,12 +621,19 @@ namespace ODEditor
 
             if (od.parent == null)
             {
-                od.prop.CO_countLabel = comboBox_countLabel.SelectedItem.ToString();
-                od.prop.CO_storageGroup = comboBox_storageGroup.SelectedItem.ToString();
+                od.prop.CO_countLabel = comboBox_countLabel.SelectedItem as string ?? od.prop.CO_countLabel;
+                od.prop.CO_storageGroup = comboBox_storageGroup.SelectedItem as string ?? od.prop.CO_storageGroup;
                 od.prop.CO_disabled = !checkBox_enabled.Checked;
                 od.prop.CO_flagsPDO = checkBox_pdoFlags.Checked;
             }
 
+            var newMappingErrors = eds.VerifyPDOMapping().Where(error => !previousMappingErrors.Contains(error)).ToList();
+            if (newMappingErrors.Count != 0)
+            {
+                Warnings.AddWarning("Object edit invalidated PDO mappings:\r\n" + string.Join("\r\n", newMappingErrors),
+                    Warnings.warning_class.WARNING_BUILD);
+                new WarningsFrm().Show();
+            }
             PopulateObjectLists(eds);
             PopulateSubList();
             PopulateObject();
@@ -758,12 +767,19 @@ namespace ODEditor
             if (comboBox.SelectedItem!=null && comboBox.SelectedItem.ToString() == "Add...")
             {
                 NewItem dialog = new NewItem("Add Storage Group");
-                if (dialog.ShowDialog() == DialogResult.OK && comboBox.FindStringExact(dialog.name) == -1)
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.name))
                 {
-                    comboBox.Items.Insert(comboBox.Items.Count - 1, dialog.name);
+                    if (comboBox.FindStringExact(dialog.name) == -1)
+                    {
+                        comboBox.Items.Insert(comboBox.Items.Count - 1, dialog.name);
+                    }
                     comboBox.SelectedItem = dialog.name;
-                    /* add new dialog location to eds back end */
                     eds.CO_storageGroups.Add(dialog.name);
+                }
+                else if (selectedObject != null)
+                {
+                    // Cancelling Add must not leave the sentinel as a real storage group.
+                    comboBox.SelectedItem = (selectedObject.parent ?? selectedObject).prop.CO_storageGroup;
                 }
             }
         }

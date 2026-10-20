@@ -19,10 +19,10 @@ jobs:
       uses: microsoft/setup-msbuild@v3
     - name: Add Packages
       run: |
-        dotnet restore
+        dotnet restore EDSEditor.sln
     - name: Build
       run: |
-        msbuild /property:Configuration=Release
+        msbuild EDSEditor.sln /property:Configuration=Release
     - name: Check for release tag
       run: |
         $release = "${{ github.ref_name }}" -match "v[\d]*[.][\d]*[.][\d]*$"

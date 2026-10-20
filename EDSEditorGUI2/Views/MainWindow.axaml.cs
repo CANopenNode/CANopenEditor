@@ -21,7 +21,7 @@ public partial class MainWindow : Window
     {
         Patterns = ["*.xpd"]
     };
-    readonly FilePickerFileType xdd = new("CANopen XDD 1.1")
+    readonly FilePickerFileType xdd = new("CANopen XDD 1.0/1.1")
     {
         Patterns = ["*.xdd"]
     };
@@ -139,8 +139,7 @@ public partial class MainWindow : Window
             {
                 filePath = fileSource;
             }
-            CanOpenXDD_1_1 coxml_1_1 = new();
-            var eds = coxml_1_1.ReadXML(filePath);
+            var eds = XddLoader.Load(filePath);
             var proto = MappingEDS.MapToProtobuffer(eds);
             var viewModel = ProtobufferViewModelMapper.MapFromProtobuffer(proto);
 

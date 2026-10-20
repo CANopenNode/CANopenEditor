@@ -1,4 +1,6 @@
-on: push
+on:
+    push:
+        branches: [main]
 
 jobs:
     contrib-readme-job:

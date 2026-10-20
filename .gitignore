@@ -24,3 +24,9 @@ edseditor-Setup.exe
 /SourceGrid_4.21
 /packages/
 *.bak
+
+# SDK output and local regression build artifacts.
+/EDSSharp/bin/
+/Tests/generated-code-build/
+**/.vs/
+/libEDSsharp/docs/

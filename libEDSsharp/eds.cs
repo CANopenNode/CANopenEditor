@@ -680,6 +680,8 @@ namespace libEDSsharp
         /// </summary>
         [EdsExport]
         public UInt32 RevisionNumber;
+        [EdsExport]
+        public string OrderCode = "";
 
         /// <summary>
         /// indicate the supported baud rates (Boolean, 0 = not supported, 1=supported)
@@ -1147,6 +1149,7 @@ namespace libEDSsharp
             ODentry newOd = new ODentry
             {
                 parent = newParent,
+                Index = Index,
                 parameter_name = parameter_name,
                 denotation = denotation,
                 objecttype = objecttype,
@@ -1157,6 +1160,11 @@ namespace libEDSsharp
                 LowLimit = LowLimit,
                 HighLimit = HighLimit,
                 actualvalue = actualvalue,
+                ObjFlags = ObjFlags,
+                CompactSubObj = CompactSubObj,
+                count = count,
+                ObjExtend = ObjExtend,
+                uniqueID = uniqueID,
                 Label = Label,
                 Description = Description,
                 subobjects = new SortedDictionary<UInt16, ODentry>(),
