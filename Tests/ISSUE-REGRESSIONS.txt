@@ -2,19 +2,19 @@ Local issue regression workflow
 ================================
 
 For the maintained SDK-style editor, run:
-  dotnet test Tests/Tests.csproj -p:BuildNet48=true -f net48 -c Debug
-  dotnet test Tests/Tests.csproj -p:BuildNet48=true -f net48 -c Release
+  dotnet test Tests/Tests.csproj -p:BuildNet481=true -f net481 -c Debug
+  dotnet test Tests/Tests.csproj -p:BuildNet481=true -f net481 -c Release
 Add -p:Platform=x64 to test the primary x64 deployment. The CLI project is built
 as a test dependency; its files are copied from the matching platform/target.
 IssueRegressionTests uses synthetic inputs, not customer files or CAN hardware.
 
-Build EDSEditor.Windows.sln with /p:BuildNet48=true for the compatibility Windows
+Build EDSEditor.Windows.sln with /p:BuildNet481=true for the compatibility Windows
 editor, CLI, library and tests. The full EDSEditor.sln retains upstream's other
-applications and default frameworks. CanMonitor selects BuildNet48 through its
-Directory.Build.props so existing consumers stay on .NET Framework 4.8.
+applications and default frameworks. CanMonitor selects BuildNet481 through its
+Directory.Build.props so existing consumers stay on .NET Framework 4.8.1.
 
 Run ./EditorRegressionTests/run-tests.ps1 with one platform/configuration and
--EditorDirectory pointing to EDSEditorGUI/bin/x64/Debug/net48 (or the matching
+-EditorDirectory pointing to EDSEditorGUI/bin/x64/Debug/net481 (or the matching
 Any CPU/configuration deployment). This exercises actual WinForms controls,
 save/reopen, PDO grids, record creation, document closure and storage selection.
 
