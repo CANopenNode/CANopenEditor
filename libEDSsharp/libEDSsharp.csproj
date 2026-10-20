@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="AssignInformationalVersion">
   <PropertyGroup>
+    <!-- Match the platforms exposed by the consuming Windows solutions. -->
+    <Platforms>AnyCPU;x64</Platforms>
     <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
     <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0</TargetFrameworks>
     <!-- Optional compatibility target for existing .NET Framework 4.8 consumers. -->
