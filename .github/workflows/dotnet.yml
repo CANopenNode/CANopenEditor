@@ -31,13 +31,22 @@ jobs:
 #        dotnet-version: 5.0.x
 #    - name: Restore dependencies
 #      run: dotnet restore
+    - name: Setup .NET runtime
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '8.0.x'
+    - name: Select solution
+      shell: pwsh
+      run: |
+        $solution = if ('${{ matrix.dotnet }}' -eq 'net481') { 'EDSEditor.Windows.sln' } else { 'EDSEditor.sln' }
+        "BUILD_SOLUTION=$solution" >> $env:GITHUB_ENV
     - name: Add Packages
       run: |
-        dotnet restore
+        dotnet restore $env:BUILD_SOLUTION -p:Build${{ matrix.dotnet }}=true
     - name: Build
 #      run: make all # builds the Debug configuration
       run: |
-        msbuild -p:Build${{ matrix.dotnet }}=true /property:Configuration=${{ matrix.configuration }}
+        msbuild $env:BUILD_SOLUTION -p:Build${{ matrix.dotnet }}=true /property:Configuration=${{ matrix.configuration }}
 #      run: dotnet build --no-restore
     - name: Test
       run: |
@@ -49,7 +58,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v7
       with:
-        name: EDSEditor_${{ matrix.dotnet }}
+        name: EDSEditor_${{ matrix.dotnet }}_${{ matrix.configuration }}
         path: |
-          EDSEditorGUI\bin\Release\
-          EDSSharp\bin\Release\
+          EDSEditorGUI\bin\${{ matrix.configuration }}\
+          EDSSharp\bin\${{ matrix.configuration }}\
