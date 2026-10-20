@@ -2,18 +2,24 @@
   <PropertyGroup>
     <TargetFrameworks Condition="'$(BuildNet481)' == 'true'">net481</TargetFrameworks>
     <TargetFrameworks Condition="'$(BuildNet8)' == 'true'">net8.0</TargetFrameworks>
+    <!-- Optional compatibility target for existing .NET Framework 4.8 consumers. -->
+    <TargetFrameworks Condition="'$(BuildNet48)' == 'true'">net48</TargetFrameworks>
     <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net481;net8.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\libEDSsharp\libEDSsharp.csproj" />
+    <ProjectReference Include="..\EDSSharp\EDSSharp.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
-  <Target Name="CopyEDSSharpToTestOutDir" AfterTargets="Build">
+  <Target Name="CopyEDSSharpToTestOutDir" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <PropertyGroup>
+      <_CliPlatformDirectory Condition="'$(Platform)' != 'AnyCPU' And '$(Platform)' != 'Any CPU'">$(Platform)\</_CliPlatformDirectory>
+    </PropertyGroup>
     <ItemGroup>
       <!-- Do not overwrite the current ProjectReference with a stale CLI copy. -->
-      <EDSSharpFiles Include="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\*"
-                     Exclude="..\EDSSharp\bin\$(Configuration)\$(TargetFramework)\libEDSsharp.*" />
+      <EDSSharpFiles Include="..\EDSSharp\bin\$(_CliPlatformDirectory)$(Configuration)\$(TargetFramework)\*"
+                     Exclude="..\EDSSharp\bin\$(_CliPlatformDirectory)$(Configuration)\$(TargetFramework)\libEDSsharp.*" />
     </ItemGroup>
     <Copy SourceFiles="@(EDSSharpFiles)" DestinationFolder="$(OutDir)" />
   </Target>

@@ -1,15 +1,22 @@
 Local issue regression workflow
 ================================
 
-Run ./Tests/run-tests.ps1 from the repository root to build and run Debug/Release
-on x64 and x86. IssueRegressionTests uses synthetic inputs to cover the original
-failures rather than depending on vendor attachments or a connected CAN device.
+For the maintained SDK-style editor, run:
+  dotnet test Tests/Tests.csproj -p:BuildNet48=true -f net48 -c Debug
+  dotnet test Tests/Tests.csproj -p:BuildNet48=true -f net48 -c Release
+Add -p:Platform=x64 to test the primary x64 deployment. The CLI project is built
+as a test dependency; its files are copied from the matching platform/target.
+IssueRegressionTests uses synthetic inputs, not customer files or CAN hardware.
 
-Run ./EditorRegressionTests/run-tests.ps1 after building the editor deployments.
-It exercises actual WinForms editor controls, save/reopen, PDO grids, record
-creation and document closure. It also tests cancelling Add Storage Group.
-An explicit -EditorDirectory with one platform/configuration lets the same
-harness run against the upstream CANopenEditor .NET Framework deployment.
+Build EDSEditor.Windows.sln with /p:BuildNet48=true for the compatibility Windows
+editor, CLI, library and tests. The full EDSEditor.sln retains upstream's other
+applications and default frameworks. CanMonitor selects BuildNet48 through its
+Directory.Build.props so existing consumers stay on .NET Framework 4.8.
+
+Run ./EditorRegressionTests/run-tests.ps1 with one platform/configuration and
+-EditorDirectory pointing to EDSEditorGUI/bin/x64/Debug/net48 (or the matching
+Any CPU/configuration deployment). This exercises actual WinForms controls,
+save/reopen, PDO grids, record creation, document closure and storage selection.
 
 To retain generated C fixtures for compiler checks, set an absolute output root
 in EDS_REGRESSION_OUTPUT_DIRECTORY before running the unit suite, then unset it.
