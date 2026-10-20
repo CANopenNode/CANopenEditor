@@ -179,7 +179,15 @@ namespace libEDSsharp
                                 }
                                 else
                                 {
-                                    name = eds.ods[index].Getsubobject(subindex).parameter_name;
+                                    ODentry current_sdo = eds.ods[index].Getsubobject(subindex);
+                                    if (current_sdo != null)
+                                    {
+                                        name = current_sdo.parameter_name;
+                                    }
+                                    else
+                                    {
+                                        name = string.Format("<p class=\"error\">Error: subindex is missing in SDO!</p>");
+                                    }
                                 }
 
 
