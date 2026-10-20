@@ -63,6 +63,27 @@ namespace Tests
             return (EDSsharp)writer.GetType().GetMethod("ReadXML").Invoke(writer, new object[] { path });
         }
 
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public void RejectedXddDoesNotKeepTheFileLocked(bool legacy, bool multi)
+        {
+            string path = Path.Combine(Folder(), "invalid.xdd");
+            File.WriteAllText(path, "<unsupported/>");
+            object converter = legacy ? (object)new CanOpenXDD() : new CanOpenXDD_1_1();
+            string method = legacy ? (multi ? "readMultiXML" : "readXML") : (multi ? "ReadMultiXML" : "ReadXML");
+            Assert.Null(converter.GetType().GetMethod(method).Invoke(converter, new object[] { path }));
+            // Format probing deliberately rejects inputs. The caller must still
+            // be able to replace/delete the file immediately after that probe.
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                Assert.True(stream.Length > 0);
+            }
+            File.Delete(path);
+        }
+
         [Fact]
         public void Issue271MissingFileInfoImportsWithDefaults()
         {

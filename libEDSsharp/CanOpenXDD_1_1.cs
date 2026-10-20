@@ -96,9 +96,10 @@ namespace libEDSsharp
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(ISO15745ProfileContainer));
-                StreamReader reader = new StreamReader(file);
-                dev = (ISO15745ProfileContainer)serializer.Deserialize(reader);
-                reader.Close();
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    dev = (ISO15745ProfileContainer)serializer.Deserialize(reader);
+                }
             }
             catch (Exception)
             {
@@ -120,15 +121,15 @@ namespace libEDSsharp
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(CanOpenProject_1_1));
-                StreamReader reader = new StreamReader(file);
-                CanOpenProject_1_1 oep = (CanOpenProject_1_1)serializer.Deserialize(reader);
-
-                foreach(ISO15745ProfileContainer cont in oep.ISO15745ProfileContainer)
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    edss.Add(Convert(cont));
-                }
+                    CanOpenProject_1_1 oep = (CanOpenProject_1_1)serializer.Deserialize(reader);
 
-                reader.Close();
+                    foreach(ISO15745ProfileContainer cont in oep.ISO15745ProfileContainer)
+                    {
+                        edss.Add(Convert(cont));
+                    }
+                }
 
                 return edss;
             }
