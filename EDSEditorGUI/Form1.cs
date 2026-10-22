@@ -189,6 +189,7 @@ namespace ODEditor
                 EDSsharp eds = new EDSsharp();
 
                 eds.Loadfile(path);
+                Warnings.warning_list.AddRange(eds.VerifyCompoundSubIndexZero());
 
                 DeviceView device = new DeviceView(eds, network);
 
@@ -224,6 +225,7 @@ namespace ODEditor
 
             try
             {
+                Warnings.warning_list.AddRange(dv.eds.VerifyCompoundSubIndexZero());
                 string savePath = Path.GetDirectoryName(FileName);
                 string baseFileName = Path.GetFileNameWithoutExtension(FileName);
                 var filepath = $"{savePath}/{baseFileName}";
@@ -329,6 +331,7 @@ namespace ODEditor
             try
             {
                 EDSsharp eds = XddLoader.Load(path);
+                Warnings.warning_list.AddRange(eds.VerifyCompoundSubIndexZero());
                 eds.projectFilename = path;
 
                 tabControl1.TabPages.Add(eds.di.ProductName);

@@ -1380,15 +1380,12 @@ namespace libEDSsharp
                     newSubObjects[newSubIndex].parameter_name = IncrementNumberAtEnd(newSubObjects[(ushort)(newSubIndex-1)].parameter_name, 1);
                 }
             }
-            if (originalOd == null)
-                newSubObjects.Add(newSubIndex++, newOd);
-
             baseObject.subobjects = newSubObjects;
 
             // Write maxSubIndex to first sub index
             if (maxSubIndex > 0 && maxSubIndex == lastSubIndex && baseObject.subobjects.Count > 0)
             {
-                baseObject.subobjects[0].defaultvalue = string.Format("0x{0:X2}", newSubIndex - 1);
+                baseObject.subobjects[0].defaultvalue = string.Format("0x{0:X2}", baseObject.subobjects.Keys.Max());
             }
 
             return newOd;
@@ -1874,9 +1871,35 @@ namespace libEDSsharp
         protected string sectionname = "";
 
         /// <summary>
-        /// Verify PDO mapping parameters in Object Dictionary. Every mapped OD entry must exist and mapping must be allowed
+        /// Identify missing or suspicious record/array count entries without changing device addresses.
         /// </summary>
         /// <returns>List of error strings, empty if no errors found.</returns>
+        public List<string> VerifyCompoundSubIndexZero()
+        {
+            var errors = new List<string>();
+            foreach (ODentry entry in ods.Values)
+            {
+                if (entry.prop.CO_disabled || (entry.objecttype != ObjectType.RECORD && entry.objecttype != ObjectType.ARRAY))
+                {
+                    continue;
+                }
+
+                // Subindex zero describes the record/array, rather than an application value.
+                // Arrays can have writable counts. Do not confuse their configurable length
+                // with a manufacturer record's application field accidentally placed at zero.
+                // Standard communication records also have special writable counts.
+                if (!entry.subobjects.TryGetValue(0, out ODentry count) || count.datatype != DataType.UNSIGNED8 ||
+                    (entry.objecttype == ObjectType.RECORD && entry.Index >= 0x2000 && count.accesstype != AccessType.ro && count.accesstype != AccessType.@const))
+                {
+                    errors.Add($"0x{entry.Index:X4}:00: Check the RECORD/ARRAY subindex-zero count: expected UNSIGNED8, normally read-only for manufacturer records; array counts may be writable. Application fields belong at subindex 1 or above. Repair the dictionary and regenerate firmware together; subindices are device addresses.");
+                }
+            }
+            return errors;
+        }
+
+        /// <summary>
+        /// Verify that every PDO mapped entry exists and permits mapping.
+        /// </summary>
         public List<string> VerifyPDOMapping()
         {
             List<string> mappingErrors = new List<string>();
