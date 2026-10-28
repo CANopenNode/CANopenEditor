@@ -49,6 +49,10 @@
             this.textBox_gituser = new System.Windows.Forms.TextBox();
             this.label_gittoken = new System.Windows.Forms.Label();
             this.textBox_gittoken = new System.Windows.Forms.TextBox();
+            this.label_uifontsize = new System.Windows.Forms.Label();
+            this.numericUpDown_uifontsize = new System.Windows.Forms.NumericUpDown();
+            this.label_uifonthint = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_uifontsize)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -70,7 +74,7 @@
             // 
             // button_save
             // 
-            this.button_save.Location = new System.Drawing.Point(100, 440);
+            this.button_save.Location = new System.Drawing.Point(100, 470);
             this.button_save.Name = "button_save";
             this.button_save.Size = new System.Drawing.Size(122, 44);
             this.button_save.TabIndex = 2;
@@ -80,7 +84,7 @@
             // 
             // button_close
             // 
-            this.button_close.Location = new System.Drawing.Point(513, 440);
+            this.button_close.Location = new System.Drawing.Point(513, 470);
             this.button_close.Name = "button_close";
             this.button_close.Size = new System.Drawing.Size(122, 44);
             this.button_close.TabIndex = 3;
@@ -237,11 +241,44 @@
             this.textBox_gittoken.TabIndex = 20;
             this.textBox_gittoken.UseSystemPasswordChar = true;
             //
+            // label_uifontsize
+            //
+            this.label_uifontsize.AutoSize = true;
+            this.label_uifontsize.Location = new System.Drawing.Point(32, 433);
+            this.label_uifontsize.Name = "label_uifontsize";
+            this.label_uifontsize.Size = new System.Drawing.Size(86, 17);
+            this.label_uifontsize.TabIndex = 21;
+            this.label_uifontsize.Text = "UI font size";
+            //
+            // numericUpDown_uifontsize
+            //
+            this.numericUpDown_uifontsize.DecimalPlaces = 1;
+            this.numericUpDown_uifontsize.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            this.numericUpDown_uifontsize.Location = new System.Drawing.Point(157, 431);
+            this.numericUpDown_uifontsize.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
+            this.numericUpDown_uifontsize.Minimum = new decimal(new int[] { 6, 0, 0, 0 });
+            this.numericUpDown_uifontsize.Name = "numericUpDown_uifontsize";
+            this.numericUpDown_uifontsize.Size = new System.Drawing.Size(80, 22);
+            this.numericUpDown_uifontsize.TabIndex = 22;
+            this.numericUpDown_uifontsize.Value = new decimal(new int[] { 9, 0, 0, 0 });
+            //
+            // label_uifonthint
+            //
+            this.label_uifonthint.AutoSize = true;
+            this.label_uifonthint.Location = new System.Drawing.Point(245, 433);
+            this.label_uifonthint.Name = "label_uifonthint";
+            this.label_uifonthint.Size = new System.Drawing.Size(280, 17);
+            this.label_uifonthint.TabIndex = 23;
+            this.label_uifonthint.Text = "pt (net8 build, applies after restart)";
+            //
             // Preferences
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 520);
+            this.ClientSize = new System.Drawing.Size(800, 550);
+            this.Controls.Add(this.label_uifonthint);
+            this.Controls.Add(this.numericUpDown_uifontsize);
+            this.Controls.Add(this.label_uifontsize);
             this.Controls.Add(this.textBox_gittoken);
             this.Controls.Add(this.label_gittoken);
             this.Controls.Add(this.textBox_gituser);
@@ -265,6 +302,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Preferences";
             this.Text = "Preferences";
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_uifontsize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -293,5 +331,8 @@
         private System.Windows.Forms.TextBox textBox_gituser;
         private System.Windows.Forms.Label label_gittoken;
         private System.Windows.Forms.TextBox textBox_gittoken;
+        private System.Windows.Forms.Label label_uifontsize;
+        private System.Windows.Forms.NumericUpDown numericUpDown_uifontsize;
+        private System.Windows.Forms.Label label_uifonthint;
     }
 }

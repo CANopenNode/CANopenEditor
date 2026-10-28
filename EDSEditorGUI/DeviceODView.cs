@@ -49,6 +49,7 @@ namespace ODEditor
         {
 
             InitializeComponent();
+            UiFont.UseMono(textBox_description);
             RebuildControls();
 
             // other elements may be added in PopulateObjectLists()

@@ -574,7 +574,8 @@ namespace ODEditor
             {
                 //1 Header Row
                 SourceGrid.Cells.Views.ColumnHeader view = new SourceGrid.Cells.Views.ColumnHeader();
-                view.Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
+                view.Font = UiFont.Create(FontStyle.Bold, 8f / UiFont.DefaultSize)
+                    ?? new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
                 view.WordWrap = true;
                 view.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleCenter;
                 view.BackColor = Color.Tomato;

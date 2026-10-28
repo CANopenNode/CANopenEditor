@@ -82,6 +82,9 @@
     <Compile Update="TableLayoutDB.cs">
       <SubType>Component</SubType>
     </Compile>
+    <None Include="Fonts\*.ttf;Fonts\OFL.txt" Condition="'$(TargetFramework)' == 'net8.0-windows'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Profiles\*.xpd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

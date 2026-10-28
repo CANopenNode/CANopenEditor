@@ -115,5 +115,16 @@ namespace ODEditor.Properties {
                 this["GitToken"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
+        public float UiFontSize {
+            get {
+                return ((float)(this["UiFontSize"]));
+            }
+            set {
+                this["UiFontSize"] = value;
+            }
+        }
     }
 }

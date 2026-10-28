@@ -41,6 +41,9 @@ namespace ODEditor
             textBox_gitrepourl.Text = Properties.Settings.Default.GitRepoUrl ?? "";
             textBox_gituser.Text = Properties.Settings.Default.GitUser ?? "";
             textBox_gittoken.Text = SettingsCrypto.Unprotect(Properties.Settings.Default.GitToken);
+
+            float fontSize = Properties.Settings.Default.UiFontSize;
+            numericUpDown_uifontsize.Value = (decimal)Math.Max(6f, Math.Min(24f, fontSize));
         }
 
         private void button_close_Click(object sender, EventArgs e)
@@ -78,6 +81,7 @@ namespace ODEditor
             Properties.Settings.Default.GitRepoUrl = textBox_gitrepourl.Text;
             Properties.Settings.Default.GitUser = textBox_gituser.Text;
             Properties.Settings.Default.GitToken = SettingsCrypto.Protect(textBox_gittoken.Text);
+            Properties.Settings.Default.UiFontSize = (float)numericUpDown_uifontsize.Value;
 
             Properties.Settings.Default.Save();
             this.Close();

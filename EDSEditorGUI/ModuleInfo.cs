@@ -18,6 +18,7 @@ namespace ODEditor
         public ModuleInfo()
         {
             InitializeComponent();
+            UiFont.UseMono(textBox_modulecomments);
 
             if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
             {

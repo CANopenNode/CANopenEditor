@@ -35,6 +35,7 @@ namespace ODEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            UiFont.Apply(Properties.Settings.Default.UiFontSize);
             Application.Run(new ODEditor_MainForm());
         }
     }

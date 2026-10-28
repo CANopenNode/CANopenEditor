@@ -48,6 +48,7 @@ namespace ODEditor
         public ODEditor_MainForm()
         {
             InitializeComponent();
+            tabControl1.ItemSize = UiFont.Scale(tabControl1.ItemSize);
             loadprofiles();
             insertToolStripMenuItem.Enabled = false;
             Warnings.warning_mask = Properties.Settings.Default.WarningMask;
@@ -617,7 +618,8 @@ namespace ODEditor
             }
 
             // Use our own font.
-            Font _tabFont = new Font("Arial", (float)10.0, FontStyle.Bold, GraphicsUnit.Pixel);
+            Font _tabFont = UiFont.Create(FontStyle.Bold, 0.85f)
+                ?? new Font("Arial", (float)10.0, FontStyle.Bold, GraphicsUnit.Pixel);
 
             // Draw string. Center the text.
             StringFormat _stringFlags = new StringFormat();
