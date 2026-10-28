@@ -36,6 +36,7 @@ namespace ODEditor
         public DevicePDOView2()
         {
             InitializeComponent();
+            UiFont.UseFor(contextMenuStrip_removeitem);
 
             // The designer anchors of the mapping grid and the zoom buttons get
             // out of step once the layout is font-scaled (larger UI font) in this

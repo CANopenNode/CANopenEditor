@@ -49,6 +49,7 @@ namespace ODEditor
         {
             InitializeComponent();
             tabControl1.ItemSize = UiFont.Scale(tabControl1.ItemSize);
+            UiFont.UseFor(menuStrip1);
             loadprofiles();
             insertToolStripMenuItem.Enabled = false;
             Warnings.warning_mask = Properties.Settings.Default.WarningMask;

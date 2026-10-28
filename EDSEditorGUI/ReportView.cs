@@ -10,6 +10,7 @@ namespace ODEditor
         public ReportView(string pathtohtml)
         {
             InitializeComponent();
+            UiFont.UseFor(toolStrip1);
 
            
 

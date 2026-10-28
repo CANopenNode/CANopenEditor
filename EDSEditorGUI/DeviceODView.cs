@@ -50,6 +50,8 @@ namespace ODEditor
 
             InitializeComponent();
             UiFont.UseMono(textBox_description);
+            UiFont.UseFor(contextMenu_object);
+            UiFont.UseFor(contextMenu_subObject);
 
             // The designer anchors of these controls get out of step once the
             // layout is font-scaled (larger UI font), so they fill their space

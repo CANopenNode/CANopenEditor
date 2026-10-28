@@ -88,6 +88,19 @@ namespace ODEditor
         }
 
         /// <summary>
+        /// Setzt auf einer Menue-, Kontextmenue- oder Werkzeugleiste die
+        /// Oberflaechenschrift. WinForms nimmt fuer Leisten sonst die
+        /// System-Menueschrift statt der Standardschrift; aufklappende
+        /// Untermenues uebernehmen die Schrift ihrer Leiste.
+        /// </summary>
+        /// <param name="strip">Leiste, z.B. MenuStrip oder ContextMenuStrip</param>
+        public static void UseFor(ToolStrip strip)
+        {
+            if (IsActive)
+                strip.Font = new Font(sans, PointSize);
+        }
+
+        /// <summary>
         /// Setzt auf einem Freitextfeld die mitgelieferte Mono-Schrift.
         /// </summary>
         /// <param name="control">Textfeld mit fest eingestellter Courier-Schrift</param>
