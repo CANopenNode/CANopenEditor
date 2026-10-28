@@ -27,3 +27,9 @@ edseditor-Setup.exe
 releases/*
 out-cli/
 /demo/generated/
+
+# SDK output and local regression build artifacts.
+/EDSSharp/bin/
+/Tests/generated-code-build/
+**/.vs/
+/libEDSsharp/docs/

@@ -99,7 +99,7 @@ namespace Tests
             ODentry od = new ODentry
             {
                 objecttype = ObjectType.ARRAY,
-                datatype = DataType.VISIBLE_STRING,
+                datatype = DataType.UNSIGNED32,
                 parameter_name = "Test Array",
                 accesstype = EDSsharp.AccessType.ro,
                 Index = 0x1011
@@ -111,14 +111,14 @@ namespace Tests
             od.subobjects.Add(0x01, new ODentry("LINE1", 0x01, DataType.UNSIGNED32, "0x01", EDSsharp.AccessType.ro, PDOMappingType.optional));
           
             string test = write_od_line(od);
-            if(test != "{0x1011, 0x7F, 0x06,  0, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
+            if(test != "{0x1011, 0x7F, 0x86,  4, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
                 throw (new Exception("TestArrayNoEntries() failed"));
 
 
             od = new ODentry
             {
                 objecttype = ObjectType.ARRAY,
-                datatype = DataType.VISIBLE_STRING,
+                datatype = DataType.UNSIGNED32,
                 parameter_name = "Test Array",
                 accesstype = EDSsharp.AccessType.ro,
                 Index = 0x2000
@@ -130,14 +130,14 @@ namespace Tests
             od.subobjects.Add(0x01, new ODentry("LINE1", 0x01, DataType.UNSIGNED32, "0x01", EDSsharp.AccessType.ro, PDOMappingType.optional));
 
             test = write_od_line(od);
-            if (test != "{0x2000, 0x7F, 0x06,  0, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
+            if (test != "{0x2000, 0x7F, 0x86,  4, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
                 throw (new Exception("TestArrayNoEntries() failed"));
 
 
             od = new ODentry
             {
                 objecttype = ObjectType.ARRAY,
-                datatype = DataType.VISIBLE_STRING,
+                datatype = DataType.UNSIGNED32,
                 parameter_name = "Test Array",
                 accesstype = EDSsharp.AccessType.ro,
                 Index = 0x1003
@@ -151,7 +151,7 @@ namespace Tests
             od.subobjects.Add(0x03, new ODentry("LINE1", 0x03, DataType.UNSIGNED32, "0x01", EDSsharp.AccessType.ro, PDOMappingType.optional));
 
             test = write_od_line(od);
-            if (test != "{0x1003, 0x03, 0x0E,  0, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
+            if (test != "{0x1003, 0x03, 0x8E,  4, (void*)&CO_OD_RAM.testArray[0]}," + Environment.NewLine)
                 throw (new Exception("TestArrayNoEntries() failed"));
 
 

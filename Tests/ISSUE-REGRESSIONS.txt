@@ -1,0 +1,71 @@
+Local issue regression workflow
+================================
+
+For the maintained SDK-style editor, run:
+  dotnet test Tests/Tests.csproj -p:BuildNet481=true -f net481 -c Debug
+  dotnet test Tests/Tests.csproj -p:BuildNet481=true -f net481 -c Release
+Add -p:Platform=x64 to test the primary x64 deployment. The CLI project is built
+as a test dependency; its files are copied from the matching platform/target.
+IssueRegressionTests uses synthetic inputs, not customer files or CAN hardware.
+
+Build EDSEditor.Windows.sln with /p:BuildNet481=true for the compatibility Windows
+editor, CLI, library and tests. The full EDSEditor.sln retains upstream's other
+applications and default frameworks. CanMonitor selects BuildNet481 through its
+Directory.Build.props so existing consumers stay on .NET Framework 4.8.1.
+
+Run ./EditorRegressionTests/run-tests.ps1 with one platform/configuration and
+-EditorDirectory pointing to EDSEditorGUI/bin/x64/Debug/net481 (or the matching
+Any CPU/configuration deployment). This exercises actual WinForms controls,
+save/reopen, PDO grids, record creation, document closure and storage selection.
+
+To retain generated C fixtures for compiler checks, set an absolute output root
+in EDS_REGRESSION_OUTPUT_DIRECTORY before running the unit suite, then unset it.
+Use a fresh root for each source revision; do not mix baseline and fixed output.
+
+Compile the generated C using:
+
+  ./Tests/compile-generated-regressions.ps1 -FixtureDirectory C:/fixtures/local,C:/fixtures/upstream -LegacyStackDirectory C:/sources/CANopenNode-v1.3 -V4StackDirectory C:/sources/CANopenNode-v4.1
+
+Repeat with -Configuration Release and -Platform Win32 as required. This compiles
+each translation unit separately against actual stack headers. It is a C ABI/
+syntax check, not a complete linked CANopen firmware build or device test.
+
+Pinned stack references used for this review:
+- Legacy: CANopenNode v1.3, b92b4bb5b1fcb41c2291fc3f76330bb0c981e20e.
+- V4: CANopenNode v4.1, ac2140717c3c498d9b0351bce052bab630a74764.
+
+Do not infer compatibility with all historical V1/V2/V3 targets from the legacy
+exporter's name. Select the exporter matching the target stack and compile its
+output with that stack's headers and configuration. The V4 DOMAIN entry remains
+callback-backed when storage is undefined.
+
+Issue #200: the pinned legacy stack's CANopen.c references the SYNC COB-ID,
+communication period, counter overflow and synchronous window fields when
+CO_NO_SYNC is enabled. Removing the editor's associated-object requirements
+without changing that stack would produce unusable output. The regression
+therefore preserves this version-specific contract; a different target requires
+a separate compatibility case.
+
+Windows tests do not establish Linux/Mono rendering, Vector CANeds acceptance,
+SRDO safety conformance, or complete modular-device support. Those requests
+remain separately identified in the private issue review report.
+
+XDD schema selection
+--------------------
+Use XddLoader.Load for a device XDD/XDC/XPD and XddLoader.LoadNetwork for
+custom multi-device projects. The expanded XML root name selects the 1.0 or
+1.1 schema; ProfileBody.formatVersion and generator/application versions do
+not identify the schema. Namespace prefixes are irrelevant.
+
+Single-device loading detects and deserializes from the same XmlReader, without
+a trial parser or an extra XML tree. Network loading validates the custom
+container and child schemas before conversion so mixed versions cannot silently
+lose devices. Unsupported formats raise InvalidDataException; malformed XML
+raises XmlException. The version-specific reader APIs remain available for
+existing callers that deliberately request a particular serialization format.
+
+XddLoaderTests covers both schemas, prefixes, body formatVersion=1.0, network
+order and values, conflicting/unknown/mixed formats, malformed XML, file-handle
+release and actual CLI imports. EditorRegressionTests exercises actual single
+and network loading in both formats. CanMonitor's application regression also
+checks its OD editor and conformance description loader for both formats.

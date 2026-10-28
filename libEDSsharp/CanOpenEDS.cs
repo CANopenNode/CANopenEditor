@@ -57,7 +57,7 @@ namespace libEDSsharp
 
             foreach (FieldInfo f in fields)
             {
-                if ((ft == Filetype.File_EDS) && (!Attribute.IsDefined(f, typeof(EdsExport))))
+                if ((ft == Filetype.File_EDS) && (!Attribute.IsDefined(f, typeof(EdsExport)) || Attribute.IsDefined(f, typeof(DcfExport))))
                     continue;
 
                 if ((ft == Filetype.File_DCF) && (!(Attribute.IsDefined(f, typeof(DcfExport)) || Attribute.IsDefined(f, typeof(EdsExport)))))
@@ -788,7 +788,7 @@ namespace libEDSsharp
                                 sub.HighLimit = kvp.Value["HighLimit"];
 
                             if (kvp.Value.ContainsKey("LowLimit"))
-                                sub.HighLimit = kvp.Value["LowLimit"];
+                                sub.LowLimit = kvp.Value["LowLimit"];
 
                             od.subobjects.Add((ushort)(x), sub);
                         }
@@ -817,6 +817,29 @@ namespace libEDSsharp
             }
         }
 
+        internal static byte[] EncodeObjFlags(uint flags)
+        {
+            return flags == 0 ? null : new byte[] { (byte)(flags >> 24), (byte)(flags >> 16), (byte)(flags >> 8), (byte)flags };
+        }
+
+        internal static uint DecodeObjFlags(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                return 0;
+            }
+            if (bytes.Length > sizeof(uint))
+            {
+                throw new InvalidDataException("ObjFlags must fit in an unsigned 32-bit hexadecimal value.");
+            }
+            uint value = 0;
+            foreach (byte part in bytes)
+            {
+                value = (value << 8) | part;
+            }
+            return value;
+        }
+
         public void Loadfile(string filename)
         {
             projectFilename = filename;
@@ -838,6 +861,10 @@ namespace libEDSsharp
                 lineno++;
             }
 
+            if (!eds.ContainsKey("DeviceInfo") || !eds.ContainsKey("MandatoryObjects"))
+            {
+                throw new InvalidDataException("EDS requires [DeviceInfo] and [MandatoryObjects] sections.");
+            }
             di = new DeviceInfo(eds["DeviceInfo"]);
 
             foreach (KeyValuePair<string, Dictionary<string, string>> kvp in eds)
@@ -846,7 +873,16 @@ namespace libEDSsharp
                 catch (Exception) { Console.WriteLine("** ALL GONE WRONG **" + kvp); }
             }
 
-            fi = new FileInfo(eds["FileInfo"]);
+            if (eds.ContainsKey("FileInfo"))
+            {
+                fi = new FileInfo(eds["FileInfo"]);
+            }
+            else
+            {
+                // Accept generators that omit file metadata while reporting the omission.
+                fi = new FileInfo();
+                Warnings.AddWarning("EDS has no [FileInfo] section; file metadata uses defaults.");
+            }
             if (eds.ContainsKey("DummyUsage"))
                 du = new Dummyusage(eds["DummyUsage"]);
 

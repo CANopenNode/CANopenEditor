@@ -20,6 +20,7 @@ message CanOpen_DeviceInfo
 {
     string vendorName = 1; // Vendor name.
     string productName = 3; // Product name.
+    string orderCode = 4; // Optional order code; older readers ignore this additive field.
     bool baudRate10 = 100; // Support of the baud rate 10 kbit/s.
     bool baudRate20 = 101; // Support of the baud rate 20 kbit/s.
     bool baudRate50 = 102; // Support of the baud rate 50 kbit/s.
