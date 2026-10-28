@@ -50,6 +50,15 @@ namespace ODEditor
 
             InitializeComponent();
             UiFont.UseMono(textBox_description);
+
+            // The designer anchors of these controls get out of step once the
+            // layout is font-scaled (larger UI font), so they fill their space
+            // by docking resp. by LayoutObjectDetails instead.
+            listView_subObjects.Dock = DockStyle.Fill;
+            textBox_name.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            textBox_denotation.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            textBox_description.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            splitContainer4.Panel2.Resize += (s, e) => LayoutObjectDetails();
             RebuildControls();
 
             // other elements may be added in PopulateObjectLists()
@@ -223,7 +232,10 @@ namespace ODEditor
 
                 lvi.Tag = od;
                 if (selectedObject != null && index == selectedObject.Index)
+                {
                     lvi.Selected = true;
+                    lvi.Font = BoldObjectFont;
+                }
                 if (od.prop.CO_disabled == true)
                     lvi.ForeColor = Color.LightGray;
 
@@ -640,6 +652,54 @@ namespace ODEditor
             PopulateObject();
         }
 
+        /// <summary>
+        /// Stretches name, denotation and description to the right edge and the
+        /// description down to the object settings below.
+        /// </summary>
+        private void LayoutObjectDetails()
+        {
+            Control panel = splitContainer4.Panel2;
+            int right = panel.ClientSize.Width - 3;
+            foreach (Control c in new Control[] { textBox_name, textBox_denotation, textBox_description })
+            {
+                c.Width = Math.Max(textBox_index.Width, right - c.Left);
+            }
+
+            int gap = textBox_denotation.Top - textBox_name.Bottom;
+            int settingsTop = panel.ClientSize.Height - groupBox1.Height;
+            textBox_description.Height = Math.Max(textBox_name.Height * 2, settingsTop - 2 * gap - textBox_description.Top);
+        }
+
+        private Font boldObjectFont;
+
+        private Font BoldObjectFont
+        {
+            get
+            {
+                if (boldObjectFont == null)
+                    boldObjectFont = new Font(listView_communication_objects.Font, FontStyle.Bold);
+                return boldObjectFont;
+            }
+        }
+
+        /// <summary>
+        /// Keeps the selected object the only selection in the three object lists
+        /// and shows it in bold, so it stays recognisable while working in the
+        /// sub index list (an unfocused selection is drawn very faintly).
+        /// </summary>
+        private void MarkSelectedObject(ListView keep)
+        {
+            foreach (ListView lv in new[] { listView_communication_objects, listView_manufacturer_objects, listView_deviceProfile_objects })
+            {
+                lv.BeginUpdate();
+                if (lv != keep)
+                    lv.SelectedItems.Clear();
+                foreach (ListViewItem item in lv.Items)
+                    item.Font = item.Tag == selectedObject ? BoldObjectFont : lv.Font;
+                lv.EndUpdate();
+            }
+        }
+
         private void ListView_objects_MouseClick(object sender, MouseEventArgs e)
         {
             ListView listview = (ListView)sender;
@@ -653,6 +713,7 @@ namespace ODEditor
             {
                 selectedList = listview;
                 selectedObject = od;
+                MarkSelectedObject(listview);
 
                 if (e.Button == MouseButtons.Right)
                 {
@@ -672,9 +733,6 @@ namespace ODEditor
                 //listView_subObjects.Focus();
 
             }
-            listView_communication_objects.HideSelection = true;
-            listView_deviceProfile_objects.HideSelection = true;
-            listView_manufacturer_objects.HideSelection = true;
         }
 
         private void ListView_objects_SelectedIndexChanged(object sender, EventArgs e)

@@ -37,6 +37,14 @@ namespace ODEditor
         {
             InitializeComponent();
 
+            // The designer anchors of the mapping grid and the zoom buttons get
+            // out of step once the layout is font-scaled (larger UI font) in this
+            // auto-scrolling view, so LayoutMappingArea sizes them instead.
+            groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            button_up.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            button_down.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            Resize += (s, e) => LayoutMappingArea();
+
             grid1.Redim(2, 67);
             grid1.FixedRows = 2;
 
@@ -566,6 +574,22 @@ namespace ODEditor
         public void redrawtable()
         {
 
+        }
+
+        /// <summary>
+        /// Lets the mapping grid take all remaining space, with the zoom buttons
+        /// at the bottom edge.
+        /// </summary>
+        private void LayoutMappingArea()
+        {
+            int margin = groupBox2.Left;
+            int buttonTop = ClientSize.Height - margin - Math.Max(button_up.Height, button_down.Height);
+            int minGridHeight = 3 * button_up.Height;
+
+            groupBox2.Width = Math.Max(groupBox3.Width, ClientSize.Width - margin - groupBox2.Left);
+            groupBox2.Height = Math.Max(minGridHeight, buttonTop - margin - groupBox2.Top);
+            button_up.Top = groupBox2.Bottom + margin;
+            button_down.Top = button_up.Top;
         }
 
         private class MyHeader : SourceGrid.Cells.ColumnHeader

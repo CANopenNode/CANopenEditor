@@ -16,6 +16,7 @@ namespace ODEditor
         public Preferences()
         {
             InitializeComponent();
+            AlignInputColumn();
 
             comboBox_exporter.DataSource = Enum.GetValues(typeof(ExporterFactory.Exporter));
 
@@ -44,6 +45,26 @@ namespace ODEditor
 
             float fontSize = Properties.Settings.Default.UiFontSize;
             numericUpDown_uifontsize.Value = (decimal)Math.Max(6f, Math.Min(24f, fontSize));
+        }
+
+        /// <summary>
+        /// Moves the input column right of the widest label; the labels grow
+        /// with the UI font and would otherwise run under the input fields.
+        /// </summary>
+        private void AlignInputColumn()
+        {
+            Label[] labels = { label1, label_couchdb, label_couchdbuser, label_couchdbpassword,
+                               label_gitrepourl, label_gituser, label_gittoken, label_uifontsize };
+            Control[] inputs = { comboBox_exporter, textBox_couchdburl, textBox_couchdbuser, textBox_couchdbpassword,
+                                 textBox_gitrepourl, textBox_gituser, textBox_gittoken, numericUpDown_uifontsize };
+
+            int inputLeft = labels.Max(l => l.Left + l.PreferredWidth) + label1.Left / 3;
+            if (inputLeft > comboBox_exporter.Left)
+            {
+                foreach (Control c in inputs)
+                    c.Left = inputLeft;
+            }
+            label_uifonthint.Left = numericUpDown_uifontsize.Right + label1.Left / 3;
         }
 
         private void button_close_Click(object sender, EventArgs e)

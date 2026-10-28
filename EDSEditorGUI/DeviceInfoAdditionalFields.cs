@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using libEDSsharp;
@@ -12,15 +13,19 @@ namespace ODEditor
 
         private void InitializeAdditionalFields()
         {
+            // Runs after InitializeComponent, i.e. after the designer layout has
+            // been font-scaled: place the group below the existing groups as they
+            // are laid out now instead of at fixed designer coordinates.
+            int gap = groupBox3.Top - groupBox4.Bottom;
             var group = new GroupBox
             {
                 Text = "Additional device information",
-                Location = new Point(12, 520),
-                Size = new Size(722, 116),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                Location = new Point(groupBox5.Left, Math.Max(groupBox5.Bottom, groupBox6.Bottom) + gap),
+                Size = new Size(groupBox6.Right - groupBox5.Left, 100),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
             };
             var layout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 3, Padding = new Padding(6) };
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             string[] labels = { "Revision number", "Order code", "Commissioning network name" };
             TextBox[] fields = { textBox_revisionNumber, textBox_orderCode, textBox_networkName };
@@ -31,10 +36,13 @@ namespace ODEditor
                 layout.Controls.Add(fields[row], 1, row);
             }
             group.Controls.Add(layout);
+            int frame = group.Height - group.DisplayRectangle.Height;
+            group.Height = layout.GetPreferredSize(new Size(group.DisplayRectangle.Width, 0)).Height + frame;
             panel1.Controls.Add(group);
             // Keep every setting and the existing Update button reachable at small window sizes.
+            panel1.Dock = DockStyle.Fill;
             panel1.AutoScroll = true;
-            panel1.AutoScrollMinSize = new Size(750, 650);
+            panel1.AutoScrollMinSize = new Size(groupBox2.Right + gap, group.Bottom + gap);
         }
 
         private void PopulateAdditionalFields()
