@@ -38,7 +38,13 @@ namespace Tests
                 : Path.Combine(outputRoot, testName + "-" + Guid.NewGuid().ToString("N")));
             Directory.CreateDirectory(folder);
             object exporter = v4 ? (object)new CanOpenNodeExporter_V4() : new CanOpenNodeExporter();
-            MethodInfo method = exporter.GetType().GetMethods().Single(m => m.Name == "export");
+            // Der V4-Exporter hat zusaetzlich einen export-Overload mit
+            // waehlbarem Symbolpraefix - die kuerzeste Signatur ist der
+            // Standard-Export.
+            MethodInfo method = exporter.GetType().GetMethods()
+                .Where(m => m.Name == "export")
+                .OrderBy(m => m.GetParameters().Length)
+                .First();
             object[] args = method.GetParameters().Length == 2
                 ? new object[] { Path.Combine(folder, "OD"), model }
                 : new object[] { folder, "OD", "issue regression", model, "OD" };

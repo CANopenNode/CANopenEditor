@@ -76,7 +76,10 @@ namespace Tests
             {
                 process.StartInfo = new ProcessStartInfo
                 {
-                    FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDSSharp.exe"),
+                    // Auf Windows heisst der Apphost EDSSharp.exe, auf Linux/macOS EDSSharp.
+                    FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows)
+                            ? "EDSSharp.exe" : "EDSSharp"),
                     Arguments = "--infile \"" + source + "\" --outfile \"" + output + "\"",
                     UseShellExecute = false,
                     CreateNoWindow = true
