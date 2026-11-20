@@ -14,6 +14,36 @@ namespace Tests
             _eds = new EDSsharp();
         }
 
+        [Theory]
+        [InlineData("\n")]
+        [InlineData("\r\n")]
+        [InlineData("\r")]
+        public void ExportUsesLfLineEndings(string newLine)
+        {
+            string folder = Path.Combine(Path.GetTempPath(), "eds-line-endings-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(folder);
+            try
+            {
+                _eds.fi.Description = "First line" + newLine + "Second line";
+                _eds.ods.Add(0x2000, new ODentry("Test value", 0x2000, DataType.UNSIGNED8,
+                    "0", EDSsharp.AccessType.rw, PDOMappingType.no));
+                export(Path.Combine(folder, "OD.c"), _eds);
+
+                foreach (string extension in new[] { ".c", ".h" })
+                {
+                    string text = File.ReadAllText(Path.Combine(folder, "OD" + extension));
+                    Assert.Contains("\n", text);
+                    Assert.DoesNotContain("\r", text);
+                    Assert.EndsWith("\n", text);
+                }
+                Assert.Contains("First line\nSecond line", File.ReadAllText(Path.Combine(folder, "OD.h")));
+            }
+            finally
+            {
+                Directory.Delete(folder, true);
+            }
+        }
+
         void GetExportResult(EDSsharp eds, out IEnumerable<String> cfile, out IEnumerable<String> hfile, out string odname)
         {
             var fullPath = Path.GetTempFileName();

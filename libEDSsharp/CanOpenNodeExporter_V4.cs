@@ -33,6 +33,21 @@ namespace libEDSsharp
     /// </summary>
     public class CanOpenNodeExporter_V4 : IExporter, IFileExporter
     {
+        // NewLine only controls the terminator appended by WriteLine. Verbatim
+        // templates can also contain CRLF from a Windows source checkout.
+        private sealed class LfStreamWriter : StreamWriter
+        {
+            public LfStreamWriter(string path) : base(path)
+            {
+                NewLine = "\n";
+            }
+
+            public override void WriteLine(string value)
+            {
+                base.WriteLine(value?.Replace("\r\n", "\n").Replace("\r", "\n"));
+            }
+        }
+
         private string odname;
 
         private List<string> ODStorageGroups;
@@ -416,8 +431,7 @@ namespace libEDSsharp
             if (filename == "")
                 filename = "OD";
 
-            StreamWriter file = new StreamWriter(folderpath + Path.DirectorySeparatorChar + filename + ".h");
-            file.NewLine = "\n";
+            StreamWriter file = new LfStreamWriter(folderpath + Path.DirectorySeparatorChar + filename + ".h");
 
             file.WriteLine(string.Format(
 @"/*******************************************************************************
@@ -593,8 +607,7 @@ namespace libEDSsharp
             if (filename == "")
                 filename = "OD";
 
-            StreamWriter file = new StreamWriter(folderpath + Path.DirectorySeparatorChar + filename + ".c");
-            file.NewLine = "\n";
+            StreamWriter file = new LfStreamWriter(folderpath + Path.DirectorySeparatorChar + filename + ".c");
 
             file.WriteLine(string.Format(
 @"/*******************************************************************************
