@@ -387,7 +387,14 @@ namespace libEDSsharp
             }
 
             writer.WriteLine(string.Format("ObjectType=0x{0:X}", (int)objecttype));
-            writer.WriteLine(string.Format(";StorageLocation={0}", prop.CO_storageGroup));
+            if (prop.CO_countLabel != "")
+            {
+                writer.WriteLine(string.Format(";CountLabel={0}", prop.CO_countLabel));
+            }
+            if (prop.CO_storageGroup != "")
+            {
+                writer.WriteLine(string.Format(";StorageLocation={0}", prop.CO_storageGroup));
+            }
 
             if (objecttype == ObjectType.ARRAY)
             {
@@ -521,9 +528,9 @@ namespace libEDSsharp
                         }
                     }
                     else
-                    //Only allow our own extensions to populate the key/value pair
                     {
-                        if (key == "StorageLocation" || key == "TPDODetectCos")
+                        //Only allow our own extensions to populate the key/value pair
+                        if (key == "CountLabel" || key == "StorageLocation" || key == "TPDODetectCos")
                         {
                             try
                             {
@@ -618,6 +625,11 @@ namespace libEDSsharp
                 }
 
                 //Access Type
+                if (kvp.Value.ContainsKey("CountLabel"))
+                {
+                    od.prop.CO_countLabel = kvp.Value["CountLabel"];
+                }
+
                 if (kvp.Value.ContainsKey("StorageLocation"))
                 {
                     od.prop.CO_storageGroup = kvp.Value["StorageLocation"];
