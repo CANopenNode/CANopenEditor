@@ -180,6 +180,17 @@ namespace ODEditor
             }
         }
 
+        private void AddArrayElementAttributeWarnings(EDSsharp eds)
+        {
+            // Only CANopenNode V4 stores a single attribute for all elements of an ARRAY.
+            // For other stacks different access of the elements is valid, so do not warn.
+            if ((ExporterFactory.Exporter)Properties.Settings.Default.ExporterType != ExporterFactory.Exporter.CANOPENNODE_V4)
+                return;
+
+            foreach (string warning in eds.VerifyArrayElementAttributes())
+                Warnings.AddWarning(warning, Warnings.warning_class.WARNING_BUILD);
+        }
+
         private void openEDSfile(string path,InfoSection.Filetype ft)
         {
             Warnings.warning_list.Clear();
@@ -190,6 +201,7 @@ namespace ODEditor
 
                 eds.Loadfile(path);
                 Warnings.warning_list.AddRange(eds.VerifyCompoundSubIndexZero());
+                AddArrayElementAttributeWarnings(eds);
 
                 DeviceView device = new DeviceView(eds, network);
 
@@ -332,6 +344,7 @@ namespace ODEditor
             {
                 EDSsharp eds = XddLoader.Load(path);
                 Warnings.warning_list.AddRange(eds.VerifyCompoundSubIndexZero());
+                AddArrayElementAttributeWarnings(eds);
                 eds.projectFilename = path;
 
                 tabControl1.TabPages.Add(eds.di.ProductName);

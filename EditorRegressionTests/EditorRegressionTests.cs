@@ -328,6 +328,109 @@ internal static class EditorRegressionTests
         }
     }
 
+    private static void SetEnum(object target, string name, string value)
+    {
+        FieldInfo field = target.GetType().GetField(name);
+        field.SetValue(target, Enum.Parse(field.FieldType, value));
+    }
+
+    private static void AddCompoundElement(object compound, ushort subindex, string datatype, string access, string defaultvalue)
+    {
+        object element = Activator.CreateInstance(compound.GetType());
+        compound.GetType().GetField("parent").SetValue(element, compound);
+        compound.GetType().GetField("parameter_name").SetValue(element, "Element " + subindex);
+        compound.GetType().GetField("defaultvalue").SetValue(element, defaultvalue);
+        SetEnum(element, "objecttype", "VAR");
+        SetEnum(element, "datatype", datatype);
+        SetEnum(element, "accesstype", access);
+        ((IDictionary)Field(compound, "subobjects")).Add(subindex, element);
+    }
+
+    private static Form[] OpenWarningForms()
+    {
+        return Application.OpenForms.Cast<Form>().Where(form => form.GetType().Name == "WarningsFrm").ToArray();
+    }
+
+    private static void CloseWarningForms()
+    {
+        foreach (Form warning in OpenWarningForms())
+        {
+            warning.Close();
+        }
+    }
+
+    private static int CountArrayWarnings(IList warnings)
+    {
+        // Copy first: the list is static and shared with the editor
+        return warnings.Cast<string>().ToArray().Count(text => text.Contains("Attributes of elements in ARRAY must be equal") && text.Contains("0x2100"));
+    }
+
+    private static void LoadEdsInEditor(object model, string path, string folder, IList warningList)
+    {
+        object filetype = Enum.Parse(library.GetType("libEDSsharp.InfoSection+Filetype", true), "File_EDS");
+        Call(model, "Savefile", path, filetype);
+        warningList.Clear();
+        using (var form = (Form)Activator.CreateInstance(editor.GetType("ODEditor.ODEditor_MainForm", true)))
+        {
+            form.GetType().GetField("appdatafolder", Fields).SetValue(form, folder);
+            ((TabControl)Field(form, "tabControl1")).TabPages.Clear();
+            ((IList)Field(form, "network")).Clear();
+            // The main form constructor applies the user's warning mask
+            library.GetType("libEDSsharp.Warnings", true).GetField("warning_mask").SetValue(null, (uint)0xffff);
+            Call(form, "openEDSfile", path, filetype);
+        }
+    }
+
+    private static void ArrayElementAttributeWarning()
+    {
+        // Make the outcome independent of the user settings (not saved): exporter CANopenNode V4, all warnings enabled
+        object settings = editor.GetType("ODEditor.Properties.Settings", true).GetProperty("Default").GetValue(null, null);
+        settings.GetType().GetProperty("ExporterType").SetValue(settings, 0, null);
+        settings.GetType().GetProperty("WarningMask").SetValue(settings, (uint)0xffff, null);
+        Type warningsType = library.GetType("libEDSsharp.Warnings", true);
+        var warningList = (IList)warningsType.GetField("warning_list").GetValue(null);
+        warningsType.GetField("warning_mask").SetValue(null, (uint)0xffff);
+        warningList.Clear();
+        CloseWarningForms();
+
+        // RECORD with sub 0 = count, sub 1 write-only, sub 2 read-only
+        object model = Model();
+        var objects = (IDictionary)Field(model, "ods");
+        objects.Clear();
+        Type entryType = library.GetType("libEDSsharp.ODentry", true);
+        object compound = Activator.CreateInstance(entryType);
+        entryType.GetProperty("Index").SetValue(compound, (ushort)0x2100);
+        entryType.GetField("parameter_name").SetValue(compound, "Generic compound");
+        SetEnum(compound, "objecttype", "RECORD");
+        AddCompoundElement(compound, 0, "UNSIGNED8", "ro", "2");
+        AddCompoundElement(compound, 1, "UNSIGNED16", "wo", "0");
+        AddCompoundElement(compound, 2, "UNSIGNED16", "ro", "0");
+        objects.Add((ushort)0x2100, compound);
+
+        string folder = Path.Combine(Path.GetTempPath(), "editor-array-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(folder);
+        try
+        {
+            // The same elements as a RECORD are valid: no ARRAY warning
+            LoadEdsInEditor(model, Path.Combine(folder, "record.eds"), folder, warningList);
+            Require(CountArrayWarnings(warningList) == 0, "Loading a RECORD with different element access produced an ARRAY warning");
+            CloseWarningForms();
+
+            // The same elements as an ARRAY share one attribute in CANopenNode V4
+            SetEnum(compound, "objecttype", "ARRAY");
+            LoadEdsInEditor(model, Path.Combine(folder, "array.eds"), folder, warningList);
+            Require(OpenWarningForms().Length > 0, "Loading an EDS with a mixed ARRAY did not show a warning");
+            Require(CountArrayWarnings(warningList) == 1, "Expected exactly one ARRAY attribute warning after loading, got " + CountArrayWarnings(warningList));
+            CloseWarningForms();
+        }
+        finally
+        {
+            CloseWarningForms();
+            Directory.Delete(folder, true);
+        }
+        Console.WriteLine("PASS: loading an EDS with an ARRAY whose elements have different access reports it once, a RECORD does not (CANopenNode V4)");
+    }
+
     [STAThread]
     private static int Main(string[] args)
     {
@@ -349,7 +452,7 @@ internal static class EditorRegressionTests
             editor = Assembly.LoadFrom(Path.Combine(directory, "EDSEditor.exe"));
             Application.EnableVisualStyles();
             int failed = 0;
-            foreach (Action test in new Action[] { PendingDeviceInfoSave, SparsePdoNumbers, AdditionalMetadata, StorageGroupSelection, MappingInvalidationWarning, RecordCreationAndDocumentClose, XddSchemaLoading })
+            foreach (Action test in new Action[] { PendingDeviceInfoSave, SparsePdoNumbers, AdditionalMetadata, StorageGroupSelection, MappingInvalidationWarning, RecordCreationAndDocumentClose, XddSchemaLoading, ArrayElementAttributeWarning })
             {
                 try
                 {

@@ -6,6 +6,8 @@ using libEDSsharp;
 
 namespace Tests
 {
+    // The exporter adds to the static Warnings.warning_list, which other tests also read
+    [Collection("Warnings")]
     public class ExporterTestsV4 : CanOpenNodeExporter_V4
     {
         readonly EDSsharp _eds;
