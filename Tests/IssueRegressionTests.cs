@@ -10,6 +10,8 @@ using Xunit;
 namespace Tests
 {
     // Kept API-neutral so the same issue contracts can run against CANopenEditor upstream.
+    // The V4 exporter adds to the static Warnings.warning_list, which other tests also read
+    [Collection("Warnings")]
     public class IssueRegressionTests : CanOpenNodeExporter
     {
         private static EDSsharp Blank()

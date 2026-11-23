@@ -262,6 +262,8 @@ namespace libEDSsharp
             string attrElem = "";
             List<string> ODStorageValues = new List<string>();
             UInt16 i = 0;
+            UInt16 firstElemSubIndex = 0;
+            List<UInt16> differingAttrSubIndexes = new List<UInt16>();
             foreach (ODentry sub in od.subobjects.Values)
             {
                 // If sub datatype is not known, use the od datatype
@@ -288,6 +290,7 @@ namespace libEDSsharp
                         // First array element. Other array elements must match this elements in data type and attributes
                         dataElem = data;
                         attrElem = attr;
+                        firstElemSubIndex = sub.Subindex;
                     }
                     else
                     {// Following checks are requirement of CANopenNode. Arrays must be C arrays.
@@ -296,12 +299,15 @@ namespace libEDSsharp
                         if ((data.cValue == null && dataElem.cValue != null) || (data.cValue != null && dataElem.cValue == null))
                             Warnings.AddWarning($"Error in 0x{indexH}: Default value must be defined on all ARRAY elements or must be undefined on all ARRAY elements!", Warnings.warning_class.WARNING_BUILD);
                         if (attr != attrElem)
-                            Warnings.AddWarning($"Error in 0x{indexH}: Attributes of elements in ARRAY must be equal", Warnings.warning_class.WARNING_BUILD);
+                            differingAttrSubIndexes.Add(sub.Subindex);
                     }
                     ODStorageValues.Add(data.cValue);
                 }
                 i++;
             }
+            // Report all differing elements in one warning, the attribute of the first element is used for all
+            if (differingAttrSubIndexes.Count > 0)
+                Warnings.AddWarning(EDSsharp.ArrayElementAttributesWarning(od, firstElemSubIndex, differingAttrSubIndexes), Warnings.warning_class.WARNING_BUILD);
             string dataPtr0 = "NULL";
             string dataPtr = "NULL";
             if (cValue0 != null)

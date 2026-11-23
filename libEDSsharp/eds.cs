@@ -1954,6 +1954,64 @@ namespace libEDSsharp
             return mappingErrors;
         }
 
+        /// <summary>
+        /// Build the warning text for an ARRAY whose elements do not all have the same attributes.
+        /// </summary>
+        /// <param name="array">The ARRAY object.</param>
+        /// <param name="firstElementSubIndex">Sub-index of the first element, whose attributes are used for all elements.</param>
+        /// <param name="differingSubIndexes">Sub-indexes of the elements that differ from the first element.</param>
+        /// <returns>A single-line warning message.</returns>
+        internal static string ArrayElementAttributesWarning(ODentry array, ushort firstElementSubIndex, IEnumerable<ushort> differingSubIndexes)
+        {
+            var differingList = differingSubIndexes.Select(subIndex => $"0x{subIndex:X2}").ToList();
+            string differing = string.Join(", ", differingList);
+            string first = $"0x{firstElementSubIndex:X2}";
+            return $"Error in 0x{array.Index:X4} \"{array.parameter_name}\": Attributes of elements in ARRAY must be equal, " +
+                (differingList.Count == 1 ? $"but sub-index {differing} differs" : $"but sub-indexes {differing} differ") + $" from sub-index {first}. " +
+                $"CANopenNode stores one attribute for all elements of an ARRAY, so the attribute of sub-index {first} is used for all of them. " +
+                "Make the access of all elements equal or change the object type to RECORD.";
+        }
+
+        /// <summary>
+        /// Find ARRAY objects whose elements do not all have the same attributes.
+        /// CANopenNode V4 stores a single attribute for all elements of an ARRAY (OD_obj_array_t),
+        /// so the attributes of the first element are used for all of them on export.
+        /// Only the attributes the V4 exporter writes are compared (SDO access, PDO access and SRDO access);
+        /// the data type is not part of this check.
+        /// </summary>
+        /// <returns>List of warning strings, one per affected ARRAY, empty if nothing found.</returns>
+        public List<string> VerifyArrayElementAttributes()
+        {
+            var warnings = new List<string>();
+            foreach (ODentry entry in ods.Values)
+            {
+                if (entry.prop.CO_disabled || entry.objecttype != ObjectType.ARRAY)
+                    continue;
+
+                // Sub-index 0 holds the element count; the elements start at sub-index 1.
+                // The subobjects are sorted by sub-index.
+                var elements = entry.subobjects.Where(kvp => kvp.Key > 0).ToList();
+                if (elements.Count < 2)
+                    continue;
+
+                ODentry first = elements[0].Value;
+                var differing = new List<ushort>();
+                foreach (var element in elements.Skip(1))
+                {
+                    if (element.Value.AccessSDO() != first.AccessSDO() ||
+                        element.Value.AccessPDO() != first.AccessPDO() ||
+                        element.Value.prop.CO_accessSRDO != first.prop.CO_accessSRDO)
+                    {
+                        differing.Add(element.Key);
+                    }
+                }
+
+                if (differing.Count > 0)
+                    warnings.Add(ArrayElementAttributesWarning(entry, elements[0].Key, differing));
+            }
+            return warnings;
+        }
+
         public DataType Getdatatype(ODentry od)
         {
 
